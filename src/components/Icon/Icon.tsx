@@ -13,6 +13,16 @@ import { ReactComponent as NotificationsIcon } from "assets/svgs/notifications.s
 import { ReactComponent as AudioIcon } from "assets/svgs/audio.svg";
 import { ReactComponent as VideoIcon } from "assets/svgs/video.svg";
 import { ReactComponent as ChatIcon } from "assets/svgs/chat.svg";
+import { ReactComponent as ViewIcon } from "assets/svgs/view.svg";
+import { ReactComponent as LeftArrowIcon } from "assets/svgs/arrow_left.svg";
+import { ReactComponent as EditIcon } from "assets/svgs/edit.svg";
+import { ReactComponent as EmailIcon } from "assets/svgs/mail.svg";
+import { ReactComponent as PhoneIcon } from "assets/svgs/phone.svg";
+import { ReactComponent as FileIcon } from "assets/svgs/file.svg";
+import { ReactComponent as FolderIcon } from "assets/svgs/folder.svg";
+import { ReactComponent as HashIcon } from "assets/svgs/hash.svg";
+import { ReactComponent as CheckedIcon } from "assets/svgs/checked.svg";
+import { ReactComponent as CancelIcon } from "assets/svgs/cancel.svg";
 import { useMemo } from "react";
 
 export type IconNames =
@@ -28,7 +38,17 @@ export type IconNames =
   | "search"
   | "audio"
   | "video"
-  | "chat";
+  | "chat"
+  | "view"
+  | "edit"
+  | "email"
+  | "phone"
+  | "file"
+  | "folder"
+  | "hash"
+  | "checked"
+  | "cancel"
+  | "leftArrow";
 
 export interface IconProps extends BoxProps {
   type: IconNames;
@@ -60,6 +80,16 @@ export default function Icon(props: IconProps) {
       audio: AudioIcon,
       video: VideoIcon,
       chat: ChatIcon,
+      view: ViewIcon,
+      edit: EditIcon,
+      email: EmailIcon,
+      phone: PhoneIcon,
+      file: FileIcon,
+      folder: FolderIcon,
+      hash: HashIcon,
+      checked: CheckedIcon,
+      cancel: CancelIcon,
+      leftArrow: LeftArrowIcon,
       notifications: NotificationsIcon,
     };
 

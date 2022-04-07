@@ -1,12 +1,14 @@
-import { Box, Grid, HStack, Text } from "@chakra-ui/react";
+import { Box, Grid, HStack, Select, Text } from "@chakra-ui/react";
 import {
   AppointmentStatus,
   CircleIcon,
   ConsultationBadge,
   Gravatar,
   Icon,
+  Input,
   MainLayoutContainer,
   Means,
+  SubscriptionBadge,
   Topbar,
 } from "components";
 import { useMemo } from "react";
@@ -87,6 +89,12 @@ export default function Home() {
         </Box>
 
         <Box mt="20px">
+          <SubscriptionBadge type="doctor" />
+          <SubscriptionBadge type="therapist" />
+          <SubscriptionBadge type="free" />
+        </Box>
+
+        <Box mt="20px">
           {["audio", "video", "chat"].map((type) => (
             <Means key={`means-of-contact:${type}`} type={type as any} />
           ))}
@@ -109,6 +117,25 @@ export default function Home() {
             subtitle="male"
           />
           <Gravatar variant="vert" title="Dolphin Ademide" subtitle="male" />
+        </Box>
+
+        <Box mt="20px">
+          <Input
+            w="100%"
+            minH="48px"
+            maxW="300px"
+            placeholder="Search Patient"
+            startAdornment={<Icon type="search" />}
+          />
+
+          <Select
+            mt="10px"
+            placeholder="Select Option"
+            minH="48px"
+            maxW="300px"
+          >
+            <option>Value</option>
+          </Select>
         </Box>
       </MainLayoutContainer>
     </Box>

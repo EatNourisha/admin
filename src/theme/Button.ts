@@ -63,11 +63,11 @@ const Button: ComponentStyleConfig = {
         shadow: `0 0 0 3px var(--focusColor)`,
       },
     },
-    product: {
-      bg: "brand.primary",
+    transparent: {
+      bg: "transparent",
       borderRadius: "6px",
       border: "2px solid transparent",
-      color: "white",
+      color: "brand.primary",
       textTransform: "inherit",
       _hover: {
         shadow: `0 0 0 3px var(--focusColor)`,

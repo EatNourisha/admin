@@ -114,7 +114,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
         <Logo w="52px" />
       </VStack>
 
-      <VStack alignItems="flex-start" w="100%" mt="80px">
+      <VStack alignItems="flex-start" w="100%" mt="80px" overflowY="scroll">
         {take(pageLinks, 5).map((link, i) => (
           <SidebarLink
             key={i}

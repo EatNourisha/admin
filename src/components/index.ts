@@ -16,5 +16,10 @@ export { default as PasswordInput } from "./Input/PasswordInput";
 
 export { default as Means } from "./Means/Means";
 export { default as Gravatar } from "./Gravatar/Gravatar";
+export {
+  default as GenericTable,
+  GenericTableItem,
+} from "./GenericTable/GenericTable";
 export { default as AppointmentStatus } from "./AppointmentStatus/AppointmentStatus";
 export { default as ConsultationBadge } from "./ConsultationBadge/ConsultationBadge";
+export { default as SubscriptionBadge } from "./SubscriptionBadge/SubscriptionBadge";

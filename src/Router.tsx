@@ -7,6 +7,8 @@ import {
   Calendar,
   Profile,
   Admins,
+  PatientDetails,
+  DoctorDetails,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -31,9 +33,11 @@ const AppRouter = () => {
         </RootPage>
         <RootPage path={config.paths.patients}>
           <ProtectedRoute path="/" component={Patients} />
+          <ProtectedRoute path="/:id" component={PatientDetails} />
         </RootPage>
         <RootPage path={config.paths.doctors}>
           <ProtectedRoute path="/" component={Doctors} />
+          <ProtectedRoute path="/:id" component={DoctorDetails} />
         </RootPage>
         <RootPage path={config.paths.calendar}>
           <ProtectedRoute path="/" component={Calendar} />

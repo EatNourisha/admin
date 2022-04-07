@@ -23,8 +23,12 @@ const colors = {
     grayText: "#323A46",
     deepBlue: "#050927",
     neutral: "#E7EAEE",
-    neutral500: "#4B5768",
+    neutral50: "#F7F8F9",
+    neutral100: "#E7EAEE",
+    neutral200: "#D0D5DD",
+    neutral500: "#64748B",
     neutral600: "#4B5768",
+    neutral700: "#323A46",
   },
 };
 
@@ -41,6 +45,7 @@ const inputSelectStyles = {
         borderWidth: "1px",
         px: "20px",
         minH: "56px",
+        borderRadius: "12px",
         _placeholder: {
           color: "brand.neutral600",
         },
@@ -48,6 +53,28 @@ const inputSelectStyles = {
         _focus: {
           borderColor: "brand.primary",
           borderWidth: "1px",
+        },
+      },
+    },
+  },
+};
+
+const SelectStyles = {
+  variants: {
+    filled: {
+      field: {
+        borderColor: "brand.neutral200",
+        borderWidth: "2px",
+        px: "20px",
+        minH: "56px",
+        borderRadius: "12px",
+        _placeholder: {
+          color: "brand.neutral600",
+        },
+        backgroundColor: "white",
+        _focus: {
+          borderColor: "brand.primary",
+          borderWidth: "2px",
         },
       },
     },
@@ -83,7 +110,7 @@ const theme = extendTheme(
     components: {
       Button,
       Input: { ...inputSelectStyles },
-      Select: { ...inputSelectStyles },
+      Select: { ...SelectStyles },
     },
   },
   withDefaultVariant({

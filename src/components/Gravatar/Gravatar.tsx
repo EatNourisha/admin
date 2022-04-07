@@ -26,6 +26,10 @@ interface GravatarProps extends BoxProps {
   title?: string;
   subtitle?: string;
   _avatar?: AvatarProps;
+  _title?: TextProps;
+  _subtitle?: TextProps;
+  _container?: TextProps;
+  _textContainer?: TextProps;
   variant?: VariantNameType;
 }
 
@@ -37,6 +41,10 @@ export default function Gravatar(props: GravatarProps) {
     src,
     _avatar,
     variant,
+    _title,
+    _subtitle,
+    _container,
+    _textContainer,
   } = props;
 
   const _orientation = useMemo(() => {
@@ -115,6 +123,7 @@ export default function Gravatar(props: GravatarProps) {
       alignItems="center"
       w="fit-content"
       {...variants?.container}
+      {..._container}
     >
       <Avatar
         src={src}
@@ -125,7 +134,7 @@ export default function Gravatar(props: GravatarProps) {
       />
 
       {(title || subtitle) && (
-        <Box ml="4px" {...variants?.textContainer}>
+        <Box ml="4px" {...variants?.textContainer} {..._textContainer}>
           {title && (
             <Text
               fontSize="14px"
@@ -133,6 +142,7 @@ export default function Gravatar(props: GravatarProps) {
               color="brand.black"
               textTransform="capitalize"
               {...variants?.title}
+              {..._title}
             >
               {title}
             </Text>
@@ -144,6 +154,7 @@ export default function Gravatar(props: GravatarProps) {
               color="brand.neutral600"
               textTransform="capitalize"
               {...variants?.subtitle}
+              {..._subtitle}
             >
               {subtitle}
             </Text>
