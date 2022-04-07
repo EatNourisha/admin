@@ -1,0 +1,19 @@
+:root {
+  --focusShadow: 0 0 0 3px red;
+  --sideNavWidth: 240px;
+  --focusColor: #3385f76f;
+  // color: #a265f7
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-display: optional;
+  background: white;
+}
+
+* {
+  box-sizing: border-box;
+}
