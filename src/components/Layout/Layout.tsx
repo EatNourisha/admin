@@ -13,7 +13,7 @@ interface LayoutProps {
 export default function Layout(props: LayoutProps) {
   const { _sidebar, _main, location, children } = props;
   return (
-    <Box pos="relative" d="flex" bg="#F5F7FA">
+    <Box pos="relative" d="flex" bg="white">
       <Sidebar {...({ ..._sidebar, location } as any)} />
       <Main {..._main}>{children}</Main>
     </Box>

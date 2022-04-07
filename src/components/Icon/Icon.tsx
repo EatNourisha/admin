@@ -10,9 +10,12 @@ import { ReactComponent as AdminIcon } from "assets/svgs/adminstrators.svg";
 import { ReactComponent as LogoutIcon } from "assets/svgs/logout.svg";
 import { ReactComponent as SearchIcon } from "assets/svgs/search.svg";
 import { ReactComponent as NotificationsIcon } from "assets/svgs/notifications.svg";
+import { ReactComponent as AudioIcon } from "assets/svgs/audio.svg";
+import { ReactComponent as VideoIcon } from "assets/svgs/video.svg";
+import { ReactComponent as ChatIcon } from "assets/svgs/chat.svg";
 import { useMemo } from "react";
 
-type IconNames =
+export type IconNames =
   | "dashboard"
   | "appointments"
   | "patients"
@@ -22,9 +25,12 @@ type IconNames =
   | "admin"
   | "logout"
   | "notifications"
-  | "search";
+  | "search"
+  | "audio"
+  | "video"
+  | "chat";
 
-interface IconProps extends BoxProps {
+export interface IconProps extends BoxProps {
   type: IconNames;
 }
 
@@ -51,6 +57,9 @@ export default function Icon(props: IconProps) {
       admin: AdminIcon,
       logout: LogoutIcon,
       search: SearchIcon,
+      audio: AudioIcon,
+      video: VideoIcon,
+      chat: ChatIcon,
       notifications: NotificationsIcon,
     };
 

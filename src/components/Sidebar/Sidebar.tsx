@@ -102,8 +102,8 @@ const Sidebar: FC<SidebarProps> = (props) => {
   return (
     <Box
       bg="brand.deepBlue"
-      minW="240px"
-      maxW="240px"
+      minW="var(--sideNavWidth)"
+      maxW="var(--sideNavWidth)"
       py="45px"
       minH="100vh"
       pos="fixed"
