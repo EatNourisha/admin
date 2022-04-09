@@ -1,4 +1,4 @@
-import { Router, Redirect } from "@reach/router";
+import { Router, Redirect, Location } from "@reach/router";
 import {
   Home,
   Appointments,
@@ -9,15 +9,33 @@ import {
   Admins,
   PatientDetails,
   DoctorDetails,
+  AddAdmins,
+  EditProfile,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
 
+import { AnimatePresence } from "framer-motion";
+
 import config from "config";
+
+const FramerRouter = ({ children }: any) => (
+  <Location>
+    {({ location }) => (
+      <div style={{ position: "relative" }}>
+        <AnimatePresence>
+          <Router key={location.key} location={location}>
+            {children}
+          </Router>
+        </AnimatePresence>
+      </div>
+    )}
+  </Location>
+);
 
 const AppRouter = () => {
   return (
-    <Router>
+    <FramerRouter>
       {/* <NotFound default />
       <Login path={constants.paths.login} />
       <ResetPassword path={constants.paths.resetPassword} />
@@ -44,16 +62,14 @@ const AppRouter = () => {
         </RootPage>
         <RootPage path={config.paths.profile}>
           <ProtectedRoute path="/" component={Profile} />
+          <ProtectedRoute path="/edit" component={EditProfile} />
         </RootPage>
         <RootPage path={config.paths.administrators}>
           <ProtectedRoute path="/" component={Admins} />
+          <ProtectedRoute path="/add" component={AddAdmins} />
         </RootPage>
-
-        {/* <RootPage path={config.paths.appointmens}> */}
-        {/* <ProtectedRoute path="/" component={Appointments} /> */}
-        {/* </RootPage> */}
       </Layout>
-    </Router>
+    </FramerRouter>
   );
 };
 

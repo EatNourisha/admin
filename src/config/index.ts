@@ -18,12 +18,14 @@ const configs = {
     forgotPassword: "/forgot",
 
     doctors: "/doctors",
-    patients: "/patients",
-    appointments: "/appointments",
-    dashboard: "/dashboard",
     profile: "/profile",
     calendar: "/calendar",
+    patients: "/patients",
+    dashboard: "/dashboard",
     administrators: "/admins",
+    editProfile: "/profile/edit",
+    appointments: "/appointments",
+    addAdministrator: "/admins/add",
 
     // faqs: "/faqs",
     // support: "/support",

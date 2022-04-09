@@ -1,9 +1,17 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
-import { MainLayoutContainer, Topbar, Icon, Gravatar } from "components";
+import { navigate } from "@reach/router";
+import {
+  MainLayoutContainer,
+  Topbar,
+  Icon,
+  Gravatar,
+  PageMotion,
+} from "components";
+import configs from "config";
 
 export default function Profile() {
   return (
-    <Box>
+    <PageMotion key="profile-root">
       <Topbar pageTitle="Profile" />
       <MainLayoutContainer>
         <Box
@@ -31,6 +39,7 @@ export default function Profile() {
               fontSize="md"
               fontWeight="600"
               leftIcon={<Icon type="edit" />}
+              onClick={() => navigate(configs.paths.editProfile)}
             >
               Edit
             </Button>
@@ -73,6 +82,6 @@ export default function Profile() {
           </HStack>
         </Box>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }

@@ -10,6 +10,7 @@ import {
   Input,
   MainLayoutContainer,
   Means,
+  PageMotion,
   Topbar,
 } from "components";
 
@@ -25,7 +26,7 @@ export default function Appointments() {
   }, [isLoading]);
 
   return (
-    <Box>
+    <PageMotion key="appointments-root">
       <Topbar pageTitle="Appointments" />
       <MainLayoutContainer>
         <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
@@ -86,6 +87,6 @@ export default function Appointments() {
           </GenericTable>
         </Box>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }

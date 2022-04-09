@@ -16,6 +16,7 @@ export { default as PasswordInput } from "./Input/PasswordInput";
 
 export { default as Means } from "./Means/Means";
 export { default as Gravatar } from "./Gravatar/Gravatar";
+export { default as PageMotion } from "./PageMotion/PageMotion";
 export {
   default as GenericTable,
   GenericTableItem,

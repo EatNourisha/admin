@@ -7,6 +7,7 @@ import {
   Icon,
   Input,
   MainLayoutContainer,
+  PageMotion,
   SubscriptionBadge,
   Topbar,
 } from "components";
@@ -26,7 +27,7 @@ export default function Patients() {
   }, [isLoading]);
 
   return (
-    <Box>
+    <PageMotion key="patients-root">
       <Topbar pageTitle="Patients" />
       <MainLayoutContainer>
         <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
@@ -87,6 +88,6 @@ export default function Patients() {
           </GenericTable>
         </Box>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }

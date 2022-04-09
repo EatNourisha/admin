@@ -17,7 +17,10 @@ import {
   GenericTableItem,
   ConsultationBadge,
   Link,
+  PageMotion,
 } from "components";
+
+import { ReactComponent as StackIcon } from "assets/svgs/stack.svg";
 
 import { navigate } from "@reach/router";
 import configs from "config";
@@ -26,10 +29,13 @@ export default function PatientDetails() {
   // const { id } = useParams();
 
   return (
-    <Box>
+    <PageMotion key="patient-details">
       <Topbar pageTitle="Patients" />
       <MainLayoutContainer>
-        <Grid templateColumns="1.5fr 1fr" gap="24px">
+        <Grid
+          templateColumns={{ xl: "1.3fr 1fr", "2xl": "1.5fr 1fr" }}
+          gap="24px"
+        >
           <Box
             p="38px"
             borderRadius="24px"
@@ -101,13 +107,15 @@ export default function PatientDetails() {
               <Text mb="16px">Active Subcription</Text>
               <Box
                 w="100%"
-                minW="418px"
-                maxW="418px"
+                minW={{ xl: "calc(100% - 140px)", "2xl": "calc(100% - 340px)" }}
+                maxW={{ xl: "calc(100% - 140px)", "2xl": "calc(100% - 340px)" }}
                 minH="180px"
                 p="24px 22px"
                 borderRadius="24px"
                 bg="linear-gradient(180deg, #3A84FF 0%, #1B70FF 100%)"
+                pos="relative"
               >
+                <Box as={StackIcon} pos="absolute" top="22px" left="22px" />
                 <HStack w="100%" justifyContent="flex-end">
                   <Box borderRadius="50px" bg="#ffffff1f" p="10px 20px">
                     <Text fontSize="14px" fontWeight="400" color="white">
@@ -179,6 +187,6 @@ export default function PatientDetails() {
           </Box>
         </Grid>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }

@@ -8,6 +8,7 @@ import {
   Input,
   MainLayoutContainer,
   Means,
+  PageMotion,
   SubscriptionBadge,
   Topbar,
 } from "components";
@@ -66,7 +67,7 @@ function TotalFeatureCount(props: TotalFeatureCountProps) {
 
 export default function Home() {
   return (
-    <Box>
+    <PageMotion key="dashboard-home">
       <Topbar pageTitle="Dashboard" />
       <MainLayoutContainer>
         <Grid templateColumns="2.5fr 1fr">
@@ -138,6 +139,6 @@ export default function Home() {
           </Select>
         </Box>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }

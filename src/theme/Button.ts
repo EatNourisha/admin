@@ -4,9 +4,9 @@ import { ComponentStyleConfig } from "@chakra-ui/react";
 const Button: ComponentStyleConfig = {
   // The styles all button have in common
   baseStyle: {
-    fontWeight: "500",
+    fontWeight: "600",
     textTransform: "capitalize",
-    borderRadius: "4px", // <-- border radius is same for all variants and sizes
+    borderRadius: "8px", // <-- border radius is same for all variants and sizes
   },
   // Two sizes: sm and md
   sizes: {
@@ -45,7 +45,7 @@ const Button: ComponentStyleConfig = {
       },
     },
     outline: {
-      borderRadius: "4px",
+      // borderRadius: "4px",
       border: "1px solid transparent",
       borderColor: "brand.primary",
       color: "brand.primary",
@@ -65,7 +65,7 @@ const Button: ComponentStyleConfig = {
     },
     transparent: {
       bg: "transparent",
-      borderRadius: "6px",
+      // borderRadius: "6px",
       border: "2px solid transparent",
       color: "brand.primary",
       textTransform: "inherit",
@@ -84,12 +84,12 @@ const Button: ComponentStyleConfig = {
       pos: "relative",
       bg: "brand.primary",
       color: "white",
-      borderRadius: "4px",
+      // borderRadius: "4px",
       _hover: {
-        bg: "#6410da",
+        bg: "brand.darkPrimary",
       },
       _active: {
-        bg: "#a265f7",
+        bg: "brand.darkPrimary",
         transform: "scale(.99)",
       },
       _focus: {

@@ -4,8 +4,9 @@ import {
   Grid,
   Heading,
   HStack,
-  //   Image,
+  Image,
   Select,
+  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -19,27 +20,51 @@ import {
   ConsultationBadge,
   Link,
   CircleIcon,
+  PageMotion,
 } from "components";
+
+import ResumePng from "assets/images/resume.png";
 
 import { navigate } from "@reach/router";
 import configs from "config";
 
-// function ViewableImage() {
-//   return (
-//     <Box pos="relative" borderRadius="16px">
-//       <Image w="100%" src={} alt="" />
-//     </Box>
-//   );
-// }
+function ViewableImage() {
+  return (
+    <Box pos="relative" borderRadius="16px" h="100%" w="100%" py="20px">
+      <Image w="100%" h="100%" src={ResumePng} alt="" />
+
+      <Box
+        pos="absolute"
+        top="20px"
+        left="0"
+        w="100%"
+        h="calc(100% - 40px)"
+        color="white"
+      >
+        <VStack h="100%" justifyContent="center">
+          <Button size="sm" variant="transparent" color="white" py="10px">
+            <Stack alignItems="center">
+              <Icon type="view" />
+              <Text>Show</Text>
+            </Stack>
+          </Button>
+        </VStack>
+      </Box>
+    </Box>
+  );
+}
 
 export default function DoctorDetails() {
   //   const { id } = useParams();
 
   return (
-    <Box pb="80px">
+    <PageMotion key="doctor-details" pb="80px">
       <Topbar pageTitle="Doctors" />
       <MainLayoutContainer>
-        <Grid templateColumns="1.5fr 1fr" gap="24px">
+        <Grid
+          templateColumns={{ xl: "1.3fr 1fr", "2xl": "1.5fr 1fr" }}
+          gap="24px"
+        >
           <Box
             p="38px"
             borderRadius="24px"
@@ -118,7 +143,7 @@ export default function DoctorDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">(603) 555-0123</Text>
+                <ViewableImage />
               </Box>
               <Box
                 w="100%"
@@ -133,7 +158,7 @@ export default function DoctorDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">(603) 555-0123</Text>
+                <ViewableImage />
               </Box>
               <Box
                 w="100%"
@@ -253,6 +278,6 @@ export default function DoctorDetails() {
           </Box>
         </Grid>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }

@@ -7,6 +7,7 @@ import {
   Icon,
   Input,
   MainLayoutContainer,
+  PageMotion,
   Topbar,
 } from "components";
 // import usePartialState from "hooks/usePartialState";
@@ -26,7 +27,7 @@ export default function Doctors() {
   }, [isLoading]);
 
   return (
-    <Box>
+    <PageMotion key="doctors-root">
       <Topbar pageTitle="Doctors" />
       <MainLayoutContainer>
         <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
@@ -97,6 +98,6 @@ export default function Doctors() {
           </GenericTable>
         </Box>
       </MainLayoutContainer>
-    </Box>
+    </PageMotion>
   );
 }
