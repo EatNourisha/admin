@@ -23,10 +23,15 @@ const makeRequest = <D extends any = any, R extends any = any>(
   const getHeaders = () => {
     if (auth?.isSignedIn && auth?.token)
       return {
+        "device-id": "29a1df4646cb3417c19994a59a3e022a",
+        role: "admin",
         authorization: `Bearer ${auth?.token}`,
       };
 
-    return {};
+    return {
+      "device-id": "29a1df4646cb3417c19994a59a3e022a",
+      role: "admin",
+    };
   };
 
   return axios.request<R>({

@@ -23,6 +23,8 @@ import { ReactComponent as FolderIcon } from "assets/svgs/folder.svg";
 import { ReactComponent as HashIcon } from "assets/svgs/hash.svg";
 import { ReactComponent as CheckedIcon } from "assets/svgs/checked.svg";
 import { ReactComponent as CancelIcon } from "assets/svgs/cancel.svg";
+import { ReactComponent as AddIcon } from "assets/svgs/add.svg";
+import { ReactComponent as DeleteIcon } from "assets/svgs/delete.svg";
 import { useMemo } from "react";
 
 export type IconNames =
@@ -48,7 +50,9 @@ export type IconNames =
   | "hash"
   | "checked"
   | "cancel"
-  | "leftArrow";
+  | "leftArrow"
+  | "add"
+  | "delete";
 
 export interface IconProps extends BoxProps {
   type: IconNames;
@@ -68,6 +72,7 @@ export default function Icon(props: IconProps) {
 
   const MappedIcon = useMemo(() => {
     const map: MapType = {
+      add: AddIcon,
       dashboard: DashboardIcon,
       appointments: AppointmentsIcon,
       patients: PatientsIcon,
@@ -91,6 +96,7 @@ export default function Icon(props: IconProps) {
       cancel: CancelIcon,
       leftArrow: LeftArrowIcon,
       notifications: NotificationsIcon,
+      delete: DeleteIcon,
     };
 
     return map[type];

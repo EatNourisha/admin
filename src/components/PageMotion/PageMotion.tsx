@@ -11,11 +11,13 @@ export default function PageMotion(props: PageMotionProps) {
 
   return (
     <MotionBox
+      maxH="100vh"
+      overflowY="scroll"
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 100 }}
       transition={{
-        staggerChildren: 5,
+        staggerChildren: 0.5,
         opacity: { type: "spring", stiffness: 100 },
         y: { type: "spring", stiffness: 100 },
       }}

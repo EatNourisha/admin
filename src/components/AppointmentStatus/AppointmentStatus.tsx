@@ -3,7 +3,7 @@ import { Text, TextProps } from "@chakra-ui/layout";
 import capitalize from "lodash/capitalize";
 
 interface AppointmentStatusProps extends TextProps {
-  status: "pending" | "completed" | "cancelled" | "queued";
+  status: "pending" | "completed" | "cancelled" | "queued" | "approved";
 }
 
 type StatusColorMapType = Record<AppointmentStatusProps["status"], string>;
@@ -17,6 +17,7 @@ export default function AppointmentStatus(props: AppointmentStatusProps) {
       completed: "brand.lightGreen",
       cancelled: "brand.red",
       queued: "yellow",
+      approved: "brand.lightBlue",
     };
 
     return map[status];

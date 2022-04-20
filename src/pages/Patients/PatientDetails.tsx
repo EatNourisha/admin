@@ -5,6 +5,7 @@ import {
   Heading,
   HStack,
   Select,
+  Skeleton,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -22,11 +23,23 @@ import {
 
 import { ReactComponent as StackIcon } from "assets/svgs/stack.svg";
 
-import { navigate } from "@reach/router";
+import { navigate, useParams } from "@reach/router";
 import configs from "config";
+import useUserDetails from "hooks/useUserDetails";
+import { format, parseISO } from "date-fns";
+import { capitalize } from "lodash";
+import useGetAppointments from "hooks/useGetAppointment";
+import { useMemo } from "react";
 
 export default function PatientDetails() {
-  // const { id } = useParams();
+  const { id } = useParams();
+
+  const { data: user, isLoading } = useUserDetails(id);
+  const { data, isLoading: isAppointmentsLoading } = useGetAppointments({
+    user_id: id,
+  });
+
+  const appointments = useMemo(() => data?.results, [data]);
 
   return (
     <PageMotion key="patient-details">
@@ -67,7 +80,13 @@ export default function PatientDetails() {
             </HStack>
 
             <VStack pt="44px" pb="74px">
-              <Gravatar variant="vert" title="John Doe" subtitle="Male" />
+              <Gravatar
+                variant="vert"
+                isLoading={isLoading}
+                src={user?.profilePhotoUrl}
+                title={`${user?.firstName} ${user?.lastName}`}
+                subtitle={capitalize(user?.gender ?? "male")}
+              />
             </VStack>
 
             <HStack gridGap="20px">
@@ -84,7 +103,15 @@ export default function PatientDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">johndoe@email.com</Text>
+                <Skeleton
+                  isLoaded={!isLoading ?? true}
+                  w="fit-content"
+                  h="20px"
+                  borderRadius="12px"
+                  mt="8px"
+                >
+                  <Text fontSize="18px">{user?.email}</Text>
+                </Skeleton>
               </Box>
               <Box
                 w="100%"
@@ -99,7 +126,15 @@ export default function PatientDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">(603) 555-0123</Text>
+                <Skeleton
+                  isLoaded={!isLoading ?? true}
+                  w="fit-content"
+                  h="20px"
+                  borderRadius="12px"
+                  mt="8px"
+                >
+                  <Text fontSize="18px">{user?.phone}</Text>
+                </Skeleton>
               </Box>
             </HStack>
 
@@ -158,19 +193,24 @@ export default function PatientDetails() {
               overflow="hidden"
               shadow="0px 2px 12px rgba(0, 0, 0, 0.05)"
             >
-              <GenericTable headers={["Doctor", "Date", "Consultant Type"]}>
-                {Array(8)
-                  .fill(0)
-                  .map((_, i) => (
-                    <GenericTableItem
-                      key={`generic-table-items:${i}`}
-                      cols={[
-                        <Gravatar title="Dr. James Kuti" />,
-                        <Text fontSize="14px">12/02/22</Text>,
-                        <ConsultationBadge type="therapist" />,
-                      ]}
-                    />
-                  ))}
+              <GenericTable
+                isLoading={isAppointmentsLoading}
+                headers={["Doctor", "Date", "Consultant Type"]}
+              >
+                {appointments?.map((value) => (
+                  <GenericTableItem
+                    key={`appointment-table-item:${value?._id}`}
+                    cols={[
+                      <Gravatar
+                        title={`${value?.doctor?.firstName} ${value?.doctor?.lastName}`}
+                      />,
+                      <Text fontSize="14px">
+                        {format(parseISO(value?.time), "dd/MM/yy")}
+                      </Text>,
+                      <ConsultationBadge type={value?.consultationType} />,
+                    ]}
+                  />
+                ))}
               </GenericTable>
             </Box>
 

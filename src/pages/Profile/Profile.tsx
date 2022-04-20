@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Skeleton, Text, VStack } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import {
   MainLayoutContainer,
@@ -8,8 +8,15 @@ import {
   PageMotion,
 } from "components";
 import configs from "config";
+import useUser from "hooks/useUser";
+import { capitalize } from "lodash";
+import { useMemo } from "react";
 
 export default function Profile() {
+  const { data, isLoading } = useUser();
+
+  const user = useMemo(() => data?.data, [data]);
+
   return (
     <PageMotion key="profile-root">
       <Topbar pageTitle="Profile" />
@@ -48,8 +55,10 @@ export default function Profile() {
           <VStack pt="44px" pb="74px">
             <Gravatar
               variant="vert"
-              title="Abake Daniel"
-              subtitle="abakedaniel@email.com"
+              isLoading={isLoading}
+              src={user?.profilePhotoUrl}
+              title={`${user?.firstName} ${user?.lastName}`}
+              subtitle={capitalize(user?.gender ?? "male")}
               _subtitle={{ textTransform: "unset" }}
             />
           </VStack>
@@ -65,7 +74,7 @@ export default function Profile() {
                 Role
               </Text>
 
-              <Text fontSize="18px">johndoe@email.com</Text>
+              <Text fontSize="18px">{capitalize(user?.roles[0])}</Text>
             </Box>
             <Box
               w="100%"
@@ -74,10 +83,18 @@ export default function Profile() {
               shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
             >
               <Text fontSize="14px" fontWeight="400" color="brand.neutral500">
-                Role
+                Phone Number
               </Text>
 
-              <Text fontSize="18px">johndoe@email.com</Text>
+              <Skeleton
+                isLoaded={!isLoading ?? true}
+                w="fit-content"
+                h="20px"
+                borderRadius="12px"
+                mt="8px"
+              >
+                <Text fontSize="18px">{user?.phone}</Text>
+              </Skeleton>
             </Box>
           </HStack>
         </Box>

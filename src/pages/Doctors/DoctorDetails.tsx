@@ -6,6 +6,7 @@ import {
   HStack,
   Image,
   Select,
+  Skeleton,
   Stack,
   Text,
   VStack,
@@ -25,8 +26,13 @@ import {
 
 import ResumePng from "assets/images/resume.png";
 
-import { navigate } from "@reach/router";
+import { navigate, useParams } from "@reach/router";
 import configs from "config";
+import useUserDetails from "hooks/useUserDetails";
+import { capitalize } from "lodash";
+import useGetAppointments from "hooks/useGetAppointment";
+import { useMemo } from "react";
+import { format, parseISO } from "date-fns";
 
 function ViewableImage() {
   return (
@@ -55,7 +61,15 @@ function ViewableImage() {
 }
 
 export default function DoctorDetails() {
-  //   const { id } = useParams();
+  const { id } = useParams();
+
+  const { data: user, isLoading } = useUserDetails(id);
+  const { data, isLoading: isAppointmentsLoading } = useGetAppointments({
+    user_id: id,
+    role: "doctor",
+  });
+
+  const appointments = useMemo(() => data?.results, [data]);
 
   return (
     <PageMotion key="doctor-details" pb="80px">
@@ -96,7 +110,13 @@ export default function DoctorDetails() {
             </HStack>
 
             <VStack pt="44px" pb="74px">
-              <Gravatar variant="vert" title="Abake Daniel" subtitle="female" />
+              <Gravatar
+                variant="vert"
+                isLoading={isLoading}
+                src={user?.profilePhotoUrl}
+                title={`${user?.firstName} ${user?.lastName}`}
+                subtitle={capitalize(user?.gender ?? "male")}
+              />
             </VStack>
 
             <Grid templateColumns="repeat(2, 1fr)" gap="20px">
@@ -113,7 +133,15 @@ export default function DoctorDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">johndoe@email.com</Text>
+                <Skeleton
+                  isLoaded={!isLoading ?? true}
+                  w="fit-content"
+                  h="20px"
+                  borderRadius="12px"
+                  mt="8px"
+                >
+                  <Text fontSize="18px">{user?.email}</Text>
+                </Skeleton>
               </Box>
               <Box
                 w="100%"
@@ -128,7 +156,15 @@ export default function DoctorDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">(603) 555-0123</Text>
+                <Skeleton
+                  isLoaded={!isLoading ?? true}
+                  w="fit-content"
+                  h="20px"
+                  borderRadius="12px"
+                  mt="8px"
+                >
+                  <Text fontSize="18px">{user?.phone}</Text>
+                </Skeleton>
               </Box>
               <Box
                 w="100%"
@@ -173,7 +209,7 @@ export default function DoctorDetails() {
                   </Text>
                 </HStack>
 
-                <Text fontSize="18px">25MA02285700</Text>
+                <Text fontSize="18px">------</Text>
               </Box>
             </Grid>
           </Box>
@@ -249,19 +285,24 @@ export default function DoctorDetails() {
               overflow="hidden"
               shadow="0px 2px 12px rgba(0, 0, 0, 0.05)"
             >
-              <GenericTable headers={["Patient", "Date", "Consultant Type"]}>
-                {Array(8)
-                  .fill(0)
-                  .map((_, i) => (
-                    <GenericTableItem
-                      key={`generic-table-items:${i}`}
-                      cols={[
-                        <Gravatar title="Kristin Watson" />,
-                        <Text fontSize="14px">12/02/22</Text>,
-                        <ConsultationBadge type="therapist" />,
-                      ]}
-                    />
-                  ))}
+              <GenericTable
+                isLoading={isAppointmentsLoading}
+                headers={["Patient", "Date", "Consultant Type"]}
+              >
+                {appointments?.map((value) => (
+                  <GenericTableItem
+                    key={`appointments-table-item:${value?._id}`}
+                    cols={[
+                      <Gravatar
+                        title={`${value?.user?.firstName} ${value?.user?.lastName}`}
+                      />,
+                      <Text fontSize="14px">
+                        {format(parseISO(value?.time), "dd/MM/yy")}
+                      </Text>,
+                      <ConsultationBadge type={value?.consultationType} />,
+                    ]}
+                  />
+                ))}
               </GenericTable>
             </Box>
 

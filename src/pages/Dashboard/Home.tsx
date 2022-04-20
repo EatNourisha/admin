@@ -12,6 +12,7 @@ import {
   SubscriptionBadge,
   Topbar,
 } from "components";
+import { MeansOfContact } from "interfaces";
 import { useMemo } from "react";
 
 interface TotalFeatureCountProps {
@@ -96,7 +97,7 @@ export default function Home() {
         </Box>
 
         <Box mt="20px">
-          {["audio", "video", "chat"].map((type) => (
+          {Object.values(MeansOfContact).map((type) => (
             <Means key={`means-of-contact:${type}`} type={type as any} />
           ))}
         </Box>

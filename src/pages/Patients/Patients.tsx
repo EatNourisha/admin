@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Box, HStack, Select, Text } from "@chakra-ui/react";
 import {
   GenericTable,
@@ -14,20 +14,26 @@ import {
 
 import { navigate } from "@reach/router";
 import configs from "config";
+import useUsers from "hooks/useUsers";
+import { capitalize } from "lodash";
 
 export default function Patients() {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
+  const { data, isLoading } = useUsers({ roles: "patient" });
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isLoading]);
+  const patients = useMemo(() => data?.results, [data]);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setIsLoading(false), 2000);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [isLoading]);
 
   return (
-    <PageMotion key="patients-root">
+    <PageMotion key="patients-root" pb="100px">
       <Topbar pageTitle="Patients" />
       <MainLayoutContainer>
         <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
@@ -69,22 +75,25 @@ export default function Patients() {
               "Subscription",
             ]}
           >
-            {Array(8)
-              .fill(0)
-              .map((_, i) => (
-                <GenericTableItem
-                  isClickable
-                  key={`generic-table-items:${i}`}
-                  onClick={() => navigate(`${configs.paths.patients}/${i}`)}
-                  cols={[
-                    <Gravatar title="Dolphin Ademide" />,
-                    <Text fontSize="14px">johndoe@email.com</Text>,
-                    <Text fontSize="14px">(603) 555-0123</Text>,
-                    <Text fontSize="14px">Male</Text>,
-                    <SubscriptionBadge type="doctor" />,
-                  ]}
-                />
-              ))}
+            {patients?.map((value) => (
+              <GenericTableItem
+                isClickable
+                key={`patient-table-item:${value?._id}`}
+                onClick={() =>
+                  navigate(`${configs.paths.patients}/${value?._id}`)
+                }
+                cols={[
+                  <Gravatar
+                    src={value?.profilePhotoUrl}
+                    title={`${value?.firstName} ${value?.lastName}`}
+                  />,
+                  <Text fontSize="14px">{value?.email}</Text>,
+                  <Text fontSize="14px">{value?.phone}</Text>,
+                  <Text fontSize="14px">{capitalize(value?.gender)}</Text>,
+                  <SubscriptionBadge type="doctor" />,
+                ]}
+              />
+            ))}
           </GenericTable>
         </Box>
       </MainLayoutContainer>

@@ -12,6 +12,7 @@ export { default as MainLayoutContainer } from "./MainLayoutContainer/MainLayout
 export { default as Input } from "./Input/Input";
 export { default as Textarea } from "./Input/Textarea";
 export { default as PinInput } from "./Input/PinInput";
+export { default as InputLabel } from "./InputLabel/InputLabel";
 export { default as PasswordInput } from "./Input/PasswordInput";
 
 export { default as Means } from "./Means/Means";
@@ -24,3 +25,11 @@ export {
 export { default as AppointmentStatus } from "./AppointmentStatus/AppointmentStatus";
 export { default as ConsultationBadge } from "./ConsultationBadge/ConsultationBadge";
 export { default as SubscriptionBadge } from "./SubscriptionBadge/SubscriptionBadge";
+
+export { default as ConfirmationModal } from "./Modals/Confirm";
+
+export {
+  PaginatorContainer,
+  Paginator,
+  usePaginator,
+} from "./Paginator/Paginator";

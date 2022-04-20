@@ -3,6 +3,8 @@ import {
   AvatarProps,
   Box,
   BoxProps,
+  Skeleton,
+  SkeletonCircle,
   Text,
   TextProps,
 } from "@chakra-ui/react";
@@ -31,6 +33,8 @@ interface GravatarProps extends BoxProps {
   _container?: TextProps;
   _textContainer?: TextProps;
   variant?: VariantNameType;
+  isLoading?: boolean;
+  initials?: string;
 }
 
 export default function Gravatar(props: GravatarProps) {
@@ -45,6 +49,8 @@ export default function Gravatar(props: GravatarProps) {
     _subtitle,
     _container,
     _textContainer,
+    isLoading,
+    initials,
   } = props;
 
   const _orientation = useMemo(() => {
@@ -125,39 +131,61 @@ export default function Gravatar(props: GravatarProps) {
       {...variants?.container}
       {..._container}
     >
-      <Avatar
-        src={src}
-        size="sm"
-        name={title ?? "User avatar"}
-        {...variants?.avatar}
-        {..._avatar}
-      />
+      <SkeletonCircle
+        isLoaded={!isLoading ?? true}
+        w="fit-content"
+        h="fit-content"
+      >
+        <Avatar
+          src={src}
+          size="sm"
+          name={initials ?? title ?? "User avatar"}
+          {...variants?.avatar}
+          {..._avatar}
+        />
+      </SkeletonCircle>
 
       {(title || subtitle) && (
         <Box ml="4px" {...variants?.textContainer} {..._textContainer}>
           {title && (
-            <Text
-              fontSize="14px"
-              fontWeight="400"
-              color="brand.black"
-              textTransform="capitalize"
-              {...variants?.title}
-              {..._title}
+            <Skeleton
+              isLoaded={!isLoading ?? true}
+              w="fit-content"
+              h="20px"
+              borderRadius="12px"
+              mb={isLoading ? "3px" : "0"}
             >
-              {title}
-            </Text>
+              <Text
+                fontSize="14px"
+                fontWeight="400"
+                color="brand.black"
+                textTransform="capitalize"
+                {...variants?.title}
+                {..._title}
+              >
+                {title}
+              </Text>
+            </Skeleton>
           )}
           {subtitle && (
-            <Text
-              fontSize="12px"
-              fontWeight="400"
-              color="brand.neutral600"
-              textTransform="capitalize"
-              {...variants?.subtitle}
-              {..._subtitle}
+            <Skeleton
+              isLoaded={!isLoading ?? true}
+              w="fit-content"
+              h="20px"
+              borderRadius="12px"
+              mt="4px !important"
             >
-              {subtitle}
-            </Text>
+              <Text
+                fontSize="12px"
+                fontWeight="400"
+                color="brand.neutral600"
+                textTransform="capitalize"
+                {...variants?.subtitle}
+                {..._subtitle}
+              >
+                {subtitle}
+              </Text>
+            </Skeleton>
           )}
         </Box>
       )}

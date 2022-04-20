@@ -10,3 +10,11 @@ export interface PaginatedDocument<T> {
   totalCount: number;
   data: T;
 }
+
+export interface HashedDocumentPagination<T> {
+  results: T;
+  previous: string;
+  hasPrevious: false;
+  next: string;
+  hasNext: true;
+}

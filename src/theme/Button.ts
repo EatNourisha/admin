@@ -52,11 +52,12 @@ const Button: ComponentStyleConfig = {
       bg: "transparent",
       _hover: {
         color: "white",
-        bg: "#6410da",
+        bg: "brand.darkPrimary",
+        shadow: `0 0 0 3px var(--focusColor)`,
       },
       _active: {
         color: "white",
-        bg: "#a265f7",
+        bg: "brand.primary",
         transform: "scale(.99)",
       },
       _focus: {

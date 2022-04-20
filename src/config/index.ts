@@ -1,7 +1,7 @@
 const configs = {
   authKey: "x231nxj",
   // baseUrl: "https://koinpoll-api.herokuapp.com/v1",
-  baseUrl: "http://localhost:3020/v1",
+  baseUrl: "http://aegle-staging.us-east-1.elasticbeanstalk.com/v1",
 
   containerW: "8xl",
   DO_SPACES_KEY: "G224YB4WBEY5CX2DABQC",

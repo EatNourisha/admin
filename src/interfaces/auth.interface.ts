@@ -1,4 +1,5 @@
-import ApiResponse from "./apiResponse.interface";
+import ApiResponse, { HashedDocumentPagination } from "./apiResponse.interface";
+import { ConsultationType } from "./appointments.interface";
 
 export enum Gender {
   MALE = "male",
@@ -24,6 +25,12 @@ export interface LoginDto {
   password: string;
 }
 
+export interface UpdateProfileDto {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+}
+
 export interface VerifyEmailDto {
   code: string;
 }
@@ -36,34 +43,73 @@ export interface UserRo {
   _id: string;
   email: string;
   firstName: string;
-  middleName: string;
   lastName: string;
   phone: string;
-  isEmailVerified: boolean;
+  emailVerified: boolean;
   createdAt: string;
   updatedAt: string;
-  userName: string;
-  primaryRole: string;
-  refCode: string;
-  control: {
-    enabled: boolean;
+  gender: Gender;
+  provider: string;
+  suspended: boolean;
+  roles: string[];
+  profilePhotoAttachment?: {
+    url: string;
+    thumbnailUrl: string;
+    originalName: string;
+    fileName: string;
+    mimeType: string;
+    _id: string;
   };
-  vote: {
-    next: string;
-    last: string;
+  profilePhotoThumbnailUrl?: string;
+  profilePhotoUrl?: string;
+
+  subscription?: {
+    _id: string;
+    user: string;
+    __v: number;
+    benefits: string[];
+    createdAt: string;
+    name: string;
+    practitionerType: ConsultationType;
+    price: {
+      amount: number;
+      previousAmount: number;
+      currency: string;
+    };
+    schedule: string;
+    subscription?: {
+      _id: string;
+      practitionerType: ConsultationType;
+      schedule: string;
+      __v: 0;
+      benefits: string[];
+      createdAt: string;
+      name: string;
+      price: {
+        amount: number;
+        previousAmount: number;
+        currency: string;
+      };
+      trial: boolean;
+      updatedAt: string;
+    };
+    trial: true;
+    updatedAt: string;
+    usageCount: number;
+    validUntil: string;
   };
 }
 
-export interface AuthPayload {
-  sub: string;
-  exp: number;
-  roles: string[];
-  email: string;
-}
+// export interface AuthPayload {
+//   sub: string;
+//   exp: number;
+//   roles: string[];
+//   email: string;
+// }
 
 export interface AuthRo {
   token: string;
-  payload: AuthPayload;
+  user: UserRo;
 }
 
 export interface ResetPasswordDto {
@@ -82,3 +128,5 @@ export type VerifyEmailRo = ApiResponse<AuthRo>;
 export type RequestVerificationCodeRo = ApiResponse<MessageRo>;
 export type RequestPasswordResetRo = ApiResponse<MessageRo>;
 export type ResetPasswordRo = ApiResponse<UserRo>;
+
+export type GetUsersRO = HashedDocumentPagination<UserRo[]>;

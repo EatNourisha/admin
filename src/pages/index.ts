@@ -9,3 +9,8 @@ export { default as EditProfile } from "./Profile/EditProfile";
 export { default as DoctorDetails } from "./Doctors/DoctorDetails";
 export { default as Appointments } from "./Appointments/Appointments";
 export { default as PatientDetails } from "./Patients/PatientDetails";
+export { default as AppointmentDetails } from "./Appointments/AppointmentDetails";
+
+export { default as Login } from "./Auth/Login";
+export { default as ResetPassword } from "./Auth/ResetPassword";
+export { default as ForgotPassword } from "./Auth/ForgotPassword";

@@ -19,6 +19,7 @@ export interface GenericTableItemProps {
   cols: Array<React.ReactNode>;
   onClick?: () => void;
   isClickable?: boolean;
+  isLast?: boolean;
 }
 
 export default function GenericTable(props: GenericTableProps) {
@@ -43,13 +44,21 @@ export default function GenericTable(props: GenericTableProps) {
               <Tr key={`header-row:${i}`}>
                 {headers.map((header, i) => (
                   <Td key={`header-loading:${i}`}>
-                    <Skeleton isLoaded={!isLoading ?? true}>{header}</Skeleton>
+                    <Skeleton
+                      isLoaded={!isLoading ?? true}
+                      borderRadius="12px"
+                      h="14px"
+                    >
+                      {header}
+                    </Skeleton>
                   </Td>
                 ))}
               </Tr>
             ))}
 
         {!isLoading && children}
+
+        {!isLoading && !children && <>No Data</>}
       </Tbody>
     </Table>
   );
@@ -61,6 +70,7 @@ export function GenericTableItem(props: GenericTableItemProps) {
     <Tr
       onClick={onClick}
       _hover={{ cursor: isClickable ? "pointer" : "default", bg: "#F7F8F98f" }}
+      borderBottom="none"
     >
       {cols?.map((col, i) => (
         <Td key={`col:${i}`}>{col}</Td>

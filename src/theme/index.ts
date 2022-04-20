@@ -105,7 +105,6 @@ const theme = extendTheme(
         //   },
         // },
       },
-      //
     },
     components: {
       Button,

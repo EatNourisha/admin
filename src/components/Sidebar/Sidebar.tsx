@@ -22,6 +22,7 @@ import takeRight from "lodash/takeRight";
 
 import { RouterProps } from "@reach/router";
 import Icon from "../Icon/Icon";
+import useAuth from "hooks/useAuth";
 
 interface SidebarProps extends BoxProps {
   location: RouterProps["location"];
@@ -83,7 +84,7 @@ const pageLinks = [
 const Sidebar: FC<SidebarProps> = (props) => {
   const { ...xprops } = props;
 
-  // const { logout } = useAuth();
+  const { logout } = useAuth();
 
   const isCurrent = useCallback(
     (path: string) => {
@@ -157,14 +158,15 @@ const Sidebar: FC<SidebarProps> = (props) => {
           minH="57px"
           maxH="fit-content"
           h="fit-content"
-          borderRadius="2px"
+          borderRadius="0px"
           justifyContent="flex-start"
           // bg="#C2C8D11f"
           color="brand.greyText"
           fontSize="sm"
-          // onClick={() => logout()}
+          onClick={() => logout()}
           _hover={{
             bg: "#EFF0F6",
+            color: "brand.lightBlue",
           }}
         >
           Logout

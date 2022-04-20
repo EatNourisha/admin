@@ -2,9 +2,10 @@ import { useMemo } from "react";
 import { HStack, Text, BoxProps } from "@chakra-ui/react";
 import { IconNames } from "components/Icon/Icon";
 import CircleIcon from "components/Icon/CircleIcon";
+import { MeansOfContact } from "interfaces";
 
 interface MeansProps extends BoxProps {
-  type: "audio" | "video" | "chat";
+  type: MeansOfContact;
 }
 
 type OptionMapType = Record<
@@ -17,16 +18,24 @@ export default function Means(props: MeansProps) {
 
   const options = useMemo(() => {
     const map: OptionMapType = {
-      audio: {
+      [MeansOfContact.AUDIO]: {
         bg: "brand.lightGreen",
         icon: "audio",
         label: "Audio Call",
       },
-      video: { bg: "brand.red", icon: "video", label: "Video Call" },
-      chat: { bg: "brand.lightBlue", icon: "chat", label: "Chat" },
+      [MeansOfContact.VIDEO]: {
+        bg: "brand.red",
+        icon: "video",
+        label: "Video Call",
+      },
+      [MeansOfContact.CHAT]: {
+        bg: "brand.lightBlue",
+        icon: "chat",
+        label: "Chat",
+      },
     };
 
-    return map[type];
+    return map[type ?? MeansOfContact.AUDIO];
   }, [type]);
 
   return (
