@@ -23,6 +23,7 @@ import {
   PageMotion,
   Means,
   AppointmentStatus,
+  Loader,
 } from "components";
 
 // import { ReactComponent as StackIcon } from "assets/svgs/stack.svg";
@@ -100,22 +101,7 @@ export default function AppointmentDetails() {
             </Button> */}
             </HStack>
 
-            {isLoading && !details && (
-              <VStack py="100px">
-                <Box
-                  p="20px"
-                  bg="white"
-                  borderRadius="26px"
-                  shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
-                >
-                  <CircularProgress
-                    isIndeterminate
-                    color="brand.primary"
-                    size="24px"
-                  />
-                </Box>
-              </VStack>
-            )}
+            {isLoading && !details && <Loader py="100px" />}
 
             {!isLoading && details && (
               <>

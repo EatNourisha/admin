@@ -25,4 +25,9 @@ export interface AppointmentRO {
   doctor: UserRo;
 }
 
+export interface AppointmentStatsRO {
+  count: number;
+  status: string;
+}
+
 export type GetAppointmentsRO = HashedDocumentPagination<AppointmentRO[]>;

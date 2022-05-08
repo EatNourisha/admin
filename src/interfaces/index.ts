@@ -27,8 +27,11 @@ export type {
 export type {
   AppointmentRO,
   GetAppointmentsRO,
+  AppointmentStatsRO,
 } from "./appointments.interface";
 
 export { ConsultationType, MeansOfContact } from "./appointments.interface";
 
 export type { default as PageProps } from "./pageProps.interface";
+
+export type { DashboardRo } from "./dashboard.interface";

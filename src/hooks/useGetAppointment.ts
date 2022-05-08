@@ -8,6 +8,8 @@ interface IUseGetAppointmentsFilter {
   user_id?: string;
   role?: string;
   searchQuery?: string;
+  limit?: number;
+  page?: number;
 }
 
 export default function useGetAppointments(

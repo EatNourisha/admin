@@ -8,7 +8,7 @@ const configs = {
   DO_SPACES_SECRET: "go8SxgqLsKl5FMP3Kvl0XOoRrffGk2IowWcSMskf6eE",
   DO_SPACES_URL: "https://koinpoll.sfo3.digitaloceanspaces.com",
   DO_SPACES_ENDPOINT: "sfo3.digitaloceanspaces.com",
-  DO_BUCKET: "koinpoll",
+  DO_BUCKET: "aegle",
 
   paths: {
     login: "/signin",
