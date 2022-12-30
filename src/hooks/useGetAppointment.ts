@@ -10,6 +10,9 @@ interface IUseGetAppointmentsFilter {
   searchQuery?: string;
   limit?: number;
   page?: number;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export default function useGetAppointments(

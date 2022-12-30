@@ -1,7 +1,7 @@
 import {
   Box,
   Button,
-  CircularProgress,
+  // CircularProgress,
   Grid,
   //   Heading,
   HStack,
@@ -9,7 +9,7 @@ import {
   Skeleton,
   Text,
   TextProps,
-  VStack,
+  // VStack,
 } from "@chakra-ui/react";
 import {
   MainLayoutContainer,
@@ -24,6 +24,7 @@ import {
   Means,
   AppointmentStatus,
   Loader,
+  DetailItem,
 } from "components";
 
 // import { ReactComponent as StackIcon } from "assets/svgs/stack.svg";
@@ -35,23 +36,6 @@ import { capitalize } from "lodash";
 // import useGetAppointments from "hooks/useGetAppointment";
 import { PropsWithChildren } from "react";
 import useAppointment from "hooks/useAppointment";
-
-interface DetailItemProps {
-  label: string;
-  _label?: TextProps;
-}
-
-function DetailItem(props: PropsWithChildren<DetailItemProps>) {
-  const { label, children, _label } = props;
-  return (
-    <Box>
-      <Text fontSize="md" fontWeight="600" mb="8px" {..._label}>
-        {label}
-      </Text>
-      {children}
-    </Box>
-  );
-}
 
 export default function AppointmentDetails() {
   const { id } = useParams();
@@ -66,7 +50,7 @@ export default function AppointmentDetails() {
   return (
     <PageMotion key="appointment-details">
       <Topbar pageTitle="Appointments" />
-      <MainLayoutContainer>
+      <MainLayoutContainer pb="40px">
         <Grid
           templateColumns={{ xl: "1.3fr 1fr", "2xl": "1.5fr 1fr" }}
           gap="24px"
@@ -162,7 +146,7 @@ export default function AppointmentDetails() {
                         isLoaded={!isLoading ?? true}
                       >
                         <HStack>
-                          <Icon type="calendar" />
+                          <Icon type="date" />
                           <Text>
                             {format(parseISO(details?.time!), "dd/MM/yy")}
                           </Text>
@@ -170,14 +154,14 @@ export default function AppointmentDetails() {
                       </Skeleton>
                     </DetailItem>
 
-                    <DetailItem label="Date">
+                    <DetailItem label="Time">
                       <Skeleton
                         borderRadius="16px"
                         w="fit-content"
                         isLoaded={!isLoading ?? true}
                       >
                         <HStack>
-                          <Icon type="calendar" />
+                          <Icon type="time" />
                           <Text>
                             {format(parseISO(details?.time!), "hh:mm a")}
                           </Text>

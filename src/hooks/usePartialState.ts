@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-export default function usePartialState<T>(initialState: Partial<T>) {
+export default function usePartialState<T>(initialState?: Partial<T>) {
   const [s, _set] = useState(initialState);
   const set = useCallback((update: typeof initialState) => {
     _set((oldState) => ({ ...oldState, ...update }));

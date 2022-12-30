@@ -12,14 +12,13 @@ export default function useUsers(
   filter: IUseUsersFilter = { roles: "patient,doctor,admin" }
 ) {
   const queries = toQueryString(filter);
-  const { data, error } = useSWR<ApiResponse<GetUsersRO>>(
-    `/admins/users?${queries}`,
-    get
-  );
+  const key = `/admins/users?${queries}`;
+  const { data, error } = useSWR<ApiResponse<GetUsersRO>>(key, get);
 
   // console.log("USERS", data);
 
   return {
+    key,
     data: data?.data,
     isLoading: !error && !data,
     error,

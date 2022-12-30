@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   HStack,
-  Select,
+  // Select,
   VStack,
   Image,
   Text,
@@ -18,6 +18,8 @@ import {
   Link,
   MainLayoutContainer,
   PageMotion,
+  Paginator,
+  PaginatorContainer,
   Topbar,
 } from "components";
 
@@ -25,9 +27,13 @@ import EmptyFolder from "assets/images/folder.png";
 import configs from "config";
 import { navigate } from "@reach/router";
 import useUsers from "hooks/useUsers";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import isEmpty from "lodash/isEmpty";
 import usePageFilters from "hooks/usePageFilters";
+import useUpdateAdminStatus from "hooks/useUpdateAdminStatus";
+import { when } from "utils";
+import useAuthStore from "stores/auth";
+import { omit } from "lodash";
 
 function EmptyState() {
   return (
@@ -62,10 +68,36 @@ function EmptyState() {
 }
 
 export default function Admins() {
-  const { state, filter, setFilter } = usePageFilters({});
-  const { data, isLoading } = useUsers({ ...filter, roles: "admin" });
+  const { sub } = useAuthStore();
+  const [currentId, setId] = useState<string | "none">("none");
+  const { state, filter, setFilter, onPrevPage, onNextPage } = usePageFilters(
+    {}
+  );
 
-  const admins = useMemo(() => data?.results, [data]);
+  const { data, isLoading, key } = useUsers({ ...filter, roles: "admin" });
+
+  const { update, removeAdmin, isRemoving, isUpdating } = useUpdateAdminStatus([
+    key,
+  ]);
+
+  const admins = useMemo(
+    () => (data?.results ?? [])?.filter((r) => r?._id !== sub),
+    [data, sub]
+  );
+  const pageData = useMemo(() => omit(data, "results"), [data]);
+
+  const handleStatus = async (id: string, isSuspended: boolean) => {
+    setId(id);
+    const action = when(!!isSuspended, "enable", "disable");
+    await update(action)(id);
+    setId("none");
+  };
+
+  const handleRemove = async (id: string) => {
+    setId(id);
+    await removeAdmin(id);
+    setId("none");
+  };
 
   return (
     <PageMotion key="admins-root">
@@ -82,7 +114,11 @@ export default function Admins() {
             onChange={(e) => setFilter("searchQuery", e.target.value)}
           />
 
-          <HStack w="fit-content" ml="0 !important" minW="250px">
+          <Button onClick={() => navigate(configs.paths.addAdministrator)}>
+            Add Administrator
+          </Button>
+
+          {/* <HStack w="fit-content" ml="0 !important" minW="250px">
             <Text fontSize="14px" fontWeight="600" d="inline-block">
               Filter by:
             </Text>
@@ -95,12 +131,12 @@ export default function Admins() {
             >
               <option>Value</option>
             </Select>
-          </HStack>
+          </HStack> */}
         </HStack>
 
         {!admins && isEmpty(admins) && !isLoading && <EmptyState />}
 
-        {
+        {!isLoading && !isEmpty(admins) && (
           <Box
             borderRadius="24px"
             overflow="hidden"
@@ -143,13 +179,17 @@ export default function Admins() {
                         variant="transparent"
                         color="brand.primary"
                         icon={<Icon type="delete" />}
-                        onClick={() =>
-                          navigate(`${configs.paths.doctors}/${value?._id}`)
-                        }
+                        disabled={isRemoving && currentId === value?._id}
+                        isLoading={isRemoving && currentId === value?._id}
+                        onClick={() => handleRemove(value?._id)}
                       />
                     </HStack>,
                     <Switch
+                      disabled={isUpdating && currentId === value?._id}
                       isChecked={!value?.suspended}
+                      onChange={() =>
+                        handleStatus(value?._id, value?.suspended)
+                      }
                       sx={{
                         "--switch-track-width": "26px",
                         ".chakra-switch__track": {
@@ -171,7 +211,17 @@ export default function Admins() {
               ))}
             </GenericTable>
           </Box>
-        }
+        )}
+
+        <Box>
+          <PaginatorContainer>
+            <Paginator
+              {...pageData}
+              onPrev={(prev) => onPrevPage(prev)}
+              onNext={(next) => onNextPage(next)}
+            />
+          </PaginatorContainer>
+        </Box>
       </MainLayoutContainer>
     </PageMotion>
   );

@@ -40,4 +40,21 @@ export default class LinkedList<T> {
     this.size += 1;
     return this;
   }
+
+  pop() {
+    if (this.size < 1) return null;
+
+    const toDelete = this.tail;
+    if (this.size === 1) {
+      this.head = null;
+      this.tail = null;
+    }
+
+    this.tail = this.tail?.prev!;
+    this.tail.next = null;
+
+    if (toDelete?.prev) toDelete.prev = null;
+    this.size -= 1;
+    return toDelete;
+  }
 }

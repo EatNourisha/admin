@@ -39,3 +39,5 @@ export { default as Loader } from "./Loader/Loader";
 export { default as TotalPaymentChart } from "./Charts/TotalPayment";
 export { default as WeeklyPatientsChart } from "./Charts/WeeklyPatients";
 export { default as AppointmentHistoryChart } from "./Charts/AppointmentHistory";
+
+export { default as DetailItem } from "./DetailItem/DetailItem";

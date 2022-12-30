@@ -6,3 +6,5 @@ export { default as makeRequest, get, post, put, destroy } from "./makeRequest";
 export { default as secureStorage } from "./secureStorage";
 
 export { default as toQueryString } from "./toQueryString";
+export { default as currencyFormat } from "./formatter";
+export { when } from "./when";

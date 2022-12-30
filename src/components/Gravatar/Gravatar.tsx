@@ -156,10 +156,14 @@ export default function Gravatar(props: GravatarProps) {
               mb={isLoading ? "3px" : "0"}
             >
               <Text
+                maxW="fit-content"
                 fontSize="14px"
                 fontWeight="400"
                 color="brand.black"
                 textTransform="capitalize"
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
                 {...variants?.title}
                 {..._title}
               >

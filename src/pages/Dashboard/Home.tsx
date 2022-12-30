@@ -19,6 +19,7 @@ import configs from "config";
 import { format, parseISO } from "date-fns";
 import useDashboard from "hooks/useDashboard";
 import useGetAppointments from "hooks/useGetAppointment";
+import { LinkedList } from "libs";
 import { take } from "lodash";
 import { useMemo } from "react";
 
@@ -26,6 +27,12 @@ export default function Home() {
   const { data, isLoading } = useGetAppointments({});
   const { data: dashboardData, isLoading: isDashboadLoading } = useDashboard();
   const appointments = useMemo(() => take(data?.results ?? [], 5), [data]);
+
+  const list = new LinkedList<number>();
+  Array(10)
+    .fill(0)
+    .forEach((_, i) => list.push(i + 1));
+  console.log(list);
 
   return (
     <PageMotion key="dashboard-home">

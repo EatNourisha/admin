@@ -11,11 +11,22 @@ import configs from "config";
 import useUser from "hooks/useUser";
 import { capitalize } from "lodash";
 import { useMemo } from "react";
+// import uploadFile from "utils/do";
 
 export default function Profile() {
   const { data, isLoading } = useUser();
 
   const user = useMemo(() => data?.data, [data]);
+
+  // eslint-disable-next-line
+  // const [file, setFile] = useState<File | null>(null);
+  // eslint-disable-next-line
+  // const upload = async () => {
+  //   // console.log("file", file);
+  //   if (!file) return;
+  //   const res = await uploadFile(file);
+  //   console.log("Upload response", res);
+  // };
 
   return (
     <PageMotion key="profile-root">
@@ -97,6 +108,15 @@ export default function Profile() {
               </Skeleton>
             </Box>
           </HStack>
+
+          {/* <Box>
+            <input
+              type="file"
+              onChange={(e) => setFile((e.target.files as any)[0])}
+            />
+
+            <button onClick={upload}>upload</button>
+          </Box> */}
         </Box>
       </MainLayoutContainer>
     </PageMotion>

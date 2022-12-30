@@ -86,7 +86,7 @@ const theme = extendTheme(
     fonts,
     colors,
     config: {
-      cssVarPrefix: "koinpoll",
+      cssVarPrefix: "aegle",
     },
     styles: {
       global: {

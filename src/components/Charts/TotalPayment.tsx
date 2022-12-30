@@ -1,14 +1,16 @@
 import { Box, BoxProps, HStack, Text } from "@chakra-ui/react";
 import Loader from "components/Loader/Loader";
-import { init, EChartsOption } from "echarts";
+import { init, EChartsOption, ECharts } from "echarts";
 import useDashboard from "hooks/useDashboard";
 import { useEffect, useMemo, useRef } from "react";
+import { currencyFormat } from "utils";
 
 interface Props extends BoxProps {}
 
 export default function TotalPayment(props: Props) {
   const { data, isLoading } = useDashboard();
   const chartRef = useRef<HTMLDivElement | null>(null);
+  const chart = useRef<ECharts | null>(null);
 
   const options: EChartsOption = useMemo(
     () => ({
@@ -67,7 +69,7 @@ export default function TotalPayment(props: Props) {
   );
 
   useEffect(() => {
-    const chart = init(
+    chart.current = init(
       chartRef.current as HTMLElement,
       {},
       {
@@ -77,15 +79,43 @@ export default function TotalPayment(props: Props) {
     );
 
     if (options && typeof options === "object") {
-      chart.setOption(options);
+      chart.current.setOption(options);
     }
 
-    window.addEventListener("resize", chart.resize as any);
+    window.addEventListener("resize", chart.current?.resize as any);
 
     return () => {
-      window.removeEventListener("resize", chart.resize as any);
+      window.removeEventListener("resize", chart.current?.resize as any);
     };
   }, [options]);
+
+  useEffect(() => {
+    if (chart.current && data) {
+      chart.current.setOption({
+        ...options,
+
+        series: [
+          {
+            ...(options.series as any)[0],
+            data: [
+              {
+                value: data?.totalDoctorSubscriptionPayment ?? 0,
+                name: "Doctor's Subscription",
+              },
+              {
+                value: data?.totalTherapistSubscriptionPayment ?? 0,
+                name: "Therapist's Subscription",
+              },
+              {
+                value: data?.totalFreeTrialSubscriptionPayment ?? 0,
+                name: "Free Trial",
+              },
+            ],
+          },
+        ],
+      });
+    }
+  }, [options, data]);
 
   return (
     <Box
@@ -110,7 +140,8 @@ export default function TotalPayment(props: Props) {
         left="0px"
       >
         <Text mt="0 !important" fontSize="28px" fontWeight="700">
-          ₦500,000
+          {/* ₦500,000 */}
+          {currencyFormat("ngn").format(data?.totalSubscriptionPayment ?? 0)}
         </Text>
       </HStack>
 

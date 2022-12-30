@@ -27,5 +27,12 @@ export default function usePageFilters<T extends IFilterState>(
     delayFunc(_value);
   };
 
-  return { state, filter, setFilter: handleFilter };
+  const onNextPage = (page: string) => {
+    setFilter({ nextPage: page, prevPage: undefined });
+  };
+  const onPrevPage = (page: string) => {
+    setFilter({ nextPage: undefined, prevPage: page });
+  };
+
+  return { state, filter, setFilter: handleFilter, onNextPage, onPrevPage };
 }

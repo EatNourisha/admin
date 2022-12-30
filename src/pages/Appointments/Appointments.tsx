@@ -3,7 +3,7 @@ import {
   Box,
   Grid,
   HStack,
-  Select,
+  // Select,
   Skeleton,
   Stack,
   Text,
@@ -19,6 +19,8 @@ import {
   MainLayoutContainer,
   Means,
   PageMotion,
+  Paginator,
+  PaginatorContainer,
   // Paginator,
   // PaginatorContainer,
   Topbar,
@@ -29,7 +31,7 @@ import configs from "config";
 import { navigate } from "@reach/router";
 import usePageFilters from "hooks/usePageFilters";
 import useGetAppointmentStats from "hooks/useAppointmentStats";
-// import { omit } from "lodash";
+import { omit } from "lodash";
 import capitalize from "lodash/capitalize";
 
 interface StatProps {
@@ -75,11 +77,13 @@ function Stat(props: StatProps) {
 export default function Appointments() {
   // const [isLoading, setIsLoading] = useState(true);
 
-  const { state, filter, setFilter } = usePageFilters({});
+  const { state, filter, setFilter, onPrevPage, onNextPage } = usePageFilters(
+    {}
+  );
   const { data, isLoading } = useGetAppointments({ ...filter });
 
   const appointments = useMemo(() => data?.results, [data]);
-  // const pageData = useMemo(() => omit(data, "results"), [data]);
+  const pageData = useMemo(() => omit(data, "results"), [data]);
 
   // console.log("APPOINTMENT DATA", appointments);
 
@@ -108,7 +112,7 @@ export default function Appointments() {
                 onChange={(e) => setFilter("searchQuery", e.target.value)}
               />
 
-              <HStack w="fit-content" ml="0 !important" minW="250px">
+              {/* <HStack w="fit-content" ml="0 !important" minW="250px">
                 <Text fontSize="14px" fontWeight="600" d="inline-block">
                   Filter by:
                 </Text>
@@ -121,7 +125,7 @@ export default function Appointments() {
                 >
                   <option>Value</option>
                 </Select>
-              </HStack>
+              </HStack> */}
             </HStack>
 
             <Box
@@ -166,6 +170,16 @@ export default function Appointments() {
                 ))}
               </GenericTable>
             </Box>
+
+            <Box>
+              <PaginatorContainer>
+                <Paginator
+                  {...pageData}
+                  onPrev={(prev) => onPrevPage(prev)}
+                  onNext={(next) => onNextPage(next)}
+                />
+              </PaginatorContainer>
+            </Box>
           </Box>
 
           <Stack mt="80px">
@@ -174,16 +188,6 @@ export default function Appointments() {
             <Stat status="queued" />
           </Stack>
         </Grid>
-
-        {/* <Box>
-          <PaginatorContainer>
-            <Paginator
-              {...pageData}
-              onPrev={(prev) => setFilter("prevPage", prev)}
-              onNext={(next) => setFilter("nextPage", next)}
-            />
-          </PaginatorContainer>
-        </Box> */}
       </MainLayoutContainer>
     </PageMotion>
   );

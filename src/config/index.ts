@@ -1,7 +1,7 @@
 const configs = {
   authKey: "x231nxj",
-  // baseUrl: "https://koinpoll-api.herokuapp.com/v1",
-  baseUrl: "http://aegle-staging.us-east-1.elasticbeanstalk.com/v1",
+  // baseUrl: "http://aegle-staging.us-east-1.elasticbeanstalk.com/v1",
+  baseUrl: "https://api-staging.aeglehealth.io/v1",
 
   containerW: "8xl",
   DO_SPACES_KEY: "G224YB4WBEY5CX2DABQC",
@@ -9,6 +9,16 @@ const configs = {
   DO_SPACES_URL: "https://koinpoll.sfo3.digitaloceanspaces.com",
   DO_SPACES_ENDPOINT: "sfo3.digitaloceanspaces.com",
   DO_BUCKET: "aegle",
+
+  AWS_BUCKET: "rapyd",
+  AWS_REGION: "us-east-1",
+  AWS_ACCESS_KEY: "AKIAXT64XBHMCZ54Y2YN",
+  AWS_SECRET_KEY: "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",
+
+  // AWS_BUCKET: "rapydcars-uploads",
+  // AWS_REGION: "us-east-1",
+  // AWS_ACCESS_KEY: "AKIAUDYTFEK2BOTMSG7C",
+  // AWS_SECRET_KEY: "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",
 
   paths: {
     login: "/signin",

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, Grid, HStack, Select, Text } from "@chakra-ui/react";
+import { Box, Grid, HStack, Text } from "@chakra-ui/react";
 import {
   GenericTable,
   GenericTableItem,
@@ -8,6 +8,8 @@ import {
   Input,
   MainLayoutContainer,
   PageMotion,
+  Paginator,
+  PaginatorContainer,
   SubscriptionBadge,
   Topbar,
   WeeklyPatientsChart,
@@ -16,17 +18,20 @@ import {
 import { navigate } from "@reach/router";
 import configs from "config";
 import useUsers from "hooks/useUsers";
-import { capitalize } from "lodash";
+import { capitalize, omit } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import TotalFeatureCount from "components/TotalFeatureCount/TotalFeatureCount";
 
 export default function Patients() {
   // const [isLoading, setIsLoading] = useState(true);
-  const { state, filter, setFilter } = usePageFilters({});
+  const { state, filter, setFilter, onNextPage, onPrevPage } = usePageFilters(
+    {}
+  );
 
   const { data, isLoading } = useUsers({ ...filter, roles: "patient" });
 
   const patients = useMemo(() => data?.results, [data]);
+  const pageData = useMemo(() => omit(data, "results"), [data]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -53,7 +58,7 @@ export default function Patients() {
                 onChange={(e) => setFilter("searchQuery", e.target.value)}
               />
 
-              <HStack w="fit-content" ml="0 !important" minW="250px">
+              {/* <HStack w="fit-content" ml="0 !important" minW="250px">
                 <Text fontSize="14px" fontWeight="600" d="inline-block">
                   Filter by:
                 </Text>
@@ -66,7 +71,7 @@ export default function Patients() {
                 >
                   <option>Value</option>
                 </Select>
-              </HStack>
+              </HStack> */}
             </HStack>
             <Box
               borderRadius="24px"
@@ -103,6 +108,16 @@ export default function Patients() {
                   />
                 ))}
               </GenericTable>
+            </Box>
+
+            <Box>
+              <PaginatorContainer>
+                <Paginator
+                  {...pageData}
+                  onPrev={(prev) => onPrevPage(prev)}
+                  onNext={(next) => onNextPage(next)}
+                />
+              </PaginatorContainer>
             </Box>
           </Box>
 

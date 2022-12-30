@@ -25,6 +25,8 @@ import { ReactComponent as CheckedIcon } from "assets/svgs/checked.svg";
 import { ReactComponent as CancelIcon } from "assets/svgs/cancel.svg";
 import { ReactComponent as AddIcon } from "assets/svgs/add.svg";
 import { ReactComponent as DeleteIcon } from "assets/svgs/delete.svg";
+import { ReactComponent as DateIcon } from "assets/svgs/date.svg";
+import { ReactComponent as TimeIcon } from "assets/svgs/time.svg";
 import { useMemo } from "react";
 
 export type IconNames =
@@ -52,7 +54,9 @@ export type IconNames =
   | "cancel"
   | "leftArrow"
   | "add"
-  | "delete";
+  | "delete"
+  | "date"
+  | "time";
 
 export interface IconProps extends BoxProps {
   type: IconNames;
@@ -97,6 +101,8 @@ export default function Icon(props: IconProps) {
       leftArrow: LeftArrowIcon,
       notifications: NotificationsIcon,
       delete: DeleteIcon,
+      date: DateIcon,
+      time: TimeIcon,
     };
 
     return map[type];

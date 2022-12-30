@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import {
   Box,
   HStack,
-  Select,
+  // Select,
   Text,
   Button,
   Td,
@@ -19,6 +19,8 @@ import {
   Input,
   MainLayoutContainer,
   PageMotion,
+  Paginator,
+  PaginatorContainer,
   Topbar,
 } from "components";
 // import usePartialState from "hooks/usePartialState";
@@ -26,7 +28,7 @@ import {
 // import { navigate } from "@reach/router";
 // import configs from "config";
 import useUsers from "hooks/useUsers";
-import { capitalize } from "lodash";
+import { capitalize, omit } from "lodash";
 import { UserRo } from "interfaces";
 import useMakeAdmin from "hooks/useMakeAdmin";
 // import usePartialState from "hooks/usePartialState";
@@ -141,11 +143,18 @@ function TableItem(props: TableItemProps) {
 export default function AddAdmin() {
   // const [isLoading, setIsLoading] = useState(true);
 
-  const { state, filter, setFilter } = usePageFilters({});
+  const { state, filter, setFilter, onNextPage, onPrevPage } = usePageFilters(
+    {}
+  );
 
   const { data, isLoading } = useUsers({ ...filter, roles: "doctor,patient" });
 
-  const doctors = useMemo(() => data?.results, [data]);
+  const users = useMemo(
+    () => (data?.results ?? []).filter((u) => !u.roles?.includes("admin")),
+    [data]
+  );
+
+  const pageData = useMemo(() => omit(data, "results"), [data]);
 
   console.log("FILTERS", filter);
 
@@ -172,7 +181,7 @@ export default function AddAdmin() {
             onChange={(e) => setFilter("searchQuery", e.target.value)}
           />
 
-          <HStack w="fit-content" ml="0 !important" minW="250px">
+          {/* <HStack w="fit-content" ml="0 !important" minW="250px">
             <Text fontSize="14px" fontWeight="600" d="inline-block">
               Filter by:
             </Text>
@@ -185,7 +194,7 @@ export default function AddAdmin() {
             >
               <option>Value</option>
             </Select>
-          </HStack>
+          </HStack> */}
         </HStack>
         <Box
           borderRadius="24px"
@@ -203,10 +212,20 @@ export default function AddAdmin() {
               "Action",
             ]}
           >
-            {doctors?.map((value) => (
+            {users?.map((value) => (
               <TableItem key={`users-table-item-${value?._id}`} value={value} />
             ))}
           </GenericTable>
+        </Box>
+
+        <Box>
+          <PaginatorContainer>
+            <Paginator
+              {...pageData}
+              onPrev={(prev) => onPrevPage(prev)}
+              onNext={(next) => onNextPage(next)}
+            />
+          </PaginatorContainer>
         </Box>
       </MainLayoutContainer>
     </PageMotion>

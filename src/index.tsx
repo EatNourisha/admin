@@ -5,6 +5,9 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Providers from "./Providers";
 
+import { Buffer } from "buffer";
+(window as any).Buffer = Buffer;
+
 // const $element = document.getElementById("root");
 // if (!$element) throw new Error("Root element not found");
 
