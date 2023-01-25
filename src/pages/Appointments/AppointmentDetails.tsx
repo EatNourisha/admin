@@ -8,7 +8,6 @@ import {
   //   Select,
   Skeleton,
   Text,
-  TextProps,
   // VStack,
 } from "@chakra-ui/react";
 import {
@@ -32,9 +31,8 @@ import {
 import { navigate, useParams } from "@reach/router";
 import configs from "config";
 import { format, parseISO } from "date-fns";
-import { capitalize } from "lodash";
+import capitalize from "lodash/capitalize";
 // import useGetAppointments from "hooks/useGetAppointment";
-import { PropsWithChildren } from "react";
 import useAppointment from "hooks/useAppointment";
 
 export default function AppointmentDetails() {
