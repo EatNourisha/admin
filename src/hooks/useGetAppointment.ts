@@ -13,6 +13,8 @@ interface IUseGetAppointmentsFilter {
   status?: string;
   startDate?: string;
   endDate?: string;
+  start_date?: string;
+  end_date?: string;
 }
 
 export default function useGetAppointments(

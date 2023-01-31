@@ -1,11 +1,14 @@
 // import { Box } from "@chakra-ui/react";
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
 import {
+  AppointmentStatus,
   Gravatar,
   Icon,
   Loader,
   MainLayoutContainer,
   PageMotion,
+  Paginator,
+  PaginatorContainer,
   Topbar,
 } from "components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -26,8 +29,9 @@ import {
 import { format, isToday, parseISO, sub } from "date-fns";
 import useGetAppointments from "hooks/useGetAppointment";
 import { AppointmentRO } from "interfaces";
-import { isEmpty, join } from "lodash";
+import { isEmpty, join, omit } from "lodash";
 import { navigate } from "@reach/router";
+import usePageFilters from "hooks/usePageFilters";
 
 interface CalendarPickerProps {
   onPick?: (value: Date | null) => void;
@@ -41,15 +45,19 @@ interface CalendarAppointmentProps extends AppointmentRO {
 export default function Calendar() {
   const [date, setDate] = useState<Date | null>(new Date());
 
+  const { filter, onPrevPage, onNextPage } = usePageFilters({});
+
   const { data, isLoading } = useGetAppointments({
     startDate: !!date
-      ? format(sub(date, { days: 10 }), "yyyy/dd/MM")
+      ? format(sub(date, { days: 1 }), "yyyy-dd-MM")
       : undefined,
-    endDate: !!date ? format(date, "yyyy/dd/MM") : undefined,
-    // status: "pending",
+    endDate: !!date ? format(date, "yyyy-dd-MM") : undefined,
+    // limit: 10,
+    ...filter,
   });
+  const pageData = useMemo(() => omit(data, "results"), [data]);
 
-  console.log("Calendar Data", data);
+  console.log("Calendar Data", data, pageData);
 
   const appointments = useMemo(() => data?.results ?? [], [data]);
   const totalCount = useMemo(() => appointments.length, [appointments]);
@@ -58,7 +66,7 @@ export default function Calendar() {
     <PageMotion key="calendar-home">
       <Topbar pageTitle="Calendar" />
       <MainLayoutContainer pb="40px">
-        <Grid templateColumns=".7fr 1fr">
+        <Grid templateColumns=".6fr 1fr" gap="40px">
           <Stack>
             <HStack>
               <Heading as="h5" fontSize="md">
@@ -90,6 +98,16 @@ export default function Calendar() {
                     onClick={() => navigate(`/appointments/${appt?._id}`)}
                   />
                 ))}
+
+                <Box>
+                  <PaginatorContainer>
+                    <Paginator
+                      {...pageData}
+                      onPrev={(prev) => onPrevPage(prev)}
+                      onNext={(next) => onNextPage(next)}
+                    />
+                  </PaginatorContainer>
+                </Box>
               </Stack>
             )}
 
@@ -98,6 +116,18 @@ export default function Calendar() {
                 <Text>No appointments found!</Text>
               </VStack>
             )}
+
+            {/* {!isLoading && !isEmpty(appointments) && (
+              <Box>
+                <PaginatorContainer>
+                  <Paginator
+                    {...pageData}
+                    onPrev={(prev) => onPrevPage(prev)}
+                    onNext={(next) => onNextPage(next)}
+                  />
+                </PaginatorContainer>
+              </Box>
+            )} */}
           </Stack>
 
           <CalendarPicker onPick={(value) => setDate(value)} />
@@ -108,11 +138,14 @@ export default function Calendar() {
 }
 
 function CalendarAppointment(props: CalendarAppointmentProps) {
-  const { time, doctor, user, onClick } = props;
+  const { time, doctor, user, status, onClick } = props;
+
+  console.log("Calendar Appointment Status", status);
   return (
     <Box
       p="28px 34px"
-      maxW="480px"
+      maxW="680px"
+      w="100%"
       borderRadius="24px"
       border="1px solid transparent"
       borderColor="brand.neutral100"
@@ -125,13 +158,17 @@ function CalendarAppointment(props: CalendarAppointmentProps) {
       mb="10px !important"
     >
       <HStack justifyContent="space-between" mb="30px">
-        <Gravatar
-          src={doctor?.profilePhotoThumbnailUrl}
-          title={`Dr. ${join([doctor?.firstName, doctor?.lastName], " ")}`}
-          _avatar={{ size: "sm" }}
-          _title={{ maxW: "116px" }}
-        />
-        <Box minW="50px" h="4px" bg="brand.primary" />
+        {!["pending"].includes(status) && (
+          <>
+            <Gravatar
+              src={doctor?.profilePhotoThumbnailUrl}
+              title={`Dr. ${join([doctor?.firstName, doctor?.lastName], " ")}`}
+              _avatar={{ size: "sm" }}
+              _title={{ maxW: "116px" }}
+            />
+            <Box minW="50px" h="4px" bg="brand.primary" />
+          </>
+        )}
         <Gravatar
           src={user?.profilePhotoThumbnailUrl}
           title={`${join([user?.firstName, user?.lastName], " ")}`}
@@ -142,7 +179,7 @@ function CalendarAppointment(props: CalendarAppointmentProps) {
 
       <Divider borderColor="brand.neutral100" borderWidth="1px" />
 
-      <HStack mt="18px">
+      <HStack mt="18px" pos="relative">
         <Skeleton borderRadius="16px" w="fit-content" isLoaded={true}>
           <HStack>
             <Icon type="date" />
@@ -156,6 +193,8 @@ function CalendarAppointment(props: CalendarAppointmentProps) {
             <Text>{format(parseISO(time), "hh:mm a")}</Text>
           </HStack>
         </Skeleton>
+
+        <AppointmentStatus pos="absolute" right="0" status={status as any} />
       </HStack>
     </Box>
   );

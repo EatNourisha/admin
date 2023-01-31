@@ -15,7 +15,7 @@ interface AppointmentStatusProps extends TextProps {
 type StatusColorMapType = Record<AppointmentStatusProps["status"], string>;
 
 export default function AppointmentStatus(props: AppointmentStatusProps) {
-  const { status } = props;
+  const { status, ...xprops } = props;
 
   const color = useMemo(() => {
     const map: StatusColorMapType = {
@@ -31,7 +31,7 @@ export default function AppointmentStatus(props: AppointmentStatusProps) {
   }, [status]);
 
   return (
-    <Text fontSize="14px" fontWeight="400" color={color}>
+    <Text fontSize="14px" fontWeight="400" color={color} {...xprops}>
       {capitalize(status)}
     </Text>
   );
