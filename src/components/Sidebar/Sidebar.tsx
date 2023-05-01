@@ -33,6 +33,7 @@ const AppointmentIcon = () => <Icon type="appointments" />;
 const PatientsIcon = () => <Icon type="patients" />;
 const DoctorsIcon = () => <Icon type="doctors" />;
 const CalendarIcon = () => <Icon type="calendar" />;
+const PlusIcon = () => <Icon type="plus" />;
 const ProfileIcon = () => <Icon type="profile" />;
 const AdminIcon = () => <Icon type="admin" />;
 
@@ -66,6 +67,12 @@ const pageLinks = [
     icon: CalendarIcon,
     label: "Calendar",
     to: "/calendar",
+  },
+  {
+    activeIcon: PlusIcon,
+    icon: PlusIcon,
+    label: "Referral Codes",
+    to: "/referrals",
   },
   {
     activeIcon: ProfileIcon,
@@ -116,13 +123,13 @@ const Sidebar: FC<SidebarProps> = (props) => {
       </VStack>
 
       <VStack alignItems="flex-start" w="100%" mt="80px" overflowY="scroll">
-        {take(pageLinks, 5).map((link, i) => (
+        {take(pageLinks, 6).map((link, i) => (
           <SidebarLink
             key={i}
             {...link}
             isCurrent={isCurrent(link.to)}
             mb={
-              i === take(pageLinks, 5).length - 1
+              i === take(pageLinks, 6).length - 1
                 ? "0 !important"
                 : "16px !important"
             }

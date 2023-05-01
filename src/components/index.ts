@@ -27,6 +27,7 @@ export { default as ConsultationBadge } from "./ConsultationBadge/ConsultationBa
 export { default as SubscriptionBadge } from "./SubscriptionBadge/SubscriptionBadge";
 
 export { default as ConfirmationModal } from "./Modals/Confirm";
+export { default as ReferralCUModal } from "./Modals/ReferralCU";
 
 export {
   PaginatorContainer,
