@@ -30,6 +30,7 @@ const configs = {
     doctors: "/doctors",
     profile: "/profile",
     calendar: "/calendar",
+    referrals: "/referrals",
     patients: "/patients",
     dashboard: "/dashboard",
     administrators: "/admins",

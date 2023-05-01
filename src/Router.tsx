@@ -15,6 +15,8 @@ import {
   ResetPassword,
   ForgotPassword,
   AppointmentDetails,
+  Referrals,
+  ReferralDetails,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -64,6 +66,10 @@ const AppRouter = () => {
         </RootPage>
         <RootPage path={configs.paths.calendar}>
           <ProtectedRoute path="/" component={Calendar} />
+        </RootPage>
+        <RootPage path={configs.paths.referrals}>
+          <ProtectedRoute path="/" component={Referrals} />
+          <ProtectedRoute path="/:id" component={ReferralDetails} />
         </RootPage>
         <RootPage path={configs.paths.profile}>
           <ProtectedRoute path="/" component={Profile} />

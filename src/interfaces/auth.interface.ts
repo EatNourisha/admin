@@ -122,6 +122,14 @@ interface MessageRo {
   message: string;
 }
 
+export interface ReferralRo {
+  code: string;
+  email: string;
+  name: string;
+  users: UserRo[];
+  _id: string;
+}
+
 export type RegisterUserRo = ApiResponse<AuthRo>;
 export type LoginRo = ApiResponse<AuthRo>;
 export type VerifyEmailRo = ApiResponse<AuthRo>;
@@ -130,3 +138,4 @@ export type RequestPasswordResetRo = ApiResponse<MessageRo>;
 export type ResetPasswordRo = ApiResponse<UserRo>;
 
 export type GetUsersRO = HashedDocumentPagination<UserRo[]>;
+export type GetReferralsRO = HashedDocumentPagination<ReferralRo[]>;

@@ -27,6 +27,7 @@ import { ReactComponent as AddIcon } from "assets/svgs/add.svg";
 import { ReactComponent as DeleteIcon } from "assets/svgs/delete.svg";
 import { ReactComponent as DateIcon } from "assets/svgs/date.svg";
 import { ReactComponent as TimeIcon } from "assets/svgs/time.svg";
+import { ReactComponent as PlusSquareIcon } from "assets/svgs/plus.svg";
 import { useMemo } from "react";
 
 export type IconNames =
@@ -56,7 +57,8 @@ export type IconNames =
   | "add"
   | "delete"
   | "date"
-  | "time";
+  | "time"
+  | "plus";
 
 export interface IconProps extends BoxProps {
   type: IconNames;
@@ -103,6 +105,7 @@ export default function Icon(props: IconProps) {
       delete: DeleteIcon,
       date: DateIcon,
       time: TimeIcon,
+      plus: PlusSquareIcon,
     };
 
     return map[type];
