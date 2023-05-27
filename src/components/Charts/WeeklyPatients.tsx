@@ -162,7 +162,7 @@ export default function WeeklyPatients(props: Props) {
     >
       <HStack justifyContent="space-between" w="100%" px="6px">
         <Text mt="0 !important" fontSize="21px" fontWeight="700">
-          New Patience
+          New Patient
         </Text>
         <Text fontSize="12px" color="brand.neutral500">
           Weekly
