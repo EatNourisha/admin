@@ -11,7 +11,6 @@ import {
   TextProps,
 } from "@chakra-ui/react";
 import { add, isPast, parseISO } from "date-fns";
-import { create } from "lodash";
 import { useMemo } from "react";
 
 type VariantNameType = "horizSingle" | "horizDouble" | "vert";
