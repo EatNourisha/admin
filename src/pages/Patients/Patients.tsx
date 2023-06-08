@@ -18,9 +18,10 @@ import {
 import { navigate } from "@reach/router";
 import configs from "config";
 import useUsers from "hooks/useUsers";
-import { capitalize, omit } from "lodash";
+import { capitalize, omit, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import TotalFeatureCount from "components/TotalFeatureCount/TotalFeatureCount";
+import { format, parseISO } from "date-fns";
 
 export default function Patients() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +31,10 @@ export default function Patients() {
 
   const { data, isLoading } = useUsers({ ...filter, roles: "patient" });
 
-  const patients = useMemo(() => data?.results, [data]);
+  const patients = useMemo(
+    () => orderBy(data?.results ?? [], ["createdAt"], ["desc"]),
+    [data]
+  );
   const pageData = useMemo(() => omit(data, "results"), [data]);
 
   // useEffect(() => {
@@ -84,6 +88,7 @@ export default function Patients() {
                   "Fullname",
                   "Email",
                   "Phone Number",
+                  "Date",
                   "Gender",
                   "Subscription",
                 ]}
@@ -99,9 +104,18 @@ export default function Patients() {
                       <Gravatar
                         src={value?.profilePhotoUrl}
                         title={`${value?.firstName} ${value?.lastName}`}
+                        createdAt={value?.createdAt}
                       />,
                       <Text fontSize="14px">{value?.email}</Text>,
                       <Text fontSize="14px">{value?.phone}</Text>,
+                      <Text fontSize="14px">
+                        {format(
+                          parseISO(
+                            value?.createdAt ?? new Date().toISOString()
+                          ),
+                          "dd/MM/yyyy"
+                        )}
+                      </Text>,
                       <Text fontSize="14px">{capitalize(value?.gender)}</Text>,
                       <SubscriptionBadge type="doctor" />,
                     ]}

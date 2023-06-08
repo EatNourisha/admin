@@ -1,13 +1,17 @@
 import {
   Avatar,
   AvatarProps,
+  Badge,
   Box,
   BoxProps,
+  HStack,
   Skeleton,
   SkeletonCircle,
   Text,
   TextProps,
 } from "@chakra-ui/react";
+import { add, isPast, parseISO } from "date-fns";
+import { create } from "lodash";
 import { useMemo } from "react";
 
 type VariantNameType = "horizSingle" | "horizDouble" | "vert";
@@ -35,6 +39,7 @@ interface GravatarProps extends BoxProps {
   variant?: VariantNameType;
   isLoading?: boolean;
   initials?: string;
+  createdAt?: string;
 }
 
 export default function Gravatar(props: GravatarProps) {
@@ -51,6 +56,7 @@ export default function Gravatar(props: GravatarProps) {
     _textContainer,
     isLoading,
     initials,
+    createdAt,
   } = props;
 
   const _orientation = useMemo(() => {
@@ -121,6 +127,12 @@ export default function Gravatar(props: GravatarProps) {
     return map[variant ?? "horizSingle"];
   }, [variant]);
 
+  const isNew = useMemo(() => {
+    if (!createdAt) return false;
+    const date = add(parseISO(createdAt), { days: 14 });
+    return !isPast(date);
+  }, [createdAt]);
+
   return (
     <Box
       d="flex"
@@ -155,20 +167,27 @@ export default function Gravatar(props: GravatarProps) {
               borderRadius="12px"
               mb={isLoading ? "3px" : "0"}
             >
-              <Text
-                maxW="fit-content"
-                fontSize="14px"
-                fontWeight="400"
-                color="brand.black"
-                textTransform="capitalize"
-                overflow="hidden"
-                whiteSpace="nowrap"
-                textOverflow="ellipsis"
-                {...variants?.title}
-                {..._title}
-              >
-                {title}
-              </Text>
+              <HStack>
+                <Text
+                  maxW="fit-content"
+                  fontSize="14px"
+                  fontWeight="400"
+                  color="brand.black"
+                  textTransform="capitalize"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  textOverflow="ellipsis"
+                  {...variants?.title}
+                  {..._title}
+                >
+                  {title}
+                </Text>
+                {isNew && (
+                  <Badge bg="brand.primary" color="white">
+                    New
+                  </Badge>
+                )}
+              </HStack>
             </Skeleton>
           )}
           {subtitle && (
