@@ -14,6 +14,8 @@ const colors = {
     secondary: "#FDFAEC",
     lightBlue: "#0066F5",
     lightGreen: "#03CCAA",
+    lemonGreen: "#08d17d",
+    lemonGreenAlpha: "#effff6",
     blackGrey: "#0A164140",
     paleWhite: "#FAFBFD",
     green: "#32D660",

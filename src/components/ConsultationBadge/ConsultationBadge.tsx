@@ -1,8 +1,15 @@
 import { useMemo } from "react";
 import { Badge, BadgeProps } from "@chakra-ui/react";
+import { when } from "utils";
+import { capitalize } from "lodash";
 
+const known_consulation_types = [
+  "doctor",
+  "therapist",
+  "fitness_coach",
+] as const;
 interface ConsultationBadgeProps extends BadgeProps {
-  type: "doctor" | "therapist";
+  type: (typeof known_consulation_types)[number] | "default";
 }
 
 type DetailsMapType = Record<
@@ -12,6 +19,8 @@ type DetailsMapType = Record<
 
 export default function ConsultationBadge(props: ConsultationBadgeProps) {
   const { type } = props;
+
+  console.log("Consultation Type", type);
 
   const details = useMemo(() => {
     const map: DetailsMapType = {
@@ -25,9 +34,25 @@ export default function ConsultationBadge(props: ConsultationBadgeProps) {
         label: "Therapist",
         color: "brand.lightBlue",
       },
+      default: {
+        bg: "#F2EFFF",
+        label: capitalize(type),
+        color: "brand.purple",
+      },
+      fitness_coach: {
+        bg: "#effff6",
+        label: "Fitness Coach",
+        color: "brand.lemonGreen",
+      },
     };
 
-    return map[type];
+    const _type = when(
+      !known_consulation_types.includes(type as any),
+      "default",
+      type
+    );
+
+    return (map as any)[_type];
   }, [type]);
 
   return (
