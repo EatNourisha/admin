@@ -22,12 +22,18 @@ export {
   default as GenericTable,
   GenericTableItem,
 } from "./GenericTable/GenericTable";
-export { default as AppointmentStatus } from "./AppointmentStatus/AppointmentStatus";
+
+export { default as LineupStatus } from "./Status/LineupStatus";
+export { default as AppointmentStatus } from "./Status/AppointmentStatus";
 export { default as ConsultationBadge } from "./ConsultationBadge/ConsultationBadge";
 export { default as SubscriptionBadge } from "./SubscriptionBadge/SubscriptionBadge";
 
+export { default as TransactionDetailModal } from "./Modals/TransactionDetails";
+export { default as LineupDetailModal } from "./Modals/LineupDetails";
 export { default as ConfirmationModal } from "./Modals/Confirm";
 export { default as ReferralCUModal } from "./Modals/ReferralCU";
+
+export { default as APaginator } from "./Paginator/APaginator";
 
 export {
   PaginatorContainer,
@@ -42,3 +48,8 @@ export { default as WeeklyPatientsChart } from "./Charts/WeeklyPatients";
 export { default as AppointmentHistoryChart } from "./Charts/AppointmentHistory";
 
 export { default as DetailItem } from "./DetailItem/DetailItem";
+
+export { LineupItem } from "./Lineup/LineupItem";
+export { WeeklyMealLineUp } from "./TableItems/WeeklyMealLineUp";
+
+export { default as AddMealModal } from "./Modals/AddMealModal";

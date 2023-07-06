@@ -3,10 +3,8 @@ import useSWR from "swr";
 import { get } from "utils/makeRequest";
 
 export default function useUserDetails(id: string) {
-  const { data, error } = useSWR<ApiResponse<UserRo>>(
-    `/admins/users/${id}`,
-    get
-  );
+  const key = `customers/${id}`;
+  const { data, error } = useSWR<ApiResponse<UserRo>>(key, get);
 
   // console.log("PROFILE", data);
 
@@ -14,5 +12,6 @@ export default function useUserDetails(id: string) {
     data: data?.data,
     isLoading: !error && !data,
     error,
+    key,
   };
 }

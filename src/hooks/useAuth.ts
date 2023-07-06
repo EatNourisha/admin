@@ -42,16 +42,17 @@ export default function useAuth() {
       setStatus("loading");
       try {
         const res = (
-          await post<ApiResponse<AuthRo>, LoginDto>("/auth/login", data)
+          await post<ApiResponse<AuthRo>, LoginDto>("/auth/admin/login", data)
         ).data as AuthRo;
         if (res)
           persist({
-            ...res.user,
-            sub: res.user._id,
-            isVerified: res.user.emailVerified,
+            ...res.payload,
+            sub: res?.payload.sub,
+            isVerified: res?.payload.is_verified,
             token: res.token,
           });
       } catch (error: any) {
+        console.log("Login Error", error);
         actions?.setError({
           action: { type: "auth/login", payload: data },
           message: error?.message,

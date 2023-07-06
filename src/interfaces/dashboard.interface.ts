@@ -22,4 +22,9 @@ export interface DashboardRo {
   totalFreeTrialSubscriptionPayment: number;
   totalTherapistSubscriptionPayment: number;
   genderDemoGraphic: GenderDemoGraphicRo[];
+
+  //Nourisha
+  meals: number;
+  customers: number;
+  subscriptions: number;
 }

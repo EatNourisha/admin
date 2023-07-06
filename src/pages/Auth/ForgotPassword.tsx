@@ -11,7 +11,7 @@ import {
 import { RequestPasswordResetDto } from "interfaces";
 import { useState, useMemo } from "react";
 
-import { InputLabel, Input } from "components";
+import { Input, Icon } from "components";
 
 import useAuth from "hooks/useAuth";
 
@@ -46,21 +46,31 @@ const ForgotPassword = (props: any) => {
   //   }, [isSignedIn, token]);
 
   return (
-    <VStack>
+    <VStack my="80px" justifyContent="center">
       {/* <Topbar /> */}
 
       <Container maxW="md">
         <Box py="60px">
-          <Box mb="20px">
-            <Heading fontSize="3xl">Forgot Password?</Heading>
-            <Text fontSize="sm" color="brand.greyText" mt="10px">
-              Enter the email address associated with your account, and we’ll
-              email you an email to change your password.
-            </Text>
-          </Box>
+          <VStack mb="32px">
+            <Icon
+              mb="60px !important"
+              color="brand.primary"
+              type="fullLogo"
+              h="128px"
+            />
+
+            <VStack mb="20px">
+              <Heading fontFamily="var(--manjari)" fontSize="2xl">
+                Forgot Password
+              </Heading>
+              <Text mt="0 !important" fontSize="sm" color="brand.greyText">
+                Enter your Email and we will send you a reset instruction
+              </Text>
+            </VStack>
+          </VStack>
+
           <VStack as="form" onSubmit={handleSubmit}>
             <FormControl>
-              <InputLabel>Email Address</InputLabel>
               <Input
                 isRequired
                 value={state?.email ?? ""}
@@ -81,7 +91,7 @@ const ForgotPassword = (props: any) => {
                 onClick={handleSubmit}
                 type="submit"
               >
-                Send me instructions
+                Reset Password
               </Button>
             </Stack>
           </VStack>

@@ -1,7 +1,7 @@
 const configs = {
   authKey: "x231nxj",
   // baseUrl: "http://aegle-staging.us-east-1.elasticbeanstalk.com/v1",
-  baseUrl: "https://api-staging.aeglehealth.io/v1",
+  baseUrl: "http://localhost:8080/v1",
 
   containerW: "8xl",
   DO_SPACES_KEY: "G224YB4WBEY5CX2DABQC",
@@ -31,11 +31,16 @@ const configs = {
     profile: "/profile",
     calendar: "/calendar",
     referrals: "/referrals",
-    patients: "/patients",
+    users: "/users",
     dashboard: "/dashboard",
     administrators: "/admins",
+    meals: "/meals",
+    plans: "/plans",
+    addPlan: "/plans/add",
+    editPlan: "/plans/edit",
     editProfile: "/profile/edit",
     appointments: "/appointments",
+    subscriptions: "/subscriptions",
     addAdministrator: "/admins/add",
 
     // faqs: "/faqs",

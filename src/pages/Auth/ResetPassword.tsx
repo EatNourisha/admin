@@ -15,7 +15,7 @@ import { useState, useEffect, useMemo } from "react";
 import useAuth from "hooks/useAuth";
 
 import { navigate, useLocation } from "@reach/router";
-import { InputLabel, PasswordInput } from "components";
+import { Icon, Link, PasswordInput } from "components";
 
 import configs from "config";
 
@@ -69,18 +69,37 @@ const ResetPassword = (props: any) => {
   }, [passwordReset]);
 
   return (
-    <VStack>
+    <VStack my="80px">
       <Container maxW="md">
         <Box py="60px">
-          <Box mb="20px">
-            <Heading fontSize="3xl">Reset Password</Heading>
-            <Text fontSize="sm" mt="10px" color="brand.greyText">
-              Enter your new password to reset your account
-            </Text>
-          </Box>
+          <VStack mb="32px">
+            <Icon
+              mb="60px !important"
+              color="brand.primary"
+              type="fullLogo"
+              h="128px"
+            />
+
+            <VStack mb="20px">
+              <Heading fontFamily="var(--manjari)" fontSize="2xl">
+                Reset Email Sent
+              </Heading>
+              <Text
+                align="center"
+                mt="0 !important"
+                fontSize="sm"
+                color="brand.greyText"
+              >
+                We have sent a reset email to your email janedoe@icould.com.
+                <Link to="#" color="brand.primary">
+                  Having problems?
+                </Link>
+              </Text>
+            </VStack>
+          </VStack>
           <VStack as="form" onSubmit={handleSubmit}>
             <FormControl>
-              <InputLabel>New Password</InputLabel>
+              {/* <InputLabel>New Password</InputLabel> */}
               <PasswordInput
                 isRequired
                 isInvalid={doesNotMatch}
@@ -91,7 +110,7 @@ const ResetPassword = (props: any) => {
               />
             </FormControl>
             <FormControl>
-              <InputLabel>Confirm Password</InputLabel>
+              {/* <InputLabel>Confirm Password</InputLabel> */}
               <PasswordInput
                 isRequired
                 isInvalid={doesNotMatch}
@@ -100,7 +119,7 @@ const ResetPassword = (props: any) => {
                   handleState({ confirmPassword: e.target.value } as any)
                 }
                 name="confirmPassword"
-                placeholder="Confirm Password"
+                placeholder="Confirm New Password"
               />
               {doesNotMatch && (
                 <FormHelperText fontSize="sm" color="red.400">
@@ -119,7 +138,7 @@ const ResetPassword = (props: any) => {
                 onClick={handleSubmit}
                 type="submit"
               >
-                Save changes
+                Submit
               </Button>
             </Stack>
           </VStack>

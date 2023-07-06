@@ -11,10 +11,11 @@ const Textarea: FC<TextareaProps> = (props) => {
     <ChakraTextarea
       isRequired
       //   minH="50px"
-      border="1px solid #B4B8C3"
-      borderRadius="8px"
+      border="1px solid transparent"
+      borderColor="brand.neutral"
+      borderRadius="4px"
       errorBorderColor="red.400"
-      bg="#F6FBFC"
+      bg="transparent"
       _focus={{
         borderColor: "brand.primary",
         shadow: "0 0 0 3px var(--focusColor)",

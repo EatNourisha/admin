@@ -59,9 +59,9 @@ export default function WeeklyPatients(props: Props) {
     demographics?.forEach((graph, i) => {
       const week = weeks[graph?.dayOfWeek - 1];
       const maleScore =
-        graph?.genderScores?.find((v) => v.gender === "male")?.count ?? 0;
+        graph?.genderScores?.find((v: any) => v.gender === "male")?.count ?? 0;
       const femaleScore =
-        graph?.genderScores?.find((v) => v.gender === "female")?.count ?? 0;
+        graph?.genderScores?.find((v: any) => v.gender === "female")?.count ?? 0;
       _.push([week, maleScore, femaleScore]);
     });
 

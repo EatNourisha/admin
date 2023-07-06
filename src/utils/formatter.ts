@@ -1,10 +1,11 @@
-type SupportCurrency = "ngn" | "ghs" | "kes" | "usd";
+type SupportCurrency = "ngn" | "ghs" | "kes" | "usd" | "gbp";
 
 const currencyMap: Record<SupportCurrency, string> = {
   ngn: "en-NG",
   ghs: "en-GH",
   kes: "en-KE",
   usd: "en-US",
+  gbp: "en-GB",
 };
 
 const formatter = (currency: SupportCurrency) =>

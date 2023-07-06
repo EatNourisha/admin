@@ -6,7 +6,6 @@ import {
   Button,
   Heading,
   HStack,
-  Stack,
 } from "@chakra-ui/react";
 import { LoginDto } from "interfaces";
 import { useState, useEffect, useMemo } from "react";
@@ -16,7 +15,7 @@ import { useState, useEffect, useMemo } from "react";
 import useAuth from "hooks/useAuth";
 
 import { navigate } from "@reach/router";
-import { Link, InputLabel, Input, PasswordInput } from "components";
+import { Link, Input, PasswordInput, Icon } from "components";
 
 import configs from "config";
 
@@ -48,7 +47,7 @@ const Login = (props: any) => {
   }, [isSignedIn, token]);
 
   return (
-    <VStack>
+    <VStack my="80px" justifyContent="center">
       <HStack
         maxW={configs.containerW}
         w="100%"
@@ -65,26 +64,29 @@ const Login = (props: any) => {
 
       <Container maxW="md">
         <Box py="60px">
-          <Box mb="20px">
-            <Heading fontSize="3xl">Sign in to your account</Heading>
+          <VStack mb="32px">
+            <Icon mb="60px !important" color="brand.primary" type="fullLogo" />
+            <Heading fontFamily="var(--manjari)" fontSize="3xl">
+              Welcome to Nourisha Admin
+            </Heading>
             {/* <Text color="brand.greyText">
             Enter your details below to get started on Genera
           </Text> */}
-          </Box>
+          </VStack>
           <VStack as="form" onSubmit={handleSubmit}>
             <FormControl>
-              <InputLabel>Email Address</InputLabel>
+              {/* <InputLabel>Email Address</InputLabel> */}
               <Input
                 isRequired
                 value={state?.email ?? ""}
                 onChange={(e) => handleState({ email: e.target.value })}
                 name="email"
-                placeholder="Email"
+                placeholder="Enter Email address"
                 type="email"
               />
             </FormControl>
             <FormControl>
-              <InputLabel>Password</InputLabel>
+              {/* <InputLabel>Password</InputLabel> */}
               <PasswordInput
                 isRequired
                 value={state?.password ?? ""}
@@ -94,19 +96,20 @@ const Login = (props: any) => {
               />
             </FormControl>
 
-            <Stack justifyContent="flex-end" w="100%">
+            <VStack mt="32px !important" w="100%">
               <Link
                 w="fit-content"
-                alignSelf="flex-end"
                 textDecoration="none"
-                color="#1351FC"
-                mb="30px"
-                mt="10px"
+                color="brand.greyText"
+                fontWeight="semibold"
+                mb="16px"
+                // mt="10px"
                 to={configs.paths.forgotPassword}
               >
                 Forgot password?
               </Link>
               <Button
+                mt="0 !important"
                 w="100%"
                 isLoading={status === "loading"}
                 disabled={isDisabled}
@@ -114,9 +117,9 @@ const Login = (props: any) => {
                 // alignSelf="flex-end"
                 // onClick={handleSubmit}
               >
-                Log in
+                Sign In
               </Button>
-            </Stack>
+            </VStack>
           </VStack>
         </Box>
       </Container>

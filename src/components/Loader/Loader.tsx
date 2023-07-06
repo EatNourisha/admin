@@ -8,7 +8,7 @@ export default function Loader(props: Props) {
       <Box
         p="20px"
         bg="white"
-        borderRadius="26px"
+        borderRadius="8px"
         shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
       >
         <CircularProgress isIndeterminate color="brand.primary" size="24px" />

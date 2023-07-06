@@ -4,14 +4,13 @@ import {
   Button,
   Center,
   Divider,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { FC, useCallback } from "react";
 
 // import { ReactComponent as Logo } from "assets/svgs/logo.svg";
 // import { ReactComponent as LogoutIcon } from "assets/svgs/sidebar/current/logout.svg";
-
-import Logo from "../Logo/Logo";
 
 // import useAuth from "hooks/useAuth";
 
@@ -29,11 +28,11 @@ interface SidebarProps extends BoxProps {
 }
 
 const DashboardIcon = () => <Icon type="dashboard" />;
-const AppointmentIcon = () => <Icon type="appointments" />;
-const PatientsIcon = () => <Icon type="patients" />;
-const DoctorsIcon = () => <Icon type="doctors" />;
-const CalendarIcon = () => <Icon type="calendar" />;
-const PlusIcon = () => <Icon type="plus" />;
+const UsersIcon = () => <Icon type="users" />;
+const MealsIcon = () => <Icon type="meals" />;
+const SubscriptionsIcon = () => <Icon type="subscriptions" />;
+const ReferralIcon = () => <Icon type="referral" />;
+
 const ProfileIcon = () => <Icon type="profile" />;
 const AdminIcon = () => <Icon type="admin" />;
 
@@ -45,35 +44,36 @@ const pageLinks = [
     to: "/dashboard",
   },
   {
-    activeIcon: AppointmentIcon,
-    icon: AppointmentIcon,
-    label: "Appointments",
-    to: "/appointments",
+    activeIcon: UsersIcon,
+    icon: UsersIcon,
+    label: "Users",
+    to: "/users",
   },
   {
-    activeIcon: PatientsIcon,
-    icon: PatientsIcon,
-    label: "Patients",
-    to: "/patients",
+    activeIcon: MealsIcon,
+    icon: MealsIcon,
+    label: "Meals",
+    to: "/meals",
   },
   {
-    activeIcon: DoctorsIcon,
-    icon: DoctorsIcon,
-    label: "Doctors",
-    to: "/doctors",
+    activeIcon: SubscriptionsIcon,
+    icon: SubscriptionsIcon,
+    label: "Subscribed Users",
+    to: "/subscriptions",
   },
   {
-    activeIcon: CalendarIcon,
-    icon: CalendarIcon,
-    label: "Calendar",
-    to: "/calendar",
+    activeIcon: SubscriptionsIcon,
+    icon: SubscriptionsIcon,
+    label: "Plans",
+    to: "/plans",
   },
   {
-    activeIcon: PlusIcon,
-    icon: PlusIcon,
-    label: "Referral Codes",
-    to: "/referrals",
+    activeIcon: ReferralIcon,
+    icon: ReferralIcon,
+    label: "Referral",
+    to: "/referral",
   },
+
   {
     activeIcon: ProfileIcon,
     icon: ProfileIcon,
@@ -109,7 +109,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
 
   return (
     <Box
-      bg="brand.deepBlue"
+      bg="brand.black"
       minW="var(--sideNavWidth)"
       maxW="var(--sideNavWidth)"
       py="45px"
@@ -118,8 +118,21 @@ const Sidebar: FC<SidebarProps> = (props) => {
       top="0"
       {...xprops}
     >
-      <VStack justifyContent="center" alignItems="center" w="100%">
-        <Logo w="52px" />
+      <VStack
+        color="white"
+        justifyContent="center"
+        alignItems="center"
+        w="100%"
+      >
+        <Icon type="fullLogo" w="85px" h="90px" />
+        <Text
+          fontFamily="var(--manjari)"
+          position="relative"
+          top="-16px"
+          mt="0 !important"
+        >
+          Admin
+        </Text>
       </VStack>
 
       <VStack alignItems="flex-start" w="100%" mt="80px" overflowY="scroll">
@@ -137,7 +150,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
         ))}
 
         <Center w="100%" my="44px !important" px="26px">
-          <Divider color="brand.primary" borderColor="brand.primary400" />
+          <Divider color="brand.primary" borderColor="brand.primary" />
         </Center>
 
         {takeRight(pageLinks, 2).map((link, i) => (

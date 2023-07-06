@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { add, isPast, parseISO } from "date-fns";
 import { useMemo } from "react";
+import { when } from "utils";
 
 type VariantNameType = "horizSingle" | "horizDouble" | "vert";
 
@@ -39,6 +40,7 @@ interface GravatarProps extends BoxProps {
   isLoading?: boolean;
   initials?: string;
   createdAt?: string;
+  onClick?: () => void;
 }
 
 export default function Gravatar(props: GravatarProps) {
@@ -56,6 +58,7 @@ export default function Gravatar(props: GravatarProps) {
     isLoading,
     initials,
     createdAt,
+    onClick,
   } = props;
 
   const _orientation = useMemo(() => {
@@ -128,17 +131,19 @@ export default function Gravatar(props: GravatarProps) {
 
   const isNew = useMemo(() => {
     if (!createdAt) return false;
-    const date = add(parseISO(createdAt), { days: 14 });
+    const date = add(parseISO(createdAt), { days: 10 });
     return !isPast(date);
   }, [createdAt]);
 
   return (
     <Box
-      d="flex"
+      display="flex"
       flexDir={_orientation}
       justifyContent="center"
       alignItems="center"
       w="fit-content"
+      cursor={when(!!onClick, "pointer", "default")}
+      onClick={onClick}
       {...variants?.container}
       {..._container}
     >

@@ -8,6 +8,7 @@ import {
   HStack,
   Stack,
   Skeleton,
+  Progress,
   // SkeletonCircle,
 } from "@chakra-ui/react";
 
@@ -21,6 +22,8 @@ interface TopbarProps extends BoxProps {
   isLoading?: boolean;
   pageTitle?: string;
   action?: ReactNode;
+  isDownloading?: boolean;
+  progressValue?: number;
 }
 
 // const NotificationButton = () => {
@@ -70,50 +73,72 @@ interface TopbarProps extends BoxProps {
 // };
 
 const Topbar: FC<TopbarProps> = (props) => {
-  const { pageTitle, action, isLoading, ...xprops } = props;
+  const {
+    pageTitle,
+    action,
+    isLoading,
+    isDownloading,
+    progressValue,
+    ...xprops
+  } = props;
   return (
-    <HStack
-      justifyContent="space-between"
+    <Stack
       h="fit-content"
       top="0"
       pos="sticky"
       zIndex="99"
       // py="14px"
       // px="16px"
-      bg="white"
-      minH="100px"
+
       mb="26px"
       // backdropFilter="blur(10px)"
       // mt="52px"
       borderBottom="1px solid #D0D5DD"
+      // pos="relative"
       {...xprops}
     >
-      <MainLayoutContainer>
-        <HStack w="100%" justifyContent="space-between">
-          <Stack>
-            <Skeleton isLoaded={!isLoading ?? true}>
-              <Heading fontSize="3xl" fontWeight="700" letterSpacing="-2px">
-                {pageTitle}
-              </Heading>
-            </Skeleton>
-            {action && action}
-          </Stack>
+      <HStack w="100%" pos="relative" bg="white" minH="100px">
+        <MainLayoutContainer>
+          <HStack w="100%" justifyContent="space-between">
+            <Stack>
+              <Skeleton isLoaded={!isLoading || true}>
+                <Heading fontSize="3xl" fontWeight="700" letterSpacing="-2px">
+                  {pageTitle}
+                </Heading>
+              </Skeleton>
+              {action && action}
+            </Stack>
 
-          <HStack>
-            {/* <Input
+            <HStack>
+              {/* <Input
               w="100%"
               minW="380px"
               mr="20px !important"
               placeholder="Enter your search term"
               startAdornment={<Icon type="search" />}
             /> */}
-            {/* <SkeletonCircle isLoaded={!isLoading ?? true}>
+              {/* <SkeletonCircle isLoaded={!isLoading ?? true}>
               <NotificationButton />
             </SkeletonCircle> */}
+            </HStack>
           </HStack>
-        </HStack>
-      </MainLayoutContainer>
-    </HStack>
+        </MainLayoutContainer>
+        {isDownloading && (
+          <Progress
+            ml="0 !important"
+            size="xs"
+            isIndeterminate={
+              isDownloading && !!progressValue && progressValue <= 0
+            }
+            pos="absolute"
+            w="100%"
+            bottom="0"
+            colorScheme="primary"
+            value={progressValue}
+          />
+        )}
+      </HStack>
+    </Stack>
   );
 };
 

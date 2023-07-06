@@ -7,8 +7,13 @@ import {
   Td,
   TableProps,
   Skeleton,
+  VStack,
+  Image,
+  Text,
 } from "@chakra-ui/react";
 import React from "react";
+
+import Empty from "assets/images/folder.png";
 
 export interface GenericTableProps extends TableProps {
   headers: string[];
@@ -26,16 +31,22 @@ export default function GenericTable(props: GenericTableProps) {
   const { headers, isLoading, children } = props;
 
   return (
-    <Table variant="simple">
-      <Thead bg="brand.neutral50" h="74px">
-        <Tr>
-          {headers.map((header) => (
-            <Th textTransform="capitalize" fontSize="14px" color="brand.black">
-              {header}
-            </Th>
-          ))}
-        </Tr>
-      </Thead>
+    <Table variant="simple" borderRadius="8px">
+      {(isLoading || (!isLoading && !!children)) && (
+        <Thead bg="brand.neutral50" h="74px">
+          <Tr>
+            {headers.map((header) => (
+              <Th
+                textTransform="capitalize"
+                fontSize="14px"
+                color="brand.black"
+              >
+                {header}
+              </Th>
+            ))}
+          </Tr>
+        </Thead>
+      )}
       <Tbody>
         {isLoading &&
           Array(10)
@@ -58,7 +69,14 @@ export default function GenericTable(props: GenericTableProps) {
 
         {!isLoading && children}
 
-        {!isLoading && !children && <>No Data</>}
+        {!isLoading && !children && (
+          <VStack maxW="200px" mx="auto" my="180px">
+            <Image src={Empty} alt="empty list" boxSize="150px" />
+            <Text textAlign="center" fontSize="14px">
+              Sorry, it looks like you have nothing here yet
+            </Text>
+          </VStack>
+        )}
       </Tbody>
     </Table>
   );

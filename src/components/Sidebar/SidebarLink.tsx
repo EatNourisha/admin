@@ -21,7 +21,7 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
   const whenCurrent = (): LinkProps =>
     isCurrent
       ? {
-          bg: "transparent",
+          bg: "rgba(255, 255, 255, 0.1)",
           color: "white",
           // borderLeftColor: "white",
           pos: "relative",
@@ -31,7 +31,7 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
             pos: "absolute",
             w: "12px",
             h: "100%",
-            bg: "white",
+            bg: "transparent",
             top: 0,
             left: -1,
             borderRightRadius: "4px",
@@ -45,7 +45,7 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
   return (
     <Link
       // as={HStack}
-      d="flex"
+      display="flex"
       flexDir="row"
       alignItems="center"
       to={to}
@@ -56,7 +56,7 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
       // borderRadius="4px"
       color="#ffffff8f"
       _hover={{
-        bg: "transparent",
+        bg: "rgba(255, 255, 255, 0.2)",
       }}
       overflow="hidden"
       minH="51px"
@@ -84,7 +84,9 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
             // transition={{ type: "spring", stiffness: 100 }}
           >
             {/* <HStack> */}
-            {!isCurrent && <Box boxSize="20px" as={icon} />}
+            {!isCurrent && (
+              <Box boxSize="20px" as={icon} color="brand.grey400" />
+            )}
             {isCurrent && <Box boxSize="20px" as={activeIcon} />}
           </motion.div>
         </AnimatePresence>

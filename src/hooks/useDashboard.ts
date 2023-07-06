@@ -5,7 +5,7 @@ import { get } from "utils/makeRequest";
 
 export default function useDashboard() {
   const { data, error } = useSWR<ApiResponse<DashboardRo>>(
-    "/admins/dashboard",
+    "customers/dashboard",
     get
   );
 

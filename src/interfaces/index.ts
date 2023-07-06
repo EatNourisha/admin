@@ -13,6 +13,7 @@ export type {
   AuthRo,
   UserRo,
   GetUsersRO,
+  GetUsersRo,
   UpdateProfileDto,
 } from "./auth.interface";
 export type { default as AppStatus } from "./appStatus.type";
@@ -35,3 +36,5 @@ export { ConsultationType, MeansOfContact } from "./appointments.interface";
 export type { default as PageProps } from "./pageProps.interface";
 
 export type { DashboardRo } from "./dashboard.interface";
+
+export * from "./user.interface";

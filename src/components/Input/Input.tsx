@@ -4,18 +4,20 @@ import {
   InputProps as ChakraInputProps,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { FC } from "react";
 
 interface InputProps extends ChakraInputProps {
   startAdornment?: any;
+  endAdornment?: any;
 }
 
 const Input: FC<InputProps> = (props) => {
-  const { startAdornment } = props;
+  const { startAdornment, endAdornment } = props;
 
   return (
-    <InputGroup>
+    <InputGroup w="unset">
       {startAdornment && (
         <InputLeftElement
           h="100%"
@@ -24,12 +26,14 @@ const Input: FC<InputProps> = (props) => {
       )}
       <ChakraInput
         isRequired
-        minH="56px"
+        // maxW=""
+        minH="52px"
         border="1px solid transparent"
-        borderRadius="12px"
-        errorBorderColor="red.400"
-        bg="brand.neutral"
+        borderRadius="4px"
+        errorBorderColor="brand.deepRed"
+        bg="transparent"
         pl={startAdornment ? "52px" : "20px"}
+        pr={endAdornment ? "52px" : "20px"}
         _focus={{
           borderColor: "brand.primary",
           shadow: "0 0 0 3px var(--focusColor)",
@@ -39,8 +43,19 @@ const Input: FC<InputProps> = (props) => {
           borderColor: "brand.primary",
           bg: "#E7EAEE3f",
         }}
+        sx={{
+          "::placeholder": {
+            color: "brand.greyText",
+          },
+        }}
         {...props}
       />
+      {endAdornment && (
+        <InputRightElement
+          h="100%"
+          children={<Box pr="20px">{endAdornment}</Box>}
+        />
+      )}
     </InputGroup>
   );
 };

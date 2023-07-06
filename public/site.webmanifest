@@ -1,6 +1,6 @@
 {
-    "name": "Aegle Admin",
-    "short_name": "Aegle Admin",
+    "name": "Nourisha",
+    "short_name": "Nourisha",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#1b2cc1",
-    "background_color": "#1b2cc1",
+    "theme_color": "#fe7e00",
+    "background_color": "#fe7e00",
     "display": "standalone"
 }

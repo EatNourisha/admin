@@ -1,4 +1,7 @@
-import ApiResponse, { HashedDocumentPagination } from "./apiResponse.interface";
+import ApiResponse, {
+  HashedDocumentPagination,
+  PaginatedDocument,
+} from "./apiResponse.interface";
 import { ConsultationType } from "./appointments.interface";
 
 export enum Gender {
@@ -42,10 +45,28 @@ export interface RequestPasswordResetDto {
 export interface UserRo {
   _id: string;
   email: string;
+
+  //Deprecated
   firstName: string;
   lastName: string;
+
+  first_name: string;
+  last_name: string;
   phone: string;
-  emailVerified: boolean;
+  is_email_verified: boolean;
+  delivery_day: string;
+  stripe_id: string;
+  primary_role: string;
+
+  address: {
+    address_: string;
+    city: string;
+    country: string;
+    postcode: string;
+  };
+
+  lineup: string | {};
+
   createdAt: string;
   updatedAt: string;
   gender: Gender;
@@ -97,19 +118,43 @@ export interface UserRo {
     updatedAt: string;
     usageCount: number;
     validUntil: string;
+
+    // Nourisha
+    stripe_id: string;
+    plan: {
+      product_id: string;
+      price_id: string;
+      name: string;
+      description: string;
+      slug: string;
+      amount: number;
+      currency: string;
+      subscription_interval: string;
+      perks: string[];
+    };
+    customer: string;
+    start_date: string;
+    end_date: string;
+    next_billing_date: string;
+    status: string;
   };
+  control: {
+    suspended: boolean;
+  };
+  notes: string;
 }
 
-// export interface AuthPayload {
-//   sub: string;
-//   exp: number;
-//   roles: string[];
-//   email: string;
-// }
+export interface AuthPayload {
+  sub: string;
+  exp: number;
+  roles: string[];
+  email: string;
+  is_verified: boolean;
+}
 
 export interface AuthRo {
   token: string;
-  user: UserRo;
+  payload: AuthPayload;
 }
 
 export interface ResetPasswordDto {
@@ -139,3 +184,5 @@ export type ResetPasswordRo = ApiResponse<UserRo>;
 
 export type GetUsersRO = HashedDocumentPagination<UserRo[]>;
 export type GetReferralsRO = HashedDocumentPagination<ReferralRo[]>;
+
+export type GetUsersRo = PaginatedDocument<UserRo[]>;

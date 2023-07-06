@@ -32,22 +32,24 @@ const PasswordInput: FC<PasswordInputProps> = ({
       <ChakraInput
         w={w}
         width={width}
-        borderRadius="8px"
-        errorBorderColor="red.400"
+        borderRadius="4px"
+        errorBorderColor="brand.deepRed"
         minH="52px"
-        // bg="#EFF0F7"
+        bg="#E7EAEE3f"
         border="1px solid transparent"
         variant="filled"
         _focus={{
           borderColor: "brand.primary",
           shadow: "0 0 0 3px var(--focusColor)",
+          bg: "#E7EAEE3f",
         }}
         _hover={{
           borderColor: "brand.primary",
+          bg: "#E7EAEE3f",
         }}
         sx={{
           "::placeholder": {
-            color: "#B4C1DC",
+            color: "brand.greyText",
           },
         }}
         {...props}
@@ -68,9 +70,9 @@ const PasswordInput: FC<PasswordInputProps> = ({
             onClick={toggleVisibility}
             icon={
               !isVisible ? (
-                <Box fontSize="24px" as={ViewIcon} color="brand.black" />
+                <Box fontSize="24px" as={ViewIcon} color="brand.greyText" />
               ) : (
-                <Box fontSize="24px" as={ViewOffIcon} color="brand.black" />
+                <Box fontSize="24px" as={ViewOffIcon} color="brand.greyText" />
               )
             }
           />

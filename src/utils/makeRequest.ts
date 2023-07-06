@@ -20,6 +20,8 @@ const makeRequest = <D extends any = any, R extends any = any>(
 ) => {
   const auth = ls.get(configs.authKey);
 
+  console.log("Auth", auth);
+
   const getHeaders = () => {
     if (auth?.isSignedIn && auth?.token)
       return {
@@ -63,5 +65,20 @@ export const destroy = <T extends any, D extends any = any>(
   makeRequest<any, T>({ url, data, method: "DELETE" }).then(
     (r: AxiosResponse<T, any>) => r.data
   );
+
+export const download = <T extends any>(
+  url: string,
+  progressCallback?: (progress: number) => void
+) =>
+  makeRequest<any, T>({
+    url,
+    method: "GET",
+    onDownloadProgress(progressEvent) {
+      const progress = Math.round(
+        (progressEvent.loaded / progressEvent.total) * 100
+      );
+      progressCallback && progressCallback(progress);
+    },
+  }).then((r: AxiosResponse<T, any>) => r.data);
 
 export default makeRequest;

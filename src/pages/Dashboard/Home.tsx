@@ -1,194 +1,120 @@
-import { Box, Grid, HStack, Select, Text } from "@chakra-ui/react";
-import { navigate } from "@reach/router";
+import { Box, Grid, Heading, Stack, Text } from "@chakra-ui/react";
 import {
-  AppointmentHistoryChart,
-  AppointmentStatus,
-  ConsultationBadge,
+  APaginator,
   GenericTable,
-  GenericTableItem,
-  Gravatar,
+  Link,
   MainLayoutContainer,
-  Means,
   PageMotion,
   Topbar,
-  TotalPaymentChart,
-  WeeklyPatientsChart,
+  WeeklyMealLineUp,
 } from "components";
 import TotalFeatureCount from "components/TotalFeatureCount/TotalFeatureCount";
-import configs from "config";
-import { format, parseISO } from "date-fns";
 import useDashboard from "hooks/useDashboard";
-import useGetAppointments from "hooks/useGetAppointment";
-import { LinkedList } from "libs";
-import { take } from "lodash";
+import usePageFilters from "hooks/usePageFilters";
+import useSubscriptions from "hooks/useSubscriptions";
+// import { LinkedList } from "libs";
 import { useMemo } from "react";
 
 export default function Home() {
-  const { data, isLoading } = useGetAppointments({});
-  const { data: dashboardData, isLoading: isDashboadLoading } = useDashboard();
-  const appointments = useMemo(() => take(data?.results ?? [], 5), [data]);
+  const { state, onPageChange } = usePageFilters({ limit: 10, page: 1 });
 
-  const list = new LinkedList<number>();
-  Array(10)
-    .fill(0)
-    .forEach((_, i) => list.push(i + 1));
-  console.log(list);
+  // const { data, isLoading } = useUsers({
+  //   has_lineup: true,
+  //   has_subscription: true,
+  //   ...state,
+  // });
+
+  const { data, isLoading } = useSubscriptions({ ...state, status: "active" });
+
+  const { data: dashboardData, isLoading: isDashboadLoading } = useDashboard();
+  const subscriptions = useMemo(() => data?.data ?? [], [data]);
+  const hasSubscriptions = useMemo(
+    () => (subscriptions ?? []).length > 0,
+    [subscriptions]
+  );
+
+  console.log("Customers", subscriptions);
+
+  // const list = new LinkedList<number>();
+  // Array(10)
+  //   .fill(0)
+  //   .forEach((_, i) => list.push(i + 1));
+  // console.log(list);
 
   return (
     <PageMotion key="dashboard-home">
       <Topbar pageTitle="Dashboard" />
       <MainLayoutContainer pb="60px">
-        <Grid templateColumns="3fr 1fr" gap={"16px"}>
-          <Box>
-            <Grid templateColumns="repeat(3, 1fr)" gap="16px">
-              <TotalFeatureCount
-                type="appointments"
-                value={dashboardData?.totalAppointments ?? 0}
-                label="Appointments"
-                isLoading={isDashboadLoading}
-              />
-              <TotalFeatureCount
-                type="patients"
-                value={dashboardData?.totalPatients ?? 0}
-                label="Patients"
-                isLoading={isDashboadLoading}
-              />
-              <TotalFeatureCount
-                type="doctors"
-                value={dashboardData?.totalDoctors ?? 0}
-                label="Doctors"
-                isLoading={isDashboadLoading}
-              />
-            </Grid>
-
-            <AppointmentHistoryChart mt="16px" />
-          </Box>
-
-          <TotalPaymentChart />
-        </Grid>
-
-        <Grid mt="16px" templateColumns="3fr 1fr" gap="16px">
-          <Box
-            borderRadius="24px"
-            overflow="hidden"
-            // shadow="0px 2px 12px rgba(0, 0, 0, 0.05)"
-            border="2px solid transparent"
-            borderColor="brand.neutral100"
-          >
-            <HStack
-              justifyContent="space-between"
-              alignItems="center"
-              p="26px 22px"
-            >
-              <Text fontSize="18px" fontWeight="700">
-                All Appointment
-              </Text>
-
-              <Select
-                // mt="10px"
-                // placeholder="Select Option"
-                minH="40px"
-                maxW="164px"
-                fontSize="12px"
-              >
-                <option value="recent">Recent Application</option>
-              </Select>
-            </HStack>
-            <GenericTable
-              isLoading={isLoading}
-              headers={[
-                "Patient",
-                "Consultant Type",
-                "Date",
-                "Time",
-                "Means of Contact",
-                "Status",
-              ]}
-            >
-              {appointments?.map((value) => (
-                <GenericTableItem
-                  isClickable
-                  onClick={() =>
-                    navigate(`${configs.paths.appointments}/${value?._id}`)
-                  }
-                  key={`appointment-table-item:${value?._id}`}
-                  cols={[
-                    <Gravatar
-                      src={value?.user?.profilePhotoUrl}
-                      title={`${value?.user?.firstName} ${value?.user?.lastName}`}
-                    />,
-                    <ConsultationBadge type={value?.consultationType} />,
-                    <Text fontSize="14px">
-                      {format(parseISO(value.time), "dd/MM/yy")}
-                    </Text>,
-                    <Text fontSize="14px">
-                      {format(parseISO(value.time), "hh:mm a")}
-                    </Text>,
-                    <Means type={value.meansOfContact} />,
-                    <AppointmentStatus status={value.status as any} />,
-                  ]}
-                />
-              ))}
-            </GenericTable>
-          </Box>
-
-          <WeeklyPatientsChart />
-        </Grid>
-
-        {/* <Box mt="20px">
-          <ConsultationBadge type="doctor" />
-          <ConsultationBadge type="therapist" />
-        </Box> */}
-
-        {/* <Box mt="20px">
-          <SubscriptionBadge type="doctor" />
-          <SubscriptionBadge type="therapist" />
-          <SubscriptionBadge type="free" />
-        </Box> */}
-
-        {/* <Box mt="20px">
-          {Object.values(MeansOfContact).map((type) => (
-            <Means key={`means-of-contact:${type}`} type={type as any} />
-          ))}
-        </Box> */}
-
-        {/* <Box mt="20px">
-          {["pending", "completed"].map((status) => (
-            <AppointmentStatus
-              key={`status:${status}`}
-              status={status as any}
+        <Box>
+          <Grid templateColumns="repeat(4, 1fr)" gap="16px">
+            <TotalFeatureCount
+              type="meals"
+              value={dashboardData?.meals ?? 0}
+              label="Meals"
+              isLoading={isDashboadLoading}
             />
-          ))}
-        </Box> */}
+            <TotalFeatureCount
+              type="users"
+              value={dashboardData?.customers ?? 0}
+              label="Users"
+              isLoading={isDashboadLoading}
+            />
+            <TotalFeatureCount
+              type="subscriptions"
+              value={dashboardData?.subscriptions ?? 0}
+              label="Subscriptions"
+              isLoading={isDashboadLoading}
+            />
+            <Box
+              p="40px 34px"
+              border="1px solid transparent"
+              borderColor="brand.neutral"
+              borderRadius="8px"
+              minW="252px"
+            >
+              <Text fontSize="3xl" fontWeight="800">
+                Menu
+              </Text>
+              <Link to="/meals" color="brand.primary">
+                View this week menu
+              </Link>
+            </Box>
+          </Grid>
+        </Box>
 
-        {/* <Box mt="20px">
-          <Gravatar title="Dolphin Ademide" />
-          <Gravatar
-            variant="horizDouble"
-            title="Dolphin Ademide"
-            subtitle="male"
-          />
-          <Gravatar variant="vert" title="Dolphin Ademide" subtitle="male" />
-        </Box> */}
-
-        {/* <Box mt="20px">
-          <Input
-            w="100%"
-            minH="48px"
-            maxW="300px"
-            placeholder="Search Patient"
-            startAdornment={<Icon type="search" />}
-          />
-
-          <Select
-            mt="10px"
-            placeholder="Select Option"
-            minH="48px"
-            maxW="300px"
+        <Stack my="26px">
+          <Box>
+            <Heading fontSize="lg" fontWeight="700">
+              Weekly Meal Lineups
+            </Heading>
+          </Box>
+          <GenericTable
+            isLoading={isLoading}
+            headers={[
+              "Fullname",
+              "Status",
+              "City",
+              "Delivery day",
+              "Subscription",
+              "Action",
+            ]}
           >
-            <option>Value</option>
-          </Select>
-        </Box> */}
+            {hasSubscriptions ? (
+              <WeeklyMealLineUp data={subscriptions} isLoading={false} />
+            ) : null}
+          </GenericTable>
+
+          {hasSubscriptions && (
+            <APaginator
+              flexDir={"row"}
+              isLoading={isLoading}
+              totalCount={data?.totalCount}
+              limit={state?.limit}
+              page={state?.page}
+              onPageChange={onPageChange}
+            />
+          )}
+        </Stack>
       </MainLayoutContainer>
     </PageMotion>
   );

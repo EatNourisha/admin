@@ -4,9 +4,13 @@ import debounce from "lodash/debounce";
 
 interface IFilterState {
   searchQuery: string;
+  searchPhrase: string;
   filterBy: string;
   nextPage?: string;
   prevPage?: string;
+
+  limit: number;
+  page: number;
 }
 
 export default function usePageFilters<T extends IFilterState>(
@@ -27,12 +31,21 @@ export default function usePageFilters<T extends IFilterState>(
     delayFunc(_value);
   };
 
+  const onPageChange = (page: number) => set({ page });
+
   const onNextPage = (page: string) => {
-    setFilter({ nextPage: page, prevPage: undefined });
+    setFilter({ nextPage: String(page), prevPage: undefined });
   };
   const onPrevPage = (page: string) => {
-    setFilter({ nextPage: undefined, prevPage: page });
+    setFilter({ prevPage: String(page), nextPage: undefined });
   };
 
-  return { state, filter, setFilter: handleFilter, onNextPage, onPrevPage };
+  return {
+    state,
+    filter,
+    setFilter: handleFilter,
+    onNextPage,
+    onPrevPage,
+    onPageChange,
+  };
 }

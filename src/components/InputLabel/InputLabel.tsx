@@ -5,24 +5,46 @@ import { FC } from "react";
 
 interface InputLabelProps extends TextProps {
   isLoading?: boolean;
+  htmlFor?: string;
 }
 
 const InputLabel: FC<InputLabelProps> = (props) => {
   const { isLoading, children } = props;
   return (
     <HStack alignItems="center">
-      <Text
+      <AnimatePresence initial={false} exitBeforeEnter={true}>
+        <motion.div
+          key={`input-label-motion-${isLoading ? "loading" : "stale"}`}
+          style={{ display: "inherit" }}
+          layout="position"
+          initial={{ x: -4, opacity: 1 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: -4, opacity: 1 }}
+        >
+          <Text
+            as="label"
+            display="inline-block"
+            fontSize="sm"
+            color="brand.black"
+            mb="4px !important"
+            {...props}
+          >
+            {children}
+          </Text>
+        </motion.div>
+        {/* </AnimatePresence> */}
+        {/* <Text
         as="label"
-        d="inline-block"
+        display="inline-block"
         fontSize="sm"
         color="brand.black"
         mb="4px !important"
         {...props}
       >
         {children}
-      </Text>
+      </Text> */}
 
-      <AnimatePresence initial={false}>
+        {/* <AnimatePresence initial={false} exitBeforeEnter={true}> */}
         <motion.div
           key={`input-label-motion-${isLoading ? "loading" : "stale"}`}
           style={{ display: "inherit", marginTop: "-3px" }}

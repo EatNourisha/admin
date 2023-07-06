@@ -9,7 +9,7 @@ import {
 } from "components";
 import configs from "config";
 import useUser from "hooks/useUser";
-import { capitalize } from "lodash";
+import { capitalize, join } from "lodash";
 import { useMemo } from "react";
 // import uploadFile from "utils/do";
 
@@ -68,7 +68,7 @@ export default function Profile() {
               variant="vert"
               isLoading={isLoading}
               src={user?.profilePhotoUrl}
-              title={`${user?.firstName} ${user?.lastName}`}
+              title={join([user?.first_name, user?.last_name], " ")}
               subtitle={capitalize(user?.gender ?? "male")}
               _subtitle={{ textTransform: "unset" }}
             />

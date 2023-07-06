@@ -1,19 +1,24 @@
-import { ApiResponse, GetUsersRO } from "interfaces";
+import { ApiResponse, GetUsersRo } from "interfaces";
 import useSWR from "swr";
 import { get } from "utils/makeRequest";
 import toQueryString from "utils/toQueryString";
 
 interface IUseUsersFilter {
-  roles?: "patient" | "doctor" | "admin" | string;
-  searchQuery?: string;
+  // Roles not-in the user's role array field
+  nin_roles?: string; // superadmin | customer | superadmin,customer
+  roles?: string;
+  searchPhrase?: string;
+  has_lineup?: boolean;
+  has_subscription?: boolean;
+
+  limit?: number;
+  page?: number;
 }
 
-export default function useUsers(
-  filter: IUseUsersFilter = { roles: "patient,doctor,admin" }
-) {
+export default function useUsers(filter: IUseUsersFilter) {
   const queries = toQueryString(filter);
-  const key = `/admins/users?${queries}`;
-  const { data, error } = useSWR<ApiResponse<GetUsersRO>>(key, get);
+  const key = `customers?${queries}`;
+  const { data, error } = useSWR<ApiResponse<GetUsersRo>>(key, get);
 
   // console.log("USERS", data);
 

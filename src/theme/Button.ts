@@ -11,10 +11,10 @@ const Button: ComponentStyleConfig = {
   // Two sizes: sm and md
   sizes: {
     sm: {
-      fontSize: "sm",
-      px: 6,
+      fontSize: "xs",
+      px: 4,
       py: 3,
-      minH: "40px",
+      minH: "20px",
     },
     md: {
       minH: "52px",
@@ -35,10 +35,10 @@ const Button: ComponentStyleConfig = {
       // minW: "fit-content",
       // minH: "fit-content",
       _hover: {
-        bg: "brand.secondary",
+        bg: "brand.primary",
       },
       _active: {
-        bg: "brand.secondary",
+        bg: "brand.primary",
       },
       _focus: {
         shadow: "0 0 0 3px var(--focusColor)",

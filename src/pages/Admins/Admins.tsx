@@ -6,34 +6,32 @@ import {
   VStack,
   Image,
   Text,
-  IconButton,
-  Switch,
+  useToast,
 } from "@chakra-ui/react";
 import {
+  APaginator,
   GenericTable,
   GenericTableItem,
   Gravatar,
   Icon,
   Input,
   Link,
+  Loader,
   MainLayoutContainer,
   PageMotion,
-  Paginator,
-  PaginatorContainer,
   Topbar,
 } from "components";
 
 import EmptyFolder from "assets/images/folder.png";
 import configs from "config";
 import { navigate } from "@reach/router";
-import useUsers from "hooks/useUsers";
 import { useMemo, useState } from "react";
 import isEmpty from "lodash/isEmpty";
 import usePageFilters from "hooks/usePageFilters";
-import useUpdateAdminStatus from "hooks/useUpdateAdminStatus";
-import { when } from "utils";
-import useAuthStore from "stores/auth";
-import { omit } from "lodash";
+
+import useAdmins from "hooks/useAdmins";
+import { join } from "lodash";
+import useUserMutations from "hooks/useUserMutations";
 
 function EmptyState() {
   return (
@@ -68,34 +66,38 @@ function EmptyState() {
 }
 
 export default function Admins() {
-  const { sub } = useAuthStore();
+  const toast = useToast();
   const [currentId, setId] = useState<string | "none">("none");
-  const { state, filter, setFilter, onPrevPage, onNextPage } = usePageFilters(
-    {}
-  );
+  const { state, filter, setFilter, onPageChange } = usePageFilters({
+    limit: 10,
+    page: 1,
+  });
 
-  const { data, isLoading, key } = useUsers({ ...filter, roles: "admin" });
+  const { data, isLoading, key } = useAdmins({
+    ...filter,
+    searchPhrase: filter?.searchPhrase,
+  });
 
-  const { update, removeAdmin, isRemoving, isUpdating } = useUpdateAdminStatus([
+  const { revokeAdminPrivilege, isLoading: isRemoving } = useUserMutations([
     key,
   ]);
 
-  const admins = useMemo(
-    () => (data?.results ?? [])?.filter((r) => r?._id !== sub),
-    [data, sub]
-  );
-  const pageData = useMemo(() => omit(data, "results"), [data]);
-
-  const handleStatus = async (id: string, isSuspended: boolean) => {
-    setId(id);
-    const action = when(!!isSuspended, "enable", "disable");
-    await update(action)(id);
-    setId("none");
-  };
+  const admins = useMemo(() => data?.data ?? [], [data]);
+  const hasAdmins = useMemo(() => admins.length > 0, [admins]);
 
   const handleRemove = async (id: string) => {
     setId(id);
-    await removeAdmin(id);
+    const result = await revokeAdminPrivilege(id);
+    if (!!result) {
+      toast({
+        position: "bottom-right",
+        title: "Success 🎉",
+        description: `Successfully revoked the admin privilege`,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
     setId("none");
   };
 
@@ -107,34 +109,22 @@ export default function Admins() {
           <Input
             // w="100%"
             minH="48px"
-            maxW="300px"
-            placeholder="Search Admin"
-            startAdornment={<Icon type="search" />}
-            value={state?.searchQuery ?? ""}
-            onChange={(e) => setFilter("searchQuery", e.target.value)}
+            minW="340px"
+            maxW="400px"
+            placeholder="Search Admins"
+            value={state?.searchPhrase ?? ""}
+            endAdornment={<Icon type="search" />}
+            onChange={(e) => setFilter("searchPhrase", e.target.value)}
           />
 
           <Button onClick={() => navigate(configs.paths.addAdministrator)}>
             Add Administrator
           </Button>
-
-          {/* <HStack w="fit-content" ml="0 !important" minW="250px">
-            <Text fontSize="14px" fontWeight="600" d="inline-block">
-              Filter by:
-            </Text>
-            <Select
-              flex="2"
-              mt="10px"
-              placeholder="Select Option"
-              minH="48px"
-              // maxW="300px"
-            >
-              <option>Value</option>
-            </Select>
-          </HStack> */}
         </HStack>
 
         {!admins && isEmpty(admins) && !isLoading && <EmptyState />}
+
+        {isLoading && isEmpty(admins) && <Loader my="180px" />}
 
         {!isLoading && !isEmpty(admins) && (
           <Box
@@ -144,68 +134,35 @@ export default function Admins() {
           >
             <GenericTable
               isLoading={isLoading}
-              headers={[
-                "Fullname",
-                "Email",
-                "Phone Number",
-                "Action",
-                "Status",
-              ]}
+              headers={["Fullname", "Email", "Phone Number", "Action"]}
             >
-              {admins?.map((value) => (
+              {admins?.map((admin) => (
                 <GenericTableItem
-                  key={`doctors-table-item:${value?._id}`}
+                  key={`doctors-table-item:${admin?._id}`}
                   cols={[
                     <Gravatar
-                      src={value?.profilePhotoUrl}
-                      title={`${value?.firstName} ${value?.lastName}`}
-                    />,
-                    <Text fontSize="14px">{value?.email}</Text>,
-                    <Text fontSize="14px">{value?.phone}</Text>,
-                    <HStack>
-                      <IconButton
-                        size="xs"
-                        aria-label="edit"
-                        variant="transparent"
-                        color="brand.neutral500"
-                        icon={<Icon type="edit" />}
-                        onClick={() =>
-                          navigate(`${configs.paths.doctors}/${value?._id}`)
-                        }
-                      />
-                      <IconButton
-                        size="xs"
-                        aria-label="edit"
-                        variant="transparent"
-                        color="brand.primary"
-                        icon={<Icon type="delete" />}
-                        disabled={isRemoving && currentId === value?._id}
-                        isLoading={isRemoving && currentId === value?._id}
-                        onClick={() => handleRemove(value?._id)}
-                      />
-                    </HStack>,
-                    <Switch
-                      disabled={isUpdating && currentId === value?._id}
-                      isChecked={!value?.suspended}
-                      onChange={() =>
-                        handleStatus(value?._id, value?.suspended)
+                      src={admin?.profilePhotoUrl}
+                      title={join([admin?.first_name, admin?.last_name], " ")}
+                      onClick={() =>
+                        navigate(`${configs.paths.users}/${admin?._id}`)
                       }
-                      sx={{
-                        "--switch-track-width": "26px",
-                        ".chakra-switch__track": {
-                          bg: "brand.neutral400",
-                          padding: "3px",
-                          borderRadius: "26px",
-                        },
-                        ".chakra-switch__track[data-checked]": {
-                          bg: "#03CCAA",
-                          padding: "3px",
-                        },
-                        ".chakra-switch__thumb": {
-                          shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                        },
-                      }}
                     />,
+                    <Text fontSize="14px">{admin?.email}</Text>,
+                    <Text fontSize="14px">{admin?.phone}</Text>,
+                    <HStack>
+                      <Button
+                        size="xs"
+                        aria-label="edit"
+                        variant="transparent"
+                        color="brand.error"
+                        leftIcon={<Icon type="delete" />}
+                        disabled={isRemoving && currentId === admin?._id}
+                        isLoading={isRemoving && currentId === admin?._id}
+                        onClick={() => handleRemove(admin?._id)}
+                      >
+                        Revoke Privilege
+                      </Button>
+                    </HStack>,
                   ]}
                 />
               ))}
@@ -213,15 +170,20 @@ export default function Admins() {
           </Box>
         )}
 
-        <Box>
-          <PaginatorContainer>
-            <Paginator
-              {...pageData}
-              onPrev={(prev) => onPrevPage(prev)}
-              onNext={(next) => onNextPage(next)}
-            />
-          </PaginatorContainer>
-        </Box>
+        {admins?.length > (state?.limit ?? 0) && (
+          <Box>
+            {hasAdmins && (
+              <APaginator
+                flexDir={"row"}
+                isLoading={isLoading}
+                totalCount={data?.totalCount}
+                limit={state?.limit}
+                page={state?.page}
+                onPageChange={onPageChange}
+              />
+            )}
+          </Box>
+        )}
       </MainLayoutContainer>
     </PageMotion>
   );

@@ -3,7 +3,13 @@ import CircleIcon from "components/Icon/CircleIcon";
 import { useMemo } from "react";
 
 interface TotalFeatureCountProps {
-  type: "appointments" | "patients" | "doctors";
+  type:
+    | "appointments"
+    | "patients"
+    | "doctors"
+    | "meals"
+    | "users"
+    | "subscriptions";
   value: number;
   label: string;
   isLoading?: boolean;
@@ -20,6 +26,13 @@ export default function TotalFeatureCount(props: TotalFeatureCountProps) {
       appointments: { bg: "brand.lightGreen", shadow: "0 10px 20px #03CCAA4f" },
       patients: { bg: "brand.red", shadow: "0 10px 20px #E5432E4f" },
       doctors: { bg: "brand.lightBlue", shadow: "0 10px 20px #0066F54f" },
+
+      meals: { bg: "brand.primary", shadow: "0 10px 20px transparent" },
+      users: { bg: "brand.lemonGreen", shadow: "0 10px 20px transparent" },
+      subscriptions: {
+        bg: "brand.lightBlue",
+        shadow: "0 10px 20px transparent",
+      },
     };
 
     return map[type];
@@ -30,7 +43,7 @@ export default function TotalFeatureCount(props: TotalFeatureCountProps) {
       p="40px 34px"
       border="1px solid transparent"
       borderColor="brand.neutral"
-      borderRadius="24px"
+      borderRadius="8px"
       minW="252px"
     >
       <HStack>

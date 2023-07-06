@@ -1,5 +1,5 @@
 import create, { State } from "zustand";
-import produce from "immer";
+import { produce } from "immer";
 import omit from "lodash/omit";
 
 import { AppStatus } from "interfaces";

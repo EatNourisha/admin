@@ -1,22 +1,24 @@
 import { Router, Redirect } from "@reach/router";
 import {
   Home,
-  Appointments,
-  Patients,
-  Doctors,
+  Users,
   Calendar,
   Profile,
   Admins,
-  PatientDetails,
-  DoctorDetails,
+  UserDetails,
   AddAdmins,
   EditProfile,
   Login,
   ResetPassword,
   ForgotPassword,
-  AppointmentDetails,
   Referrals,
   ReferralDetails,
+  Subscriptions,
+  PlanDetails,
+  Plans,
+  AddPlan,
+  EditPlan,
+  Meals,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -52,17 +54,26 @@ const AppRouter = () => {
         <RootPage path={configs.paths.dashboard}>
           <ProtectedRoute path="/" component={Home} />
         </RootPage>
-        <RootPage path={configs.paths.appointments}>
+        {/* <RootPage path={configs.paths.appointments}>
           <ProtectedRoute path="/" component={Appointments} />
           <ProtectedRoute path="/:id" component={AppointmentDetails} />
+        </RootPage> */}
+        <RootPage path={configs.paths.users}>
+          <ProtectedRoute path="/:id" component={UserDetails} />
+          <ProtectedRoute path="/" component={Users} />
         </RootPage>
-        <RootPage path={configs.paths.patients}>
-          <ProtectedRoute path="/:id" component={PatientDetails} />
-          <ProtectedRoute path="/" component={Patients} />
+        <RootPage path={configs.paths.subscriptions}>
+          <ProtectedRoute path="/" component={Subscriptions} />
         </RootPage>
-        <RootPage path={configs.paths.doctors}>
-          <ProtectedRoute path="/:id" component={DoctorDetails} />
-          <ProtectedRoute path="/" component={Doctors} />
+        <RootPage path={configs.paths.plans}>
+          <ProtectedRoute path="/:id" component={PlanDetails} />
+          <ProtectedRoute path="/" component={Plans} />
+          <ProtectedRoute path="/add" component={AddPlan} />
+          <ProtectedRoute path="/edit/:id" component={EditPlan} />
+        </RootPage>
+        <RootPage path={configs.paths.meals}>
+          {/* <ProtectedRoute path="/:id" component={DoctorDetails} /> */}
+          <ProtectedRoute path="/" component={Meals} />
         </RootPage>
         <RootPage path={configs.paths.calendar}>
           <ProtectedRoute path="/" component={Calendar} />

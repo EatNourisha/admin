@@ -26,8 +26,8 @@ export default function Doctors() {
   const { filter, onPrevPage, onNextPage } = usePageFilters({});
   const { data, isLoading } = useUsers({ roles: "doctor", ...filter });
 
-  const doctors = useMemo(() => data?.results, [data]);
-  const pageData = useMemo(() => omit(data, "results"), [data]);
+  const doctors = useMemo(() => (data as any)?.results ?? [], [data]);
+  const pageData = useMemo(() => omit(data, "results") as any, [data]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -82,7 +82,7 @@ export default function Doctors() {
               "Action",
             ]}
           >
-            {doctors?.map((value) => (
+            {doctors?.map((value: any) => (
               <GenericTableItem
                 key={`doctors-table-item:${value?._id}`}
                 cols={[
