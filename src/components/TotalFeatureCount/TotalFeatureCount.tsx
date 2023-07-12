@@ -3,13 +3,7 @@ import CircleIcon from "components/Icon/CircleIcon";
 import { useMemo } from "react";
 
 interface TotalFeatureCountProps {
-  type:
-    | "appointments"
-    | "patients"
-    | "doctors"
-    | "meals"
-    | "users"
-    | "subscriptions";
+  type: "meals" | "users" | "subscriptions";
   value: number;
   label: string;
   isLoading?: boolean;
@@ -23,10 +17,6 @@ export default function TotalFeatureCount(props: TotalFeatureCountProps) {
       TotalFeatureCountProps["type"],
       { bg: string; shadow: string }
     > = {
-      appointments: { bg: "brand.lightGreen", shadow: "0 10px 20px #03CCAA4f" },
-      patients: { bg: "brand.red", shadow: "0 10px 20px #E5432E4f" },
-      doctors: { bg: "brand.lightBlue", shadow: "0 10px 20px #0066F54f" },
-
       meals: { bg: "brand.primary", shadow: "0 10px 20px transparent" },
       users: { bg: "brand.lemonGreen", shadow: "0 10px 20px transparent" },
       subscriptions: {

@@ -31,7 +31,7 @@ const Input: FC<InputProps> = (props) => {
         border="1px solid transparent"
         borderRadius="4px"
         errorBorderColor="brand.deepRed"
-        bg="transparent"
+        bg="#E7EAEE3f"
         pl={startAdornment ? "52px" : "20px"}
         pr={endAdornment ? "52px" : "20px"}
         _focus={{

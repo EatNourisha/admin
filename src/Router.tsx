@@ -2,7 +2,6 @@ import { Router, Redirect } from "@reach/router";
 import {
   Home,
   Users,
-  Calendar,
   Profile,
   Admins,
   UserDetails,
@@ -43,6 +42,7 @@ import configs from "config";
 
 const AppRouter = () => {
   return (
+    // @ts-ignore
     <Router>
       {/* <NotFound default /> */}
       <Login path={configs.paths.login} />
@@ -50,6 +50,7 @@ const AppRouter = () => {
       <ForgotPassword path={configs.paths.forgotPassword} />
 
       <Layout path="/">
+        {/*  @ts-ignore */}
         <Redirect from="/" to={configs.paths.dashboard} noThrow />
         <RootPage path={configs.paths.dashboard}>
           <ProtectedRoute path="/" component={Home} />
@@ -74,9 +75,6 @@ const AppRouter = () => {
         <RootPage path={configs.paths.meals}>
           {/* <ProtectedRoute path="/:id" component={DoctorDetails} /> */}
           <ProtectedRoute path="/" component={Meals} />
-        </RootPage>
-        <RootPage path={configs.paths.calendar}>
-          <ProtectedRoute path="/" component={Calendar} />
         </RootPage>
         <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />

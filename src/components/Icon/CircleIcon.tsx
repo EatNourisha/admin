@@ -25,7 +25,7 @@ export default function CircleIcon(props: CircleIconProps) {
 
   return (
     <Box
-      d="flex"
+      display="flex"
       boxSize={boxSize ?? sizes}
       justifyContent="center"
       alignItems="center"

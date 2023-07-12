@@ -12,7 +12,7 @@ const InputLabel: FC<InputLabelProps> = (props) => {
   const { isLoading, children } = props;
   return (
     <HStack alignItems="center">
-      <AnimatePresence initial={false} exitBeforeEnter={true}>
+      <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={`input-label-motion-${isLoading ? "loading" : "stale"}`}
           style={{ display: "inherit" }}

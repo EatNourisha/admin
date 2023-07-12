@@ -25,7 +25,6 @@ export {
 
 export { default as LineupStatus } from "./Status/LineupStatus";
 export { default as AppointmentStatus } from "./Status/AppointmentStatus";
-export { default as ConsultationBadge } from "./ConsultationBadge/ConsultationBadge";
 export { default as SubscriptionBadge } from "./SubscriptionBadge/SubscriptionBadge";
 
 export { default as TransactionDetailModal } from "./Modals/TransactionDetails";
@@ -42,10 +41,6 @@ export {
 } from "./Paginator/Paginator";
 
 export { default as Loader } from "./Loader/Loader";
-
-export { default as TotalPaymentChart } from "./Charts/TotalPayment";
-export { default as WeeklyPatientsChart } from "./Charts/WeeklyPatients";
-export { default as AppointmentHistoryChart } from "./Charts/AppointmentHistory";
 
 export { default as DetailItem } from "./DetailItem/DetailItem";
 

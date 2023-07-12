@@ -75,7 +75,7 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
       {...syntheticProps}
     >
       <HStack>
-        <AnimatePresence exitBeforeEnter initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={`icon-${isCurrent ? "active" : "inactive"}`}
             initial={{ scale: 0.9, y: -4, opacity: 0 }}
