@@ -15,10 +15,6 @@ const configs = {
   AWS_ACCESS_KEY: "AKIAXT64XBHMCZ54Y2YN",
   AWS_SECRET_KEY: "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",
 
-  // AWS_BUCKET: "rapydcars-uploads",
-  // AWS_REGION: "us-east-1",
-  // AWS_ACCESS_KEY: "AKIAUDYTFEK2BOTMSG7C",
-  // AWS_SECRET_KEY: "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",
 
   paths: {
     login: "/signin",
