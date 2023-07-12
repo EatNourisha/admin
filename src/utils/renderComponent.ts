@@ -1,7 +1,7 @@
 import React from "react";
 
 const renderComponent = <C extends string, P>(
-  children: React.ReactNode | React.ReactChildren,
+  children: React.ReactNode,
   component?: C,
   props?: P
 ) =>

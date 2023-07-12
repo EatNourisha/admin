@@ -110,7 +110,7 @@ export default function Gravatar(props: GravatarProps) {
         textContainer: {
           ml: 0,
           mt: "10px",
-          d: "flex",
+          display: "flex",
           flexDir: "column",
           alignItems: "center",
           justifyContent: "center",

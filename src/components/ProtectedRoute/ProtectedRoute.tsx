@@ -31,6 +31,7 @@ const ProtectedRoute: FC<ProtectedRouteProps> = (props) => {
     return isNotMandatory ? (
       <Component isFetchingUser={false} {...rest} />
     ) : (
+      // @ts-ignore
       <Redirect to={config.paths.login} noThrow />
     );
   };

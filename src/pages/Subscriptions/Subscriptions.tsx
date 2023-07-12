@@ -62,7 +62,7 @@ export default function Users() {
               />
 
               <HStack w="fit-content" ml="0 !important" minW="250px">
-                <Text fontSize="14px" fontWeight="600" d="inline-block">
+                <Text fontSize="14px" fontWeight="600" display="inline-block">
                   Filter by Subscription type:
                 </Text>
                 <Select

@@ -75,7 +75,7 @@ export const download = <T extends any>(
     method: "GET",
     onDownloadProgress(progressEvent) {
       const progress = Math.round(
-        (progressEvent.loaded / progressEvent.total) * 100
+        (progressEvent.loaded / (progressEvent?.total ?? 0)) * 100
       );
       progressCallback && progressCallback(progress);
     },

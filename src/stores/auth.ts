@@ -1,4 +1,4 @@
-import create, { State } from "zustand";
+import create from "zustand";
 import { produce } from "immer";
 import omit from "lodash/omit";
 
@@ -6,7 +6,7 @@ import { AppStatus } from "interfaces";
 import ls from "utils/secureStorage";
 import configs from "config";
 
-interface AuthState extends State {
+interface AuthState  {
   isSignedIn: boolean;
   sub: string | null;
   token: string | null;
