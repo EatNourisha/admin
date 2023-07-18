@@ -7,9 +7,11 @@ import {
   Image,
   Text,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   APaginator,
+  ConfirmationModal,
   GenericTable,
   GenericTableItem,
   Gravatar,
@@ -67,6 +69,8 @@ function EmptyState() {
 
 export default function Admins() {
   const toast = useToast();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentId, setId] = useState<string | "none">("none");
   const { state, filter, setFilter, onPageChange } = usePageFilters({
     limit: 10,
@@ -86,7 +90,8 @@ export default function Admins() {
   const hasAdmins = useMemo(() => admins.length > 0, [admins]);
 
   const handleRemove = async (id: string) => {
-    setId(id);
+    // setId(id);
+    onClose();
     const result = await revokeAdminPrivilege(id);
     if (!!result) {
       toast({
@@ -158,7 +163,10 @@ export default function Admins() {
                         leftIcon={<Icon type="delete" />}
                         disabled={isRemoving && currentId === admin?._id}
                         isLoading={isRemoving && currentId === admin?._id}
-                        onClick={() => handleRemove(admin?._id)}
+                        onClick={() => {
+                          setId(admin?._id);
+                          onOpen();
+                        }}
                       >
                         Revoke Privilege
                       </Button>
@@ -185,6 +193,15 @@ export default function Admins() {
           </Box>
         )}
       </MainLayoutContainer>
+
+      <ConfirmationModal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Confirm Revocation"
+        description="Are you sure you want to revoke this privilege?"
+        onConfirm={() => handleRemove(currentId)}
+        buttonText={["Revoke"]}
+      />
     </PageMotion>
   );
 }

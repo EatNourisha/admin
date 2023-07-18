@@ -149,6 +149,8 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       const filename = `${file?.name}_${Math.random() * 99999999}`;
       const res = await uploadFile(file, filename);
       image_url = res.location;
+
+      // console.log("Upload Result", res);
       set({ isUploading: false });
     } catch (error) {
       console.log("Upload Error", error);

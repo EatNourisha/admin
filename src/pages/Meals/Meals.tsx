@@ -6,6 +6,7 @@ import {
   Grid,
   HStack,
   IconButton,
+  Image,
   Stack,
   Text,
   VStack,
@@ -26,7 +27,7 @@ import { orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import { MealRo } from "interfaces";
 
-import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
+// import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
 import useMeals from "hooks/useMeals";
 import useMealMutations from "hooks/useMealMutations";
 
@@ -116,7 +117,7 @@ interface MealItemProps extends Partial<MealRo>, BoxProps {
 }
 
 function MealItem(props: MealItemProps) {
-  const { name, keys, ...xprops } = props;
+  const { name, image_url, keys, ...xprops } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -151,8 +152,15 @@ function MealItem(props: MealItemProps) {
         display="flex"
         alignItems="center"
         justifyContent="center"
+        overflow="hidden"
       >
-        <Box as={PlateSVG} boxSize="60px" />
+        <Box
+          as={Image}
+          src={image_url}
+          boxSize="100%"
+          objectFit="cover"
+          alt={name}
+        />
       </Box>
 
       <Stack p="12px">

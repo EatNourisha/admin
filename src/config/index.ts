@@ -10,10 +10,10 @@ const configs = {
   DO_SPACES_ENDPOINT: "sfo3.digitaloceanspaces.com",
   DO_BUCKET: "aegle",
 
-  AWS_BUCKET: "rapyd",
+  AWS_BUCKET: "nourisha-bucket",
   AWS_REGION: "us-east-1",
-  AWS_ACCESS_KEY: "AKIAXT64XBHMCZ54Y2YN",
-  AWS_SECRET_KEY: "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",
+  AWS_ACCESS_KEY: "AKIARYIJOAE6YMB2DQGQ",
+  AWS_SECRET_KEY: "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",
 
 
   paths: {

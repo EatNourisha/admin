@@ -56,7 +56,7 @@ function Item(props: ItemProps) {
           <Button
             size="sm"
             variant="outline"
-            disabled={!user?.lineup}
+            isDisabled={!user?.lineup}
             onClick={onOpen}
           >
             View Lineup
