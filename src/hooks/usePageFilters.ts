@@ -11,6 +11,9 @@ interface IFilterState {
 
   limit: number;
   page: number;
+
+  status?: string;
+  [key: string]: any;
 }
 
 export default function usePageFilters<T extends IFilterState>(
@@ -21,7 +24,7 @@ export default function usePageFilters<T extends IFilterState>(
 
   console.log("FILTERS", filter);
 
-  const handleFilter = (key: keyof T, _value: string) => {
+  const handleFilter = (key: keyof T, _value: any) => {
     set({ [key]: _value } as any);
 
     const delayFunc = debounce(

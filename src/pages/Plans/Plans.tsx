@@ -13,7 +13,7 @@ import {
 
 import { navigate } from "@reach/router";
 import configs from "config";
-import { orderBy } from "lodash";
+import { omit, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import usePlans from "hooks/usePlans";
 import { currencyFormat } from "utils";
@@ -26,7 +26,7 @@ export default function Plans() {
   });
 
   const { data, isLoading } = usePlans({
-    ...state,
+    ...omit(state, ["searchPhrase"]),
     searchPhrase: filter?.searchPhrase,
   });
 
@@ -85,35 +85,37 @@ export default function Plans() {
                 "Action",
               ]}
             >
-              {plans?.map((plan) => (
-                <GenericTableItem
-                  isClickable={false}
-                  key={`customer-table-item:${plan?._id}`}
-                  onClick={() =>
-                    navigate(`${configs.paths.plans}/${plan?._id}`)
-                  }
-                  cols={[
-                    <Text fontSize="14px" textTransform="capitalize">
-                      {plan?.name ?? "--------"}
-                    </Text>,
-                    <Text fontSize="14px">{plan?.product_id}</Text>,
-                    <Text fontSize="14px" textTransform="uppercase">
-                      {plan?.currency}
-                    </Text>,
-                    <Text fontSize="14px">
-                      {currencyFormat((plan?.currency as any) ?? "gbp").format(
-                        plan?.amount ?? 0
-                      )}
-                    </Text>,
-                    <Text fontSize="14px" textTransform="capitalize">
-                      {plan?.subscription_interval}ly
-                    </Text>,
-                    <Button size="sm" variant="outline">
-                      View More
-                    </Button>,
-                  ]}
-                />
-              ))}
+              {hasPlans
+                ? plans?.map((plan) => (
+                    <GenericTableItem
+                      isClickable={false}
+                      key={`customer-table-item:${plan?._id}`}
+                      onClick={() =>
+                        navigate(`${configs.paths.plans}/${plan?._id}`)
+                      }
+                      cols={[
+                        <Text fontSize="14px" textTransform="capitalize">
+                          {plan?.name ?? "--------"}
+                        </Text>,
+                        <Text fontSize="14px">{plan?.product_id}</Text>,
+                        <Text fontSize="14px" textTransform="uppercase">
+                          {plan?.currency}
+                        </Text>,
+                        <Text fontSize="14px">
+                          {currencyFormat(
+                            (plan?.currency as any) ?? "gbp"
+                          ).format(plan?.amount ?? 0)}
+                        </Text>,
+                        <Text fontSize="14px" textTransform="capitalize">
+                          {plan?.subscription_interval}ly
+                        </Text>,
+                        <Button size="sm" variant="outline">
+                          View More
+                        </Button>,
+                      ]}
+                    />
+                  ))
+                : null}
             </GenericTable>
           </Box>
 

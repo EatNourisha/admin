@@ -37,7 +37,7 @@ export default function Meals() {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const { state, filter, onPageChange } = usePageFilters({
-    limit: 10,
+    limit: 12,
     page: 1,
   });
 
@@ -51,6 +51,7 @@ export default function Meals() {
     [data]
   );
   const hasMeals = useMemo(() => (meals ?? []).length > 0, [meals]);
+  const totalCount = useMemo(() => data?.totalCount ?? 0, [data]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -93,7 +94,7 @@ export default function Meals() {
           </VStack>
 
           <Box>
-            {hasMeals && meals.length > (state?.limit ?? 0) && (
+            {hasMeals && totalCount >= (state?.limit ?? 0) && (
               <APaginator
                 flexDir={"row"}
                 isLoading={isLoading}

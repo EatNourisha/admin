@@ -8,6 +8,7 @@ interface IUseSubscriptionsFilter {
   page: number;
   searchPhrase: string;
   status: string;
+  plan: string;
 }
 
 export default function useSubscriptions(
