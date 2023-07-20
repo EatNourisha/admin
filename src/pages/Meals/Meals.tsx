@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import {
+  Badge,
   Box,
   BoxProps,
   Button,
@@ -118,7 +119,7 @@ interface MealItemProps extends Partial<MealRo>, BoxProps {
 }
 
 function MealItem(props: MealItemProps) {
-  const { name, image_url, keys, ...xprops } = props;
+  const { name, image_url, keys, is_available, ...xprops } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -141,8 +142,22 @@ function MealItem(props: MealItemProps) {
       border="1px solid transparent"
       borderColor="brand.neutral"
       borderRadius="8px"
+      pos="relative"
       {...xprops}
     >
+      {!is_available && (
+        <Badge
+          pos="absolute"
+          left="26px"
+          top="calc(50% - 10px)"
+          fontSize="sm"
+          color="brand.red"
+          transform="rotate(-45deg)"
+          shadow="0 0 20px rgba(0 0 0 / 60%)"
+        >
+          Unavailable
+        </Badge>
+      )}
       <Box
         w="128px"
         minW="128px"

@@ -169,6 +169,24 @@ export default function EditPlan() {
                   </Select>
                 </FormControl>
               </HStack>
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Delivery Fee</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    value={state?.delivery_fee ?? ""}
+                    onChange={(e) => set({ delivery_fee: e.target.value })}
+                    endAdornment={
+                      <Text fontSize="md" textTransform="uppercase">
+                        {state?.currency === "gbp" ? "£GBP" : state?.currency}
+                      </Text>
+                    }
+                  />
+                </FormControl>
+              </HStack>
 
               <FormControl>
                 <InputLabel>Description</InputLabel>
@@ -260,7 +278,7 @@ export default function EditPlan() {
         onClose={onClose}
         title="Confirm"
         onConfirm={submitForm(() => {
-          navigate(`${configs.paths.plans}/${id}`);
+          navigate(`${configs.paths.plans}/${id}`, { replace: true });
         })}
         buttonText={["Save"]}
         description="Are you sure you want to save changes to this plan"

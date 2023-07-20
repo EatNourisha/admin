@@ -142,6 +142,7 @@ export default function UserDetails() {
                 isLoading={isLoading}
                 title="Currency"
                 description={plan?.currency ?? "GBP"}
+                _desc={{ textTransform: "uppercase" }}
               />
               <Detail
                 isLoading={isLoading}
@@ -154,6 +155,13 @@ export default function UserDetails() {
                 isLoading={isLoading}
                 title="Reference ID"
                 description={plan?.product_id ?? "---------"}
+              />
+              <Detail
+                isLoading={isLoading}
+                title="Delivery Fee"
+                description={currencyFormat(
+                  (plan?.currency as any) ?? "gbp"
+                ).format(+(plan?.delivery_fee ?? 0))}
               />
             </Grid>
 

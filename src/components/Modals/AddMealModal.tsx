@@ -13,6 +13,7 @@ import {
   ModalHeader,
   Stack,
   FormControl,
+  Switch,
 } from "@chakra-ui/react";
 
 import Input from "components/Input/Input";
@@ -22,9 +23,10 @@ import useMealMutations from "hooks/useMealMutations";
 import usePartialState from "hooks/usePartialState";
 import { MealRo } from "interfaces";
 import { useEffect, useMemo, useRef } from "react";
-import { uploadFile, when } from "utils";
+import { slugify, uploadFile, when } from "utils";
 
 import isEqual from "lodash/isEqual";
+import InputLabel from "components/InputLabel/InputLabel";
 
 interface AddMealModalProps extends Omit<ModalProps, "children" | "id"> {
   // Mutation keys
@@ -56,6 +58,13 @@ export default function AddMealModal(props: AddMealModalProps) {
     const result = await submitForm();
     if (!!result) onClose();
   };
+
+  const is_available = useMemo(
+    () => state?.is_available!,
+    [state?.is_available]
+  );
+
+  console.log("is_available", is_available);
 
   const isDisabled = useMemo(() => {
     if (!!meal) return !hasChanges || !!state?.file || isLoading;
@@ -106,6 +115,34 @@ export default function AddMealModal(props: AddMealModalProps) {
                 onChange={(e) => set({ name: e.target.value })}
               />
             </FormControl>
+
+            <FormControl display="flex" w="fit-content" alignSelf="flex-start">
+              <Switch
+                ml="8px"
+                aria-label="switch meal availability"
+                disabled={isLoading}
+                isChecked={is_available}
+                onChange={() => set({ is_available: !is_available })}
+                sx={{
+                  "--switch-track-width": "26px",
+                  ".chakra-switch__track": {
+                    bg: "brand.neutral400",
+                    padding: "3px",
+                    borderRadius: "26px",
+                  },
+                  ".chakra-switch__track[data-checked]": {
+                    bg: "#03CCAA",
+                    padding: "3px",
+                  },
+                  ".chakra-switch__thumb": {
+                    shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  },
+                }}
+              />
+              <InputLabel ml="8px" htmlFor="isChecked">
+                {when(is_available, "Available", "Unavailable")}
+              </InputLabel>
+            </FormControl>
           </Stack>
         </ModalBody>
 
@@ -133,6 +170,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
   const [state, set, reset] = usePartialState<IMealFormState>(
     {
       name: meal?.name,
+      is_available: meal?.is_available ?? true,
     },
     [meal]
   );
@@ -146,7 +184,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
     try {
       set({ isUploading: true });
       const file = state.file;
-      const filename = `${file?.name}_${Math.random() * 99999999}`;
+      const filename = `${slugify(file?.name)}_${Math.random() * 99999999}`;
       const res = await uploadFile(file, filename);
       image_url = res.location;
 
@@ -160,7 +198,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
     const res = addNewMeal({
       name: state?.name!,
       image_url: image_url as string,
-      is_available: true,
+      is_available: state?.is_available ?? true,
       meals: [],
     });
 
@@ -175,7 +213,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       try {
         set({ isUploading: true });
         const file = state.file;
-        const filename = `${file?.name}_${Math.random() * 99999999}`;
+        const filename = `${slugify(file?.name)}_${Math.random() * 99999999}`;
         const res = await uploadFile(file, filename);
         image_url = res.location;
         set({ isUploading: false });

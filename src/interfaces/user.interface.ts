@@ -10,6 +10,7 @@ export interface PlanRo {
   amount: number;
   currency: string;
   subscription_interval: string;
+  delivery_fee: string;
   perks: string[];
 }
 

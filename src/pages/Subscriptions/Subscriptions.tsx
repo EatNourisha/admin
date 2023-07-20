@@ -40,7 +40,7 @@ export default function Users() {
 
   const { data, isLoading } = useSubscriptions({
     ...omit(state, "subType"),
-    status: filter?.status,
+    status: filter?.status ?? "active",
     plan: filter?.plan,
   });
 

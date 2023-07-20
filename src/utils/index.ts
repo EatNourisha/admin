@@ -15,3 +15,4 @@ export { default as secureStorage } from "./secureStorage";
 export { default as toQueryString } from "./toQueryString";
 export { default as currencyFormat } from "./formatter";
 export { when } from "./when";
+export { slugify } from "./slugify";
