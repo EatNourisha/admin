@@ -1,12 +1,10 @@
 import { useCallback } from "react";
 import { useSWRConfig } from "swr";
-import { put } from "utils/makeRequest";
+import { post } from "utils/makeRequest";
 
-import { ApiResponse, UserRo, UpdateProfileDto } from "interfaces";
+import { ApiResponse, AddNewBroadcastDto, BroadcastRo } from "interfaces";
 
 import useErrorStore from "stores/error";
-// import { navigate } from "@reach/router";
-// import configs from "config";
 import usePartialState from "./usePartialState";
 
 interface IState {
@@ -15,7 +13,7 @@ interface IState {
   isError: boolean;
 }
 
-export default function useUpdateProfile(keys?: string[]) {
+export default function useBroadcastMutations(keys?: string[]) {
   const { mutate } = useSWRConfig();
 
   const [state, set] = usePartialState<IState>({
@@ -26,23 +24,22 @@ export default function useUpdateProfile(keys?: string[]) {
 
   const { actions } = useErrorStore();
 
-  const update = useCallback(
-    async (data: UpdateProfileDto) => {
+  const addNewBroadcast = useCallback(
+    async (data: AddNewBroadcastDto) => {
       set({ isLoading: true, isSuccess: false });
       try {
         const res = (
-          await put<ApiResponse<UserRo>, UpdateProfileDto>("/customers/me", data)
-        ).data as UserRo;
+          await post<ApiResponse<BroadcastRo>, AddNewBroadcastDto>("/notifications/broadcasts", data)
+        ).data as BroadcastRo;
 
         keys?.forEach(async (key) => await mutate(key));
-        mutate(`/me`);
-        set({ isSuccess: true });
+        set({ isSuccess: true, isLoading: false });
 
         return res;
       } catch (error: any) {
         set({ isError: true });
         actions?.setError({
-          action: { type: "profile/update", payload: data },
+          action: { type: "plans/add", payload: data },
           message: error?.message,
           status: error?.statusCode,
           showUser: true,
@@ -53,8 +50,9 @@ export default function useUpdateProfile(keys?: string[]) {
     [set, actions, keys, mutate]
   );
 
+
   return {
-    update,
+    addNewBroadcast,
     ...state,
   };
 }

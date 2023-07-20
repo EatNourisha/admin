@@ -38,3 +38,4 @@ export type { default as PageProps } from "./pageProps.interface";
 export type { DashboardRo } from "./dashboard.interface";
 
 export * from "./user.interface";
+export * from './broadcast.interface'

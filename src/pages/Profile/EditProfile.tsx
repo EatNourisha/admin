@@ -25,13 +25,24 @@ import configs from "config";
 import usePartialState from "hooks/usePartialState";
 import useUpdateProfile from "hooks/useUpdateProfile";
 import useUser from "hooks/useUser";
-import { capitalize } from "lodash";
+import { UserRo } from "interfaces";
+import { capitalize, isEqual } from "lodash";
 import { useEffect, useMemo } from "react";
 
 interface IFormState {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
+}
+
+function transformed(user: UserRo) {
+  return {
+    first_name: user?.first_name,
+    last_name: user?.last_name,
+    email: user?.email,
+    phone: user?.phone,
+  };
 }
 
 export default function AddAdmin() {
@@ -42,7 +53,10 @@ export default function AddAdmin() {
 
   const { update, isLoading: isUpdating, isSuccess } = useUpdateProfile();
 
-  const [state, set] = usePartialState<IFormState>({});
+  const [state, set] = usePartialState<IFormState>(
+    transformed((user ?? {}) as any),
+    [user]
+  );
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -52,21 +66,23 @@ export default function AddAdmin() {
   const updateProfile = async () => {
     onClose();
     const reqData = { ...state };
-    if (state?.name) {
-      const [first, last] = state?.name?.split(" ")!;
-      Object.assign(reqData, {
-        firstName: first ?? user?.firstName,
-        lastName: last ?? user?.lastName,
-      });
-    }
+
+    // Object.assign(reqData, {
+    //   first_name: first ?? user?.first_name,
+    //   last_name: last ?? user?.last_name,
+    // });
+    // }
     // console.log("STATE", reqData);
 
     await update(reqData);
   };
 
   const isDisabled = useMemo(
-    () => !(state?.name || state?.phone) || isLoading || isUpdating,
-    [isLoading, isUpdating, state]
+    () =>
+      isEqual(transformed(user ?? ({} as any)), { ...state }) ||
+      isLoading ||
+      isUpdating,
+    [isLoading, isUpdating, state, user]
   );
 
   useEffect(() => {
@@ -122,19 +138,31 @@ export default function AddAdmin() {
             >
               <HStack gridGap="24px">
                 <FormControl>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>Firstname</InputLabel>
                   <Input
                     isRequired={false}
                     bg="white !important"
                     borderWidth="2px"
                     borderColor="brand.neutral200"
-                    placeholder={`${user?.firstName ?? ""} ${
-                      user?.lastName ?? ""
-                    }`}
-                    value={state?.name}
-                    onChange={(e) => set({ name: e.target.value })}
+                    placeholder={`Enter firstname`}
+                    value={state?.first_name ?? user?.last_name}
+                    onChange={(e) => set({ first_name: e.target.value })}
                   />
                 </FormControl>
+                <FormControl>
+                  <InputLabel>Lastname</InputLabel>
+                  <Input
+                    isRequired={false}
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={`Enter lastname`}
+                    value={state?.last_name ?? user?.first_name}
+                    onChange={(e) => set({ last_name: e.target.value })}
+                  />
+                </FormControl>
+              </HStack>
+              <HStack gridGap="24px">
                 <FormControl>
                   <InputLabel>Email</InputLabel>
                   <Input
@@ -147,16 +175,6 @@ export default function AddAdmin() {
                     onChange={undefined}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap="24px">
-                <FormControl>
-                  <InputLabel>Role</InputLabel>
-                  <Select>
-                    <option value={user?.roles[0] ?? ""}>
-                      {capitalize(user?.roles[0] ?? "")}
-                    </option>
-                  </Select>
-                </FormControl>
                 <FormControl>
                   <InputLabel>Phone Number</InputLabel>
                   <Input
@@ -166,14 +184,25 @@ export default function AddAdmin() {
                     borderColor="brand.neutral200"
                     placeholder={user?.phone ?? ""}
                     value={state?.phone}
-                    onChange={(e) => set({ phone: e.target.value })}
+                    // onChange={(e) => set({ phone: e.target.value })}
                   />
                 </FormControl>
+              </HStack>
+              <HStack gridGap="24px">
+                <FormControl w="50%">
+                  <InputLabel>Role</InputLabel>
+                  <Select borderRadius="4px">
+                    <option value={user?.primary_role ?? ""}>
+                      {capitalize(user?.primary_role ?? "")}
+                    </option>
+                  </Select>
+                </FormControl>
+                <FormControl w="50%" visibility="hidden"></FormControl>
               </HStack>
 
               <HStack>
                 <Button
-                  disabled={isDisabled}
+                  isDisabled={isDisabled}
                   isLoading={isUpdating}
                   type="submit"
                 >

@@ -32,6 +32,8 @@ const configs = {
     administrators: "/admins",
     meals: "/meals",
     plans: "/plans",
+    broadcasts: "/broadcasts",
+    sendBroadcast: "/broadcasts/send",
     addPlan: "/plans/add",
     editPlan: "/plans/edit",
     editProfile: "/profile/edit",

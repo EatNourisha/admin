@@ -85,7 +85,9 @@ export default function Profile() {
                 Role
               </Text>
 
-              <Text fontSize="18px">{capitalize(user?.roles[0])}</Text>
+              <Text fontSize="18px">
+                {capitalize(user?.primary_role ?? "")}
+              </Text>
             </Box>
             <Box
               w="100%"

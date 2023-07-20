@@ -32,6 +32,8 @@ const UsersIcon = () => <Icon type="users" />;
 const MealsIcon = () => <Icon type="meals" />;
 const SubscriptionsIcon = () => <Icon type="subscriptions" />;
 const ReferralIcon = () => <Icon type="referral" />;
+const PlansIcon = () => <Icon type="plans" />;
+const BroadcastIcon = () => <Icon type="broadcast" />;
 
 const ProfileIcon = () => <Icon type="profile" />;
 const AdminIcon = () => <Icon type="admin" />;
@@ -62,10 +64,16 @@ const pageLinks = [
     to: "/subscriptions",
   },
   {
-    activeIcon: SubscriptionsIcon,
-    icon: SubscriptionsIcon,
+    activeIcon: PlansIcon,
+    icon: PlansIcon,
     label: "Plans",
     to: "/plans",
+  },
+  {
+    activeIcon: BroadcastIcon,
+    icon: BroadcastIcon,
+    label: "Broadcasts",
+    to: "/broadcasts",
   },
   {
     activeIcon: ReferralIcon,
@@ -135,16 +143,16 @@ const Sidebar: FC<SidebarProps> = (props) => {
         </Text>
       </VStack>
 
-      <VStack alignItems="flex-start" w="100%" mt="80px" overflowY="scroll">
-        {take(pageLinks, 6).map((link, i) => (
+      <VStack alignItems="flex-start" w="100%" mt="40px" overflowY="scroll">
+        {take(pageLinks, 7).map((link, i) => (
           <SidebarLink
             key={i}
             {...link}
             isCurrent={isCurrent(link.to)}
             mb={
-              i === take(pageLinks, 6).length - 1
+              i === take(pageLinks, 7).length - 1
                 ? "0 !important"
-                : "16px !important"
+                : "8px !important"
             }
           />
         ))}
@@ -161,7 +169,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
             mb={
               i === takeRight(pageLinks, 2).length - 1
                 ? "0 !important"
-                : "16px !important"
+                : "8px !important"
             }
           />
         ))}
