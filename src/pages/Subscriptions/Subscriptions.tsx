@@ -1,18 +1,10 @@
 import { useMemo } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  HStack,
-  Select,
-  Text,
-} from "@chakra-ui/react";
+import { Box, FormControl, HStack, Select, Text } from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
   GenericTableItem,
   Gravatar,
-  Icon,
   InputLabel,
   MainLayoutContainer,
   PageMotion,
@@ -116,13 +108,13 @@ export default function Users() {
               </FormControl>
             </HStack>
 
-            <Button
+            {/* <Button
               ml="0 !important"
               leftIcon={<Icon type="export" />}
               isDisabled={isLoading || !hasSubscriptions}
             >
               Export
-            </Button>
+            </Button> */}
           </HStack>
           <Box
             borderRadius="8px"

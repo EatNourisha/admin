@@ -3,6 +3,7 @@ import ApiResponse, {
   PaginatedDocument,
 } from "./apiResponse.interface";
 import { ConsultationType } from "./appointments.interface";
+import { PlanRo } from "./user.interface";
 
 export enum Gender {
   MALE = "male",
@@ -168,11 +169,23 @@ interface MessageRo {
 }
 
 export interface ReferralRo {
-  code: string;
-  email: string;
-  name: string;
-  users: UserRo[];
   _id: string;
+  is_subscribed: boolean;
+  inviter: UserRo;
+  invitee: UserRo;
+  subscription_plan?: PlanRo
+  createdAt: string;
+  updatedAt: string;
+  reward: number;
+  currency: number;
+  ref_code: string;
+}
+
+export interface ReferralStatsRo {
+  fulfilled_withdrawals: number;
+pending_withdrawals: number;
+subscribed_invites: number;
+unsubscribed_invites: number;
 }
 
 export type RegisterUserRo = ApiResponse<AuthRo>;
@@ -183,6 +196,6 @@ export type RequestPasswordResetRo = ApiResponse<MessageRo>;
 export type ResetPasswordRo = ApiResponse<UserRo>;
 
 export type GetUsersRO = HashedDocumentPagination<UserRo[]>;
-export type GetReferralsRO = HashedDocumentPagination<ReferralRo[]>;
 
+export type GetReferralsRo = PaginatedDocument<ReferralRo[]>;
 export type GetUsersRo = PaginatedDocument<UserRo[]>;

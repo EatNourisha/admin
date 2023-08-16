@@ -28,14 +28,15 @@ export default function Users() {
     page: 1,
   });
 
-  const [progress, setProgress] = useState(0);
+  const [progress /*, setProgress*/] = useState(0);
 
   const { data, isLoading } = useUsers({
     ...state,
     searchPhrase: filter?.searchPhrase,
   });
 
-  const { exportUserDocs, isDownloading, isLoading: isExporting } = useExport();
+  const { /*exportUserDocs, */ isDownloading, isLoading: isExporting } =
+    useExport();
 
   const customers = useMemo(
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
@@ -43,9 +44,9 @@ export default function Users() {
   );
   const hasCustomers = useMemo(() => (customers ?? []).length > 0, [customers]);
 
-  const exportUsers = async () => {
-    await exportUserDocs((progs) => setProgress(progs));
-  };
+  // const exportUsers = async () => {
+  //   await exportUserDocs((progs) => setProgress(progs));
+  // };
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -76,13 +77,13 @@ export default function Users() {
               onChange={(e) => setFilter("searchPhrase", e.target.value)}
             />
 
-            <Button
+            {/* <Button
               ml="0 !important"
               leftIcon={<Icon type="export" />}
               onClick={exportUsers}
             >
               Export
-            </Button>
+            </Button> */}
           </HStack>
           <Box
             borderRadius="8px"

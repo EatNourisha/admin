@@ -13,6 +13,7 @@ import {
   Switch,
   Text,
   TextProps,
+  Tooltip,
   useDisclosure,
   useToast,
   VStack,
@@ -130,33 +131,66 @@ export default function UserDetails() {
             >
               Edit
             </Button> */}
-              <FormControl display="flex" w="fit-content" alignSelf="flex-end">
-                <InputLabel isLoading={isSuspending} m="0" htmlFor="isChecked">
-                  {when(isSuspended, "Unsuspend", "Suspend")}
-                </InputLabel>
-                <Switch
-                  ml="8px"
-                  aria-label="suspend user"
-                  disabled={isSuspending || isLoading}
-                  isChecked={!!user?.control?.suspended}
-                  onChange={toggleUserSuspense}
-                  sx={{
-                    "--switch-track-width": "26px",
-                    ".chakra-switch__track": {
-                      bg: "brand.neutral400",
-                      padding: "3px",
-                      borderRadius: "26px",
-                    },
-                    ".chakra-switch__track[data-checked]": {
-                      bg: "#03CCAA",
-                      padding: "3px",
-                    },
-                    ".chakra-switch__thumb": {
-                      shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                    },
-                  }}
-                />
-              </FormControl>
+              <HStack gridGap="10px">
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-end"
+                >
+                  <InputLabel
+                    isLoading={isSuspending}
+                    m="0"
+                    htmlFor="isChecked"
+                  >
+                    {when(isSuspended, "Unsuspend", "Suspend")}
+                  </InputLabel>
+                  <Switch
+                    ml="8px"
+                    aria-label="suspend user"
+                    disabled={isSuspending || isLoading}
+                    isChecked={!!user?.control?.suspended}
+                    onChange={toggleUserSuspense}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <Tooltip label="View Referrals">
+                  <IconButton
+                    minH="unset"
+                    minW="unset"
+                    maxH="unset"
+                    maxW="unset"
+                    boxSize="28px"
+                    borderRadius="8px"
+                    bg="transparent"
+                    aria-label="edit user note"
+                    icon={<Icon type="referral" color="black" />}
+                    _hover={{
+                      bg: "transparent",
+                    }}
+                    _active={{
+                      bg: "transparent",
+                    }}
+                    _loading={{ color: "brand.primary" }}
+                    onClick={() => navigate(`/referrals?customer=${id}`)}
+                    // disabled={isDeleting}
+                    // isLoading={isDeleting}
+                  />
+                </Tooltip>
+              </HStack>
             </HStack>
 
             <VStack pt="44px" pb="74px">

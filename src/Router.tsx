@@ -11,7 +11,6 @@ import {
   ResetPassword,
   ForgotPassword,
   Referrals,
-  ReferralDetails,
   Subscriptions,
   PlanDetails,
   Plans,
@@ -57,10 +56,9 @@ const AppRouter = () => {
         <RootPage path={configs.paths.dashboard}>
           <ProtectedRoute path="/" component={Home} />
         </RootPage>
-        {/* <RootPage path={configs.paths.appointments}>
-          <ProtectedRoute path="/" component={Appointments} />
-          <ProtectedRoute path="/:id" component={AppointmentDetails} />
-        </RootPage> */}
+        <RootPage path={configs.paths.referrals}>
+          <ProtectedRoute path="/" component={Referrals} />
+        </RootPage>
         <RootPage path={configs.paths.users}>
           <ProtectedRoute path="/:id" component={UserDetails} />
           <ProtectedRoute path="/" component={Users} />
@@ -82,10 +80,9 @@ const AppRouter = () => {
           {/* <ProtectedRoute path="/:id" component={DoctorDetails} /> */}
           <ProtectedRoute path="/" component={Meals} />
         </RootPage>
-        <RootPage path={configs.paths.referrals}>
+        {/* <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
-          <ProtectedRoute path="/:id" component={ReferralDetails} />
-        </RootPage>
+        </RootPage> */}
         <RootPage path={configs.paths.profile}>
           <ProtectedRoute path="/" component={Profile} />
           <ProtectedRoute path="/edit" component={EditProfile} />

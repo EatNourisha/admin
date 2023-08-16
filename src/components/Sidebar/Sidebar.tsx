@@ -79,7 +79,7 @@ const pageLinks = [
     activeIcon: ReferralIcon,
     icon: ReferralIcon,
     label: "Referral",
-    to: "/referral",
+    to: "/referrals",
   },
 
   {

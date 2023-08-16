@@ -4,7 +4,6 @@ export { default as Admins } from "./Admins/Admins";
 export { default as Profile } from "./Profile/Profile";
 export { default as Referrals } from "./Referrals/Referrals";
 export { default as EditProfile } from "./Profile/EditProfile";
-export { default as ReferralDetails } from "./Referrals/ReferralDetails";
 
 export { default as Users } from "./Users/Users";
 export { default as UserDetails } from "./Users/UserDetails";
