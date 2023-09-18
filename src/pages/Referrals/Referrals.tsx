@@ -2,9 +2,6 @@ import {
   HStack,
   // Select,
   VStack,
-  Text,
-  BoxProps,
-  Skeleton,
   Tabs,
   Tab,
   TabList,
@@ -14,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { MainLayoutContainer, PageMotion, Topbar } from "components";
 
-import { when } from "utils";
 import useReferralStats from "hooks/useReferralStats";
 import { UsersInvited } from "./Panels/UsersInvited";
 import { UsersSubscribed } from "./Panels/UsersSubscribed";
@@ -22,6 +18,7 @@ import { PaidOut } from "./Panels/PaidOut";
 import { PendingWithdrawals } from "./Panels/PendingWithdrawals";
 import { useLocation } from "@reach/router";
 import { useMemo } from "react";
+import { ReferralCounter } from "components/ReferralCount/ReferralCount";
 
 // function EmptyState() {
 //   return (
@@ -141,8 +138,8 @@ export default function Referrals() {
               >
                 <CTab>Users Invited</CTab>
                 <CTab>Users Subscribed</CTab>
-                <CTab>Paid Out</CTab>
-                <CTab>Pending Withdrawals</CTab>
+                {/* <CTab>Paid Out</CTab>
+                <CTab>Pending Withdrawals</CTab> */}
               </TabList>
             </VStack>
 
@@ -311,43 +308,6 @@ export default function Referrals() {
 //     </>
 //   );
 // }
-
-interface ReferralCounterProps extends BoxProps {
-  count: number;
-  description: string;
-  isLoading?: boolean;
-}
-
-function ReferralCounter(props: ReferralCounterProps) {
-  const { count, description, isLoading, ...xprops } = props;
-  return (
-    <VStack
-      w="100%"
-      borderRadius="8px"
-      maxW="252px"
-      bg="#FFE6E4"
-      p="44px"
-      {...xprops}
-    >
-      <Skeleton isLoaded={!isLoading} opacity={when(!!isLoading, 0.5, 1)}>
-        <Text fontSize="32px" fontWeight="700" color="black">
-          {when(count <= 99, `0${count}`, String(count))}
-        </Text>
-      </Skeleton>
-      <Skeleton isLoaded={!isLoading} opacity={when(!!isLoading, 0.5, 1)}>
-        <Text
-          mt="0 !important"
-          fontSize="16px"
-          fontWeight="400"
-          color="black"
-          textTransform="capitalize"
-        >
-          {description}
-        </Text>
-      </Skeleton>
-    </VStack>
-  );
-}
 
 interface CTabProps extends TabProps {}
 

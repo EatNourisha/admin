@@ -74,7 +74,10 @@ export default function Users() {
               placeholder="Search Users"
               value={state?.searchPhrase ?? ""}
               endAdornment={<Icon type="search" />}
-              onChange={(e) => setFilter("searchPhrase", e.target.value)}
+              onChange={(e) => {
+                e.preventDefault();
+                setFilter("searchPhrase", e.target.value);
+              }}
             />
 
             {/* <Button

@@ -8,46 +8,58 @@ import {
   InputLabel,
   MainLayoutContainer,
   PageMotion,
-  SubscriptionBadge,
   Topbar,
 } from "components";
 
-import { capitalize, join, omit } from "lodash";
+import { capitalize, join } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
-import useSubscriptions from "hooks/useSubscriptions";
-import { PlanRo, UserRo } from "interfaces";
-import { format, parseISO } from "date-fns";
-import { navigate } from "@reach/router";
+import { MealPackRo, UserRo } from "interfaces";
+import { navigate, useParams } from "@reach/router";
 import configs from "config";
-import usePlans from "hooks/usePlans";
+import useMealAnalysis from "hooks/useMealAnalysis";
+import { ReferralCounter } from "components/ReferralCount/ReferralCount";
 
-export default function Subscriptions() {
+export default function MealAnalysis() {
   // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, setFilter, onPageChange } = usePageFilters({
     limit: 10,
     page: 1,
   });
 
-  const { data: plans, isLoading: isLoadingPlans } = usePlans({});
-
-  const { data, isLoading } = useSubscriptions({
-    ...omit(state, "subType"),
-    status: filter?.status ?? "active",
-    plan: filter?.plan,
+  const { id } = useParams();
+  const { data, isLoading } = useMealAnalysis(id, {
+    limit: 10,
+    page: 1,
+    day: filter?.day,
+    meal_type: filter?.meal_type,
   });
 
-  const subscriptions = useMemo(() => data?.data ?? [], [data]);
-  const hasSubscriptions = useMemo(
-    () => (subscriptions ?? []).length > 0,
-    [subscriptions]
+  console.log("Meal Analysis", id, data);
+
+  const analysis = useMemo(() => data?.data ?? [], [data]);
+
+  const hasAnalysis = useMemo(() => (analysis ?? []).length > 0, [analysis]);
+
+  const isFiltering = useMemo(
+    () => hasAnalysis && isLoading,
+    [hasAnalysis, isLoading]
   );
 
-  const handleSubscriptionType = (value: string) => {
-    setFilter("subType", value);
+  const handleMealType = (value: string) => {
+    setFilter("mealType", value);
     if (value !== "all") {
-      setFilter("plan", value);
+      setFilter("meal_type", value);
     } else {
-      setFilter("plan", undefined);
+      setFilter("meal_type", undefined);
+    }
+  };
+
+  const handleDayOfWeek = (value: string) => {
+    setFilter("dayOfWeek", value);
+    if (value !== "all") {
+      setFilter("day", value);
+    } else {
+      setFilter("day", undefined);
     }
   };
 
@@ -60,10 +72,23 @@ export default function Subscriptions() {
   // }, [isLoading]);
 
   return (
-    <PageMotion key="subscriptions-root" pb="100px">
-      <Topbar pageTitle="Subscriptions" />
+    <PageMotion key="meal-analysis-root" pb="100px">
+      <Topbar pageTitle="Meal Stats" />
       <MainLayoutContainer>
         <Box>
+          <HStack
+            mt="48px"
+            as="form"
+            justifyContent="flex-start"
+            w="100%"
+            mb="24px"
+          >
+            <ReferralCounter
+              isLoading={isLoading}
+              count={data?.totalCount ?? 0}
+              description={"Total Count"}
+            />
+          </HStack>
           <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
             <HStack gridGap="16px">
               {/* <Input
@@ -79,30 +104,63 @@ export default function Subscriptions() {
 
               <FormControl w="fit-content" ml="0 !important" minW="250px">
                 <InputLabel
-                  isLoading={isLoadingPlans}
+                  isLoading={isFiltering}
                   fontSize="14px"
                   fontWeight="600"
                   display="inline-block"
                 >
-                  Filter by Subscription type:
+                  Filter by Meal type:
                 </InputLabel>
                 <Select
                   flex="2"
                   mt="10px"
-                  disabled={isLoading || isLoadingPlans}
+                  disabled={isLoading || isFiltering}
                   borderWidth="1.5px"
                   placeholder="Select Option"
                   minH="52px"
                   borderRadius="8px"
-                  value={filter?.subType}
-                  onChange={(e) => handleSubscriptionType(e.target.value)}
+                  value={filter?.mealType}
+                  onChange={(e) => handleMealType(e.target.value)}
                   // maxW="300px"
                 >
                   <option value="all">All</option>
-                  {(plans?.data ?? []).map((plan) => (
-                    <option value={plan?._id}>
-                      {capitalize(plan?.name ?? "")}
-                    </option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                </Select>
+              </FormControl>
+              <FormControl w="fit-content" ml="0 !important" minW="250px">
+                <InputLabel
+                  isLoading={isFiltering}
+                  fontSize="14px"
+                  fontWeight="600"
+                  display="inline-block"
+                >
+                  Filter by Day of Week:
+                </InputLabel>
+                <Select
+                  flex="2"
+                  mt="10px"
+                  disabled={isLoading || isFiltering}
+                  borderWidth="1.5px"
+                  placeholder="Select Option"
+                  minH="52px"
+                  borderRadius="8px"
+                  value={filter?.dayOfWeek}
+                  onChange={(e) => handleDayOfWeek(e.target.value)}
+                  // maxW="300px"
+                >
+                  <option value="all">All</option>
+                  {[
+                    "monday",
+                    "tuesday",
+                    "wednesday",
+                    "thursday",
+                    "friday",
+                    "saturday",
+                    "sunday",
+                  ].map((day) => (
+                    <option value={day}>{capitalize(day)}</option>
                   ))}
                 </Select>
               </FormControl>
@@ -116,6 +174,7 @@ export default function Subscriptions() {
               Export
             </Button> */}
           </HStack>
+
           <Box
             borderRadius="8px"
             overflow="hidden"
@@ -123,23 +182,17 @@ export default function Subscriptions() {
           >
             <GenericTable
               isLoading={isLoading}
-              headers={[
-                "Fullname",
-                "Email",
-                "Start Date",
-                "End Date",
-                "Subscription Type",
-              ]}
+              headers={["Fullname", "Meal", "Day", "Meal Type", "Delivery Day"]}
             >
-              {hasSubscriptions
-                ? subscriptions?.map((sub) => {
-                    const user = sub?.customer as UserRo;
-                    const plan = sub?.plan as PlanRo;
+              {hasAnalysis
+                ? analysis?.map((lysis) => {
+                    const user = lysis?.customer as UserRo;
+                    const pack = lysis?.pack as MealPackRo;
 
                     return (
                       <GenericTableItem
                         isClickable={false}
-                        key={`subscription-table-item:${sub?._id}`}
+                        key={`lysisscription-table-item:${lysis?._id}`}
                         // onClick={() =>
                         //   navigate(`${configs.paths.users}/${user?._id}`)
                         // }
@@ -154,30 +207,18 @@ export default function Subscriptions() {
                               navigate(`${configs.paths.users}/${user?._id}`)
                             }
                           />,
-                          <Text fontSize="14px">{user?.email}</Text>,
                           <Text fontSize="14px">
-                            {!!sub?.start_date
-                              ? format(
-                                  parseISO(
-                                    sub?.start_date ?? new Date().toDateString()
-                                  ),
-                                  "eee, MMM dd, yyyy"
-                                )
-                              : "--------------"}
+                            {pack?.name ?? "----------"}
+                          </Text>,
+                          <Text fontSize="14px">
+                            {capitalize(lysis?.day ?? "--------------")}
                           </Text>,
                           <Text fontSize="14px" textTransform="capitalize">
-                            {!!sub?.end_date
-                              ? format(
-                                  parseISO(
-                                    sub?.end_date ?? new Date().toDateString()
-                                  ),
-                                  "eee, MMM dd, yyyy"
-                                )
-                              : "--------------"}
+                            {capitalize(lysis?.meal_type ?? "--------------")}
                           </Text>,
-                          <SubscriptionBadge
-                            type={(plan?.slug as any) ?? "no_subscription"}
-                          />,
+                          <Text fontSize="14px" textTransform="capitalize">
+                            {capitalize(user?.delivery_day ?? "--------------")}
+                          </Text>,
                         ]}
                       />
                     );
@@ -196,7 +237,7 @@ export default function Subscriptions() {
               
             </PaginatorContainer> */}
 
-            {hasSubscriptions && (
+            {hasAnalysis && (
               <APaginator
                 flexDir={"row"}
                 isLoading={isLoading}

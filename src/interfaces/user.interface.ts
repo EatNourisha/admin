@@ -114,3 +114,15 @@ export interface AddNewPlanDto
 
 export interface AddNewMealDto
   extends Omit<MealRo, "_id" | "createdAt" | "updatedAt" | "slug"> {}
+
+export interface MealAnalysisRo {
+  _id: string;
+  pack: MealPackRo;
+  customer: UserRo;
+  day: string;
+  meal_type: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type GetMealAnalysis = PaginatedDocument<MealAnalysisRo[]>;

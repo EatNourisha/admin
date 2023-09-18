@@ -31,6 +31,7 @@ import { MealRo } from "interfaces";
 // import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
 import useMeals from "hooks/useMeals";
 import useMealMutations from "hooks/useMealMutations";
+import { navigate } from "@reach/router";
 
 export default function Meals() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -119,7 +120,7 @@ interface MealItemProps extends Partial<MealRo>, BoxProps {
 }
 
 function MealItem(props: MealItemProps) {
-  const { name, image_url, keys, is_available, ...xprops } = props;
+  const { _id, name, image_url, keys, is_available, ...xprops } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -190,7 +191,7 @@ function MealItem(props: MealItemProps) {
             boxSize="28px"
             borderRadius="8px"
             bg="transparent"
-            aria-label="remove perk"
+            aria-label="edit mealpack"
             icon={<Icon type="edit" boxSize="16px" color="black" />}
             _hover={{
               bg: "transparent",
@@ -209,7 +210,7 @@ function MealItem(props: MealItemProps) {
             boxSize="28px"
             borderRadius="8px"
             bg="transparent"
-            aria-label="remove perk"
+            aria-label="delete mealpack"
             icon={<Icon type="delete" boxSize="16px" />}
             _hover={{
               bg: "transparent",
@@ -219,6 +220,27 @@ function MealItem(props: MealItemProps) {
             }}
             _loading={{ color: "brand.primary" }}
             onClick={onOpen}
+            disabled={isLoading}
+            isLoading={isLoading}
+          />
+          <IconButton
+            minH="unset"
+            minW="unset"
+            maxH="unset"
+            maxW="unset"
+            boxSize="28px"
+            borderRadius="8px"
+            bg="transparent"
+            aria-label="view analysis"
+            icon={<Icon type="stats" boxSize="16px" color="black" />}
+            _hover={{
+              bg: "transparent",
+            }}
+            _active={{
+              bg: "transparent",
+            }}
+            _loading={{ color: "brand.primary" }}
+            onClick={() => navigate(`/meals/analysis/${_id}`)}
             disabled={isLoading}
             isLoading={isLoading}
           />

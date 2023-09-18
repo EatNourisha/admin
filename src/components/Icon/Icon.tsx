@@ -39,6 +39,7 @@ import { ReactComponent as DownloadIcon } from "assets/svgs/download.svg";
 import { ReactComponent as UploadIcon } from "assets/svgs/upload.svg";
 import { ReactComponent as PlansIcon } from "assets/svgs/plans.svg";
 import { ReactComponent as BroadcastIcon } from "assets/svgs/broadcast.svg";
+import { ReactComponent as StatsIcon } from "assets/svgs/stats.svg";
 
 import { useMemo } from "react";
 
@@ -81,7 +82,8 @@ export type IconNames =
   | "upload"
   | "pdf"
   | "plans"
-  | "broadcast";
+  | "broadcast"
+  | "stats";
 
 export interface IconProps extends BoxProps {
   type: IconNames;
@@ -142,6 +144,7 @@ export default function Icon(props: IconProps) {
       pdf: UploadIcon,
       plans: PlansIcon,
       broadcast: BroadcastIcon,
+      stats: StatsIcon,
     };
 
     return map[type];

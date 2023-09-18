@@ -16,7 +16,6 @@ const configs = {
   AWS_ACCESS_KEY: "AKIARYIJOAE6YMB2DQGQ",
   AWS_SECRET_KEY: "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",
 
-
   paths: {
     login: "/signin",
     register: "/signup",

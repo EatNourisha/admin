@@ -14,6 +14,7 @@ export { default as EditPlan } from "./Plans/EditPlan";
 export { default as PlanDetails } from "./Plans/PlanDetails";
 
 export { default as Meals } from "./Meals/Meals";
+export { default as MealAnalysis } from "./Meals/MealAnalysis";
 
 export { default as Subscriptions } from "./Subscriptions/Subscriptions";
 
@@ -21,5 +22,5 @@ export { default as Login } from "./Auth/Login";
 export { default as ResetPassword } from "./Auth/ResetPassword";
 export { default as ForgotPassword } from "./Auth/ForgotPassword";
 
-export {default as Broadcasts} from './Broadcast/Broadcast'
-export {default as SendBroadcast} from './Broadcast/SendBroadcast'
+export { default as Broadcasts } from "./Broadcast/Broadcast";
+export { default as SendBroadcast } from "./Broadcast/SendBroadcast";

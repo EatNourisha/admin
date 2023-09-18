@@ -19,6 +19,7 @@ import {
   Meals,
   Broadcasts,
   SendBroadcast,
+  MealAnalysis,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -79,6 +80,7 @@ const AppRouter = () => {
         <RootPage path={configs.paths.meals}>
           {/* <ProtectedRoute path="/:id" component={DoctorDetails} /> */}
           <ProtectedRoute path="/" component={Meals} />
+          <ProtectedRoute path="/analysis/:id" component={MealAnalysis} />
         </RootPage>
         {/* <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
