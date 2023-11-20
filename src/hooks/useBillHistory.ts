@@ -9,12 +9,15 @@ interface IUseBillHistoryFilter {
   searchPhrase: string;
 }
 
-export default function useBillHistory(filter: Partial<IUseBillHistoryFilter>) {
+export default function useBillHistory(
+  id: string,
+  filter: Partial<IUseBillHistoryFilter>
+) {
   const queries = toQueryString(filter);
-  const key = `transactions?${queries}`;
+  const key = `transactions/customer/${id}?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetBillHistory>>(key, get);
 
-  // console.log("USERS", data);
+  console.log("Transac", data);
 
   return {
     key,

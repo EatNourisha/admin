@@ -64,7 +64,7 @@ export default function UserDetails() {
 
   console.log("Lineup", lineup);
 
-  const { data: bill_history, isLoading: isLoadingBills } = useBillHistory({
+  const { data: bill_history, isLoading: isLoadingBills } = useBillHistory(id, {
     ...state,
   });
 
@@ -458,8 +458,16 @@ function Detail(props: DetailProps) {
 }
 
 function BillItem(props: BillItemProps) {
-  const { _id, status, currency, amount, createdAt, isLoading, ...xprops } =
-    props;
+  const {
+    _id,
+    status,
+    currency,
+    reason,
+    amount,
+    createdAt,
+    isLoading,
+    ...xprops
+  } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -480,7 +488,8 @@ function BillItem(props: BillItemProps) {
             // mt="8px"
           >
             <Text fontSize="14px" fontWeight="600">
-              {capitalize(status ?? "Successful")} Subscription
+              {capitalize(status ?? "Successful")}{" "}
+              {capitalize(reason ?? "Subscription")}
             </Text>
           </Skeleton>
           <Skeleton

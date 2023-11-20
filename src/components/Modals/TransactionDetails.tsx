@@ -119,11 +119,13 @@ export default function TransactionDetailModal(
               border="2px dotted transparent"
               borderColor="brand.primary"
             >
-              <TxDetail
-                isLoading={isLoading}
-                title="Subscription Type"
-                description={plan?.name ?? "-------"}
-              />
+              {!!plan?.name && (
+                <TxDetail
+                  isLoading={isLoading}
+                  title="Subscription Type"
+                  description={plan?.name ?? "-------"}
+                />
+              )}
 
               <TxDetail
                 isLoading={isLoading}

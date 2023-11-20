@@ -20,6 +20,7 @@ import {
   Broadcasts,
   SendBroadcast,
   MealAnalysis,
+  AssignPlan,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -69,6 +70,7 @@ const AppRouter = () => {
         </RootPage>
         <RootPage path={configs.paths.plans}>
           <ProtectedRoute path="/:id" component={PlanDetails} />
+          <ProtectedRoute path="/:id/assign" component={AssignPlan} />
           <ProtectedRoute path="/" component={Plans} />
           <ProtectedRoute path="/add" component={AddPlan} />
           <ProtectedRoute path="/edit/:id" component={EditPlan} />

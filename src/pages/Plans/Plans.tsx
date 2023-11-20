@@ -90,9 +90,6 @@ export default function Plans() {
                     <GenericTableItem
                       isClickable={false}
                       key={`customer-table-item:${plan?._id}`}
-                      onClick={() =>
-                        navigate(`${configs.paths.plans}/${plan?._id}`)
-                      }
                       cols={[
                         <Text fontSize="14px" textTransform="capitalize">
                           {plan?.name ?? "--------"}
@@ -109,9 +106,28 @@ export default function Plans() {
                         <Text fontSize="14px" textTransform="capitalize">
                           {plan?.subscription_interval}ly
                         </Text>,
-                        <Button size="sm" variant="outline">
-                          View More
-                        </Button>,
+                        <HStack>
+                          <Button
+                            size="sm"
+                            variant="transparent"
+                            onClick={() =>
+                              navigate(
+                                `${configs.paths.plans}/${plan?._id}/assign`
+                              )
+                            }
+                          >
+                            Assign To
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() =>
+                              navigate(`${configs.paths.plans}/${plan?._id}`)
+                            }
+                          >
+                            View More
+                          </Button>
+                        </HStack>,
                       ]}
                     />
                   ))

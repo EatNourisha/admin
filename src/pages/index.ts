@@ -11,6 +11,7 @@ export { default as UserDetails } from "./Users/UserDetails";
 export { default as Plans } from "./Plans/Plans";
 export { default as AddPlan } from "./Plans/AddPlan";
 export { default as EditPlan } from "./Plans/EditPlan";
+export { default as AssignPlan } from "./Plans/AssignPlan";
 export { default as PlanDetails } from "./Plans/PlanDetails";
 
 export { default as Meals } from "./Meals/Meals";

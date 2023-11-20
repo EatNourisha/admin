@@ -115,6 +115,11 @@ export interface AddNewPlanDto
 export interface AddNewMealDto
   extends Omit<MealRo, "_id" | "createdAt" | "updatedAt" | "slug"> {}
 
+export interface AssignPlanDto {
+  plan_id: string;
+  customer_id: string;
+}
+
 export interface MealAnalysisRo {
   _id: string;
   pack: MealPackRo;

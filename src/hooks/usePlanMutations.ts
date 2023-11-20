@@ -2,7 +2,13 @@ import { useCallback } from "react";
 import { useSWRConfig } from "swr";
 import { destroy, post, put } from "utils/makeRequest";
 
-import { ApiResponse, AddNewPlanDto, PlanRo } from "interfaces";
+import {
+  ApiResponse,
+  AddNewPlanDto,
+  PlanRo,
+  AssignPlanDto,
+  SubscriptionRo,
+} from "interfaces";
 
 import useErrorStore from "stores/error";
 import usePartialState from "./usePartialState";
@@ -41,6 +47,36 @@ export default function usePlanMutations(keys?: string[]) {
         set({ isError: true });
         actions?.setError({
           action: { type: "plans/add", payload: data },
+          message: error?.message,
+          status: error?.statusCode,
+          showUser: true,
+        });
+      }
+      set({ isLoading: false });
+    },
+    [set, actions, keys, mutate]
+  );
+
+  const assignPlan = useCallback(
+    async (data: AssignPlanDto) => {
+      set({ isLoading: true, isSuccess: false });
+      try {
+        const res = (
+          await put<ApiResponse<SubscriptionRo>, AssignPlanDto>(
+            `/plans/${data?.plan_id}/assign`,
+            data
+          )
+        ).data as SubscriptionRo;
+
+        keys?.forEach(async (key) => await mutate(key));
+        // mutate(`/plans`);
+        set({ isSuccess: true, isLoading: false });
+
+        return res;
+      } catch (error: any) {
+        set({ isError: true });
+        actions?.setError({
+          action: { type: "plan/assign", payload: data },
           message: error?.message,
           status: error?.statusCode,
           showUser: true,
@@ -110,6 +146,7 @@ export default function usePlanMutations(keys?: string[]) {
     updatePlan,
     addNewPlan,
     deletePlan,
+    assignPlan,
     ...state,
   };
 }
