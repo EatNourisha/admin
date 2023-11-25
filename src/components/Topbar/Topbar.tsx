@@ -9,10 +9,13 @@ import {
   Stack,
   Skeleton,
   Progress,
+  Button,
   // SkeletonCircle,
 } from "@chakra-ui/react";
 
 import MainLayoutContainer from "../MainLayoutContainer/MainLayoutContainer";
+import Icon from "components/Icon/Icon";
+import { navigate } from "@reach/router";
 // import Icon from "../Icon/Icon";
 // import Input from "../Input/Input";
 
@@ -120,6 +123,26 @@ const Topbar: FC<TopbarProps> = (props) => {
               {/* <SkeletonCircle isLoaded={!isLoading ?? true}>
               <NotificationButton />
             </SkeletonCircle> */}
+              {pageTitle?.toLowerCase().includes("admin") && (
+                <Button
+                  size="sm"
+                  variant="transparent"
+                  leftIcon={<Icon type="admin" />}
+                  onClick={() => navigate("/admins/settings")}
+                >
+                  Settings
+                </Button>
+              )}
+              {pageTitle?.toLowerCase().includes("meal") && (
+                <Button
+                  size="sm"
+                  variant="transparent"
+                  leftIcon={<Icon type="subscriptions" />}
+                  onClick={() => navigate("/meals/orders")}
+                >
+                  View Orders
+                </Button>
+              )}
             </HStack>
           </HStack>
         </MainLayoutContainer>

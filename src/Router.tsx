@@ -21,6 +21,11 @@ import {
   SendBroadcast,
   MealAnalysis,
   AssignPlan,
+  EditMeal,
+  AddMeal,
+  Settings,
+  Orders,
+  OrderDetails,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -80,9 +85,12 @@ const AppRouter = () => {
           <ProtectedRoute path="/send" component={SendBroadcast} />
         </RootPage>
         <RootPage path={configs.paths.meals}>
-          {/* <ProtectedRoute path="/:id" component={DoctorDetails} /> */}
           <ProtectedRoute path="/" component={Meals} />
+          <ProtectedRoute path="/add" component={AddMeal} />
+          <ProtectedRoute path="/edit/:id" component={EditMeal} />
           <ProtectedRoute path="/analysis/:id" component={MealAnalysis} />
+          <ProtectedRoute path="/orders" component={Orders} />
+          <ProtectedRoute path="/orders/:id" component={OrderDetails} />
         </RootPage>
         {/* <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
@@ -94,6 +102,7 @@ const AppRouter = () => {
         <RootPage path={configs.paths.administrators}>
           <ProtectedRoute path="/" component={Admins} />
           <ProtectedRoute path="/add" component={AddAdmins} />
+          <ProtectedRoute path="/settings" component={Settings} />
         </RootPage>
       </Layout>
     </Router>

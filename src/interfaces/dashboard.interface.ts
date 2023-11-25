@@ -13,18 +13,9 @@ export interface GenderDemoGraphicRo {
 }
 
 export interface DashboardRo {
-  totalAppointments: number;
-  totalPatients: number;
-  totalDoctors: number;
-  totalPatientsForPeriod: number;
-  totalSubscriptionPayment: number;
-  totalDoctorSubscriptionPayment: number;
-  totalFreeTrialSubscriptionPayment: number;
-  totalTherapistSubscriptionPayment: number;
-  genderDemoGraphic: GenderDemoGraphicRo[];
-
   //Nourisha
   meals: number;
   customers: number;
   subscriptions: number;
+  orders: number;
 }

@@ -190,6 +190,29 @@ export default function UserDetails() {
                     // isLoading={isDeleting}
                   />
                 </Tooltip>
+                <Tooltip label="View Orders">
+                  <IconButton
+                    minH="unset"
+                    minW="unset"
+                    maxH="unset"
+                    maxW="unset"
+                    boxSize="28px"
+                    borderRadius="8px"
+                    bg="transparent"
+                    aria-label="edit user note"
+                    icon={<Icon type="subscriptions" color="brand.primary" />}
+                    _hover={{
+                      bg: "transparent",
+                    }}
+                    _active={{
+                      bg: "transparent",
+                    }}
+                    _loading={{ color: "brand.primary" }}
+                    onClick={() => navigate(`/meals/orders?customer=${id}`)}
+                    // disabled={isDeleting}
+                    // isLoading={isDeleting}
+                  />
+                </Tooltip>
                 {/* <Tooltip label="View Meal Stats">
                   <IconButton
                     minH="unset"

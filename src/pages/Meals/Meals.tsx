@@ -32,11 +32,12 @@ import { MealRo } from "interfaces";
 import useMeals from "hooks/useMeals";
 import useMealMutations from "hooks/useMealMutations";
 import { navigate } from "@reach/router";
+import { currencyFormat } from "utils";
 
 export default function Meals() {
   // const [isLoading, setIsLoading] = useState(true);
 
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { isOpen, onClose /*, onOpen */ } = useDisclosure();
 
   const { state, filter, onPageChange } = usePageFilters({
     limit: 12,
@@ -72,7 +73,7 @@ export default function Meals() {
             <Button
               ml="0 !important"
               leftIcon={<Icon type="add" />}
-              onClick={onOpen}
+              onClick={() => navigate("/meals/add")}
             >
               Add Meal
             </Button>
@@ -120,12 +121,12 @@ interface MealItemProps extends Partial<MealRo>, BoxProps {
 }
 
 function MealItem(props: MealItemProps) {
-  const { _id, name, image_url, keys, is_available, ...xprops } = props;
+  const { _id, name, image_url, keys, price, is_available, ...xprops } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: editIsOpen,
-    onOpen: editOnOpen,
+    // onOpen: editOnOpen,
     onClose: editOnClose,
   } = useDisclosure();
 
@@ -182,6 +183,14 @@ function MealItem(props: MealItemProps) {
 
       <Stack p="12px">
         <Text>{name}</Text>
+        <Text>{currencyFormat("gbp").format(+(price?.amount ?? 0))}</Text>
+        <HStack mt="-10px !important" fontSize="xs" color="brand.primary">
+          <Text>Delivery Fee</Text>
+          <Text>
+            {currencyFormat("gbp").format(+(price?.deliveryFee ?? 0))}
+          </Text>
+        </HStack>
+
         <HStack>
           <IconButton
             minH="unset"
@@ -199,7 +208,7 @@ function MealItem(props: MealItemProps) {
             _active={{
               bg: "transparent",
             }}
-            onClick={editOnOpen}
+            onClick={() => navigate(`/meals/edit/${_id}`)}
           />
 
           <IconButton
@@ -242,7 +251,6 @@ function MealItem(props: MealItemProps) {
             _loading={{ color: "brand.primary" }}
             onClick={() => navigate(`/meals/analysis/${_id}`)}
             disabled={isLoading}
-            isLoading={isLoading}
           />
         </HStack>
       </Stack>

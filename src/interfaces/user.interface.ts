@@ -56,6 +56,14 @@ export interface MealRo {
   name: string;
   slug: string;
   updatedAt: string;
+  price?: {
+    amount: string;
+    deliveryFee: string;
+    previousAmount: number;
+    currency: string;
+  };
+  images?: string[];
+  description?: string;
   _id: string;
 }
 
@@ -101,10 +109,52 @@ export interface MealPackRo {
   is_available: boolean;
 }
 
+export enum OrderStatus {
+  PROCESSING = "processing", // "processing payment"
+  PAID = "payment_received", // "processing payment"
+  CANCELLED = "cancelled",
+  CONFIRMING = "confirming", // "confirming payment"
+  ACCEPTED = "accepted", // "order has been confirmed"
+  DISPATCHED = "dispatched",
+  RECEIVED = "received",
+  DEFAULT = "default",
+}
+
+export interface OrderItemRo {
+  customer: string | UserRo;
+  order: string;
+  item: string | MealRo;
+  quantity: number;
+  cart_session_id: string;
+}
+
+export interface OrderRo {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+
+  customer: UserRo;
+  cart_id: string;
+  subtotal: number;
+  delivery_fee: number;
+  total: number;
+  status: OrderStatus;
+  delivery_date: string;
+  ref: string;
+  delivery_address: UserRo["address"];
+  phone_number: string;
+  items: OrderItemRo[];
+}
+
 export type GetBillHistory = PaginatedDocument<TransactionRo[]>;
 export type GetSubscriptions = PaginatedDocument<SubscriptionRo[]>;
 export type GetPlans = PaginatedDocument<PlanRo[]>;
+export type GetOrders = PaginatedDocument<OrderRo[]>;
 export type GetMeals = PaginatedDocument<MealRo[]>;
+export type GetOrderById = {
+  order: OrderRo;
+  items: PaginatedDocument<OrderItemRo[]>;
+};
 
 export interface AddNewPlanDto
   extends Omit<
@@ -128,6 +178,16 @@ export interface MealAnalysisRo {
   meal_type: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SettingsRo {
+  _id: string;
+  name: string;
+  delivery_fee: string;
+  createdAt: string;
+  updatedAt: string;
+  currency: string;
+  delivery_fee_calculation_type: string;
 }
 
 export type GetMealAnalysis = PaginatedDocument<MealAnalysisRo[]>;

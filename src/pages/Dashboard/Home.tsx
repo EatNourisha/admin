@@ -46,7 +46,7 @@ export default function Home() {
       <Topbar pageTitle="Dashboard" />
       <MainLayoutContainer pb="60px">
         <Box>
-          <Grid templateColumns="repeat(4, 1fr)" gap="16px">
+          <Grid templateColumns="repeat(5, 1fr)" gap="16px">
             <TotalFeatureCount
               type="meals"
               value={dashboardData?.meals ?? 0}
@@ -63,6 +63,12 @@ export default function Home() {
               type="subscriptions"
               value={dashboardData?.subscriptions ?? 0}
               label="Subscriptions"
+              isLoading={isDashboadLoading}
+            />
+            <TotalFeatureCount
+              type="subscriptions"
+              value={dashboardData?.orders ?? 0}
+              label="Orders"
               isLoading={isDashboadLoading}
             />
             <Box

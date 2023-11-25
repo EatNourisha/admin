@@ -1,6 +1,6 @@
 const configs = {
   authKey: "x231nxj",
-  // baseUrl: "http://localhost:8090/v1",
+  // baseUrl: "http://localhost:8080/v1",
   // baseUrl: "https://api-stage.eatnourisha.com/v1",
   baseUrl: "https://api.eatnourisha.com/v1",
 
