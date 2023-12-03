@@ -51,8 +51,33 @@ export default function useOrderMutations(keys?: string[]) {
     [set, actions, keys, mutate]
   );
 
+  const fixUnpaidOrders = useCallback(async () => {
+    set({ isLoading: true, isSuccess: false });
+    try {
+      const res = (
+        await put<ApiResponse<void>, null>(`/orders/ascertain`, null)
+      ).data as void;
+
+      keys?.forEach(async (key) => await mutate(key));
+      mutate(`/orders`);
+      set({ isSuccess: true, isLoading: false });
+
+      return res;
+    } catch (error: any) {
+      set({ isError: true });
+      actions?.setError({
+        action: { type: "orders/fix-unpaid-orders", payload: null },
+        message: error?.message,
+        status: error?.statusCode,
+        showUser: true,
+      });
+    }
+    set({ isLoading: false });
+  }, [set, actions, keys, mutate]);
+
   return {
     updateOrder,
+    fixUnpaidOrders,
     ...state,
   };
 }

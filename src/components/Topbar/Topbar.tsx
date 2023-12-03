@@ -27,6 +27,9 @@ interface TopbarProps extends BoxProps {
   action?: ReactNode;
   isDownloading?: boolean;
   progressValue?: number;
+  fix_unpaid_order?: boolean;
+  onFixOrders?: () => void;
+  isFixing?: boolean;
 }
 
 // const NotificationButton = () => {
@@ -82,6 +85,9 @@ const Topbar: FC<TopbarProps> = (props) => {
     isLoading,
     isDownloading,
     progressValue,
+    fix_unpaid_order,
+    onFixOrders,
+    isFixing,
     ...xprops
   } = props;
   return (
@@ -90,9 +96,6 @@ const Topbar: FC<TopbarProps> = (props) => {
       top="0"
       pos="sticky"
       zIndex="99"
-      // py="14px"
-      // px="16px"
-
       mb="26px"
       // backdropFilter="blur(10px)"
       // mt="52px"
@@ -143,6 +146,19 @@ const Topbar: FC<TopbarProps> = (props) => {
                   View Orders
                 </Button>
               )}
+              {pageTitle?.toLowerCase().includes("orders") &&
+                !!fix_unpaid_order && (
+                  <Button
+                    size="sm"
+                    variant="transparent"
+                    leftIcon={<Icon type="subscriptions" />}
+                    onClick={onFixOrders}
+                    isLoading={isFixing}
+                    disabled={isFixing}
+                  >
+                    Fix unpaid orders
+                  </Button>
+                )}
             </HStack>
           </HStack>
         </MainLayoutContainer>

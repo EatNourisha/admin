@@ -18,18 +18,19 @@ import { currencyFormat } from "utils";
 import useOrders from "hooks/useOrders";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { OrderStatusBadge } from "./OrderStatusBadge";
+import useOrderMutations from "hooks/useOrderMutation";
 
 export default function Orders() {
   // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, onPageChange } = usePageFilters({
-    limit: 10,
+    limit: 20,
     page: 1,
   });
 
   const { search } = useLocation();
   const params = useMemo(() => new URLSearchParams(search), [search]);
 
-  const { data, isLoading } = useOrders({
+  const { data, isLoading, key } = useOrders({
     ...omit(state, ["searchPhrase"]),
     searchPhrase: filter?.searchPhrase,
     customer: params.get("customer") ?? undefined,
@@ -43,6 +44,8 @@ export default function Orders() {
   );
   const hasOrders = useMemo(() => (orders ?? []).length > 0, [orders]);
 
+  const { fixUnpaidOrders, isLoading: isFixing } = useOrderMutations([key]);
+
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
 
@@ -53,7 +56,12 @@ export default function Orders() {
 
   return (
     <PageMotion key="orders-root" pb="100px">
-      <Topbar pageTitle="Orders" />
+      <Topbar
+        pageTitle="Orders"
+        fix_unpaid_order
+        onFixOrders={fixUnpaidOrders}
+        isFixing={isFixing}
+      />
       <MainLayoutContainer>
         <Box>
           {/* <HStack as="form" justifyContent="space-between" w="100%" mb="24px">

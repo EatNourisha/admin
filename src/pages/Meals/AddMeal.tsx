@@ -167,6 +167,7 @@ export default function AddMeal() {
                     borderWidth="2px"
                     borderColor="brand.neutral200"
                     placeholder={""}
+                    isRequired={false}
                     value={state?.price?.previousAmount ?? ""}
                     isDisabled
                     // onChange={(e) => setPrice({ amount: +e.target.value })}
@@ -188,6 +189,7 @@ export default function AddMeal() {
                     borderWidth="2px"
                     borderColor="brand.neutral200"
                     placeholder={""}
+                    isRequired={false}
                     value={state?.price?.deliveryFee ?? ""}
                     onChange={(e) => setPrice({ deliveryFee: e.target.value })}
                     endAdornment={

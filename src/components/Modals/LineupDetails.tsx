@@ -159,7 +159,7 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
           >
             Print
           </Button>
-          <Button
+          {/* <Button
             // w="100%"
             // size="sm"
             minH="48px"
@@ -169,7 +169,7 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
             disabled={isLoading}
           >
             Download
-          </Button>
+          </Button> */}
         </ModalFooter>
       </ModalContent>
     </Modal>

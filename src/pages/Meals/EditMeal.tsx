@@ -190,6 +190,7 @@ export default function EditMeal() {
                     borderWidth="2px"
                     borderColor="brand.neutral200"
                     placeholder={""}
+                    isRequired={false}
                     value={state?.price?.deliveryFee ?? ""}
                     onChange={(e) => setPrice({ deliveryFee: e.target.value })}
                     endAdornment={

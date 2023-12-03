@@ -150,7 +150,11 @@ export function useMealForm(meal?: MealRo) {
 
     const result = await addNewMeal({
       ...(state as any),
-      price: state?.price ?? {},
+      price:
+        {
+          ...state?.price,
+          deliveryFee: +(state?.price?.deliveryFee ?? 0) as any,
+        } ?? {},
       image_url: images[0],
       images,
     });
@@ -166,7 +170,11 @@ export function useMealForm(meal?: MealRo) {
 
     const result = await updateMeal(id, {
       ...(state as any),
-      price: state?.price ?? {},
+      price:
+        {
+          ...state?.price,
+          deliveryFee: +(state?.price?.deliveryFee ?? 0) as any,
+        } ?? {},
       images: [...saved_images, ...uploaded_images],
     });
 
