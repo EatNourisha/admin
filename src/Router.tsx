@@ -26,6 +26,9 @@ import {
   Settings,
   Orders,
   OrderDetails,
+  Promos,
+  CreatePromo,
+  EditPromo,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -65,6 +68,12 @@ const AppRouter = () => {
         </RootPage>
         <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
+        </RootPage>
+
+        <RootPage path={configs.paths.promos}>
+          <ProtectedRoute path="/" component={Promos} />
+          <ProtectedRoute path="/create" component={CreatePromo} />
+          <ProtectedRoute path="/edit/:id" component={EditPromo} />
         </RootPage>
         <RootPage path={configs.paths.users}>
           <ProtectedRoute path="/:id" component={UserDetails} />

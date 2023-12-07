@@ -51,7 +51,7 @@ export default function useOrderMutations(keys?: string[]) {
     [set, actions, keys, mutate]
   );
 
-  const fixUnpaidOrders = useCallback(async () => {
+  const fixPaidOrders = useCallback(async () => {
     set({ isLoading: true, isSuccess: false });
     try {
       const res = (
@@ -77,7 +77,7 @@ export default function useOrderMutations(keys?: string[]) {
 
   return {
     updateOrder,
-    fixUnpaidOrders,
+    fixPaidOrders,
     ...state,
   };
 }

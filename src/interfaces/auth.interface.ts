@@ -3,7 +3,7 @@ import ApiResponse, {
   PaginatedDocument,
 } from "./apiResponse.interface";
 import { ConsultationType } from "./appointments.interface";
-import { PlanRo } from "./user.interface";
+import { PlanRo, PromoRo } from "./user.interface";
 
 export enum Gender {
   MALE = "male",
@@ -173,19 +173,20 @@ export interface ReferralRo {
   is_subscribed: boolean;
   inviter: UserRo;
   invitee: UserRo;
-  subscription_plan?: PlanRo
+  subscription_plan?: PlanRo;
   createdAt: string;
   updatedAt: string;
   reward: number;
   currency: number;
   ref_code: string;
+  promo: PromoRo | string;
 }
 
 export interface ReferralStatsRo {
   fulfilled_withdrawals: number;
-pending_withdrawals: number;
-subscribed_invites: number;
-unsubscribed_invites: number;
+  pending_withdrawals: number;
+  subscribed_invites: number;
+  unsubscribed_invites: number;
 }
 
 export type RegisterUserRo = ApiResponse<AuthRo>;

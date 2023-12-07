@@ -31,3 +31,7 @@ export { default as SendBroadcast } from "./Broadcast/SendBroadcast";
 export { default as Settings } from "./Settings/Settings";
 export { default as Orders } from "./Orders/Orders";
 export { default as OrderDetails } from "./Orders/OrderDetails";
+
+export { default as Promos } from "./Promos/Promos";
+export { default as CreatePromo } from "./Promos/CreatePromo";
+export { default as EditPromo } from "./Promos/EditPromo";

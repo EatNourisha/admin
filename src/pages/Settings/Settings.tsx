@@ -24,6 +24,9 @@ import {
 import { useMemo } from "react";
 import useSettings from "hooks/useSettings";
 import { useSettingsForm } from "./useSettingsForm";
+import { InfluencerRewardType } from "interfaces";
+import { capitalize } from "lodash";
+import { when } from "utils";
 
 export default function Settings() {
   const { data: settings, isLoading } = useSettings();
@@ -39,6 +42,7 @@ export default function Settings() {
     onOpen,
     submitForm,
     hasChanges,
+    setReward,
   } = useSettingsForm(settings);
 
   console.log("Settings Changes", { hasChanges, state });
@@ -53,7 +57,8 @@ export default function Settings() {
       (!(
         state?.name &&
         state?.delivery_fee &&
-        state?.delivery_fee_calculation_type
+        state?.delivery_fee_calculation_type &&
+        state?.influencer_reward?.amount
       ) &&
         !hasChanges) ||
       isSubmiting,
@@ -157,6 +162,56 @@ export default function Settings() {
               </HStack>
 
               <Divider />
+
+              <HStack justifyContent="space-between">
+                <Text fontWeight="600">Influencer's Reward</Text>
+              </HStack>
+
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    placeholder="Select Option"
+                    borderRadius="4px"
+                    value={state?.influencer_reward?.type ?? ""}
+                    onChange={(e) => setReward({ type: e.target.value as any })}
+                  >
+                    {Object.values(InfluencerRewardType).map((type) => (
+                      <option key={type} value={type}>
+                        {capitalize(type)}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <InputLabel>
+                    {when(
+                      state?.influencer_reward?.type ===
+                        InfluencerRewardType.FIXED,
+                      "Amount",
+                      "Percentage"
+                    )}
+                  </InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    value={state?.influencer_reward?.amount ?? ""}
+                    onChange={(e) => setReward({ amount: e.target.value })}
+                    endAdornment={
+                      <Text fontSize="md" textTransform="uppercase">
+                        {state?.influencer_reward?.type ===
+                        InfluencerRewardType.FIXED
+                          ? "£"
+                          : "%"}
+                      </Text>
+                    }
+                  />
+                </FormControl>
+              </HStack>
+
+              {/* <Divider /> */}
 
               <HStack>
                 <Button

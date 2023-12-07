@@ -81,6 +81,12 @@ const pageLinks = [
     label: "Referral",
     to: "/referrals",
   },
+  {
+    activeIcon: ReferralIcon,
+    icon: ReferralIcon,
+    label: "Promotions",
+    to: "/promos",
+  },
 
   {
     activeIcon: ProfileIcon,
@@ -124,6 +130,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
       minH="100vh"
       pos="fixed"
       top="0"
+      overflowY="scroll"
       {...xprops}
     >
       <VStack
@@ -143,14 +150,20 @@ const Sidebar: FC<SidebarProps> = (props) => {
         </Text>
       </VStack>
 
-      <VStack alignItems="flex-start" w="100%" mt="40px" overflowY="scroll">
-        {take(pageLinks, 7).map((link, i) => (
+      <VStack
+        alignItems="flex-start"
+        w="100%"
+        h="calc(100% - 122px)"
+        py="40px"
+        overflowY="scroll"
+      >
+        {take(pageLinks, 8).map((link, i) => (
           <SidebarLink
             key={i}
             {...link}
             isCurrent={isCurrent(link.to)}
             mb={
-              i === take(pageLinks, 7).length - 1
+              i === take(pageLinks, 8).length - 1
                 ? "0 !important"
                 : "8px !important"
             }

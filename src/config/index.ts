@@ -25,6 +25,7 @@ const configs = {
 
     profile: "/profile",
     referrals: "/referrals",
+    promos: "/promos",
     users: "/users",
     dashboard: "/dashboard",
     administrators: "/admins",

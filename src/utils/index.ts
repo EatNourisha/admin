@@ -16,3 +16,5 @@ export { default as toQueryString } from "./toQueryString";
 export { default as currencyFormat } from "./formatter";
 export { when } from "./when";
 export { slugify } from "./slugify";
+
+export * from "./generateCode";

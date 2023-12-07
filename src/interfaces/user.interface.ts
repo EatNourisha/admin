@@ -180,6 +180,10 @@ export interface MealAnalysisRo {
   updatedAt: string;
 }
 
+export enum InfluencerRewardType {
+  FIXED = "fixed",
+  PERCENTAGE = "percentage",
+}
 export interface SettingsRo {
   _id: string;
   name: string;
@@ -188,6 +192,94 @@ export interface SettingsRo {
   updatedAt: string;
   currency: string;
   delivery_fee_calculation_type: string;
+  influencer_reward: {
+    amount: string;
+    type: InfluencerRewardType;
+  };
 }
 
+export enum CouponDuration {
+  ONCE = "once",
+  REPEATING = "repeating",
+  FOREVEER = "forever",
+}
+export interface CouponRo {
+  amount_off: string;
+  currency: string;
+  duration: CouponDuration;
+  duration_in_months: string;
+  max_redemptions: string;
+  name: string;
+  percent_off: string;
+  redeem_by: Date;
+  times_redeemed: string;
+  valid: boolean;
+  stripe_id: string;
+  required_for?: "promo" | null;
+}
+export interface PromoRo {
+  _id: string;
+  code: string;
+  coupon: CouponRo | string;
+  stripe_id: string;
+  active: boolean;
+  /// The customer that this promotion code can be used by.
+  customer: UserRo | string;
+  /// The admin that created this promotion code.
+  created_by: UserRo | string;
+  /// Date at which the promotion code can no longer be redeemed.
+  expires_at: string;
+  max_redemptions: string;
+  restrictions: {
+    first_time_transaction: boolean;
+    minimum_amount: string;
+    minimum_amount_currency: string;
+  };
+  times_redeemed: number;
+  influencer: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    customer?: UserRo | string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePromoDto
+  extends Omit<
+    PromoRo,
+    | "_id"
+    | "createdAt"
+    | "updatedAt"
+    | "coupon"
+    | "restrictions"
+    | "stripe_id"
+    | "customer"
+    | "created_by"
+    | "times_redeemed"
+    | "expires_at"
+  > {
+  coupon: {
+    amount_off?: number;
+    currency: string;
+    duration: CouponDuration;
+    duration_in_months: number;
+    max_redemptions: number;
+    name?: string;
+    percent_off?: number;
+    redeem_by?: string;
+  };
+
+  restrictions: {
+    first_time_transaction: boolean;
+    minimum_amount?: number;
+    minimum_amount_currency?: string;
+  };
+
+  expires_at?: number;
+}
+
+export type GetPromos = PaginatedDocument<PromoRo[]>;
 export type GetMealAnalysis = PaginatedDocument<MealAnalysisRo[]>;

@@ -156,7 +156,7 @@ const Topbar: FC<TopbarProps> = (props) => {
                     isLoading={isFixing}
                     disabled={isFixing}
                   >
-                    Fix unpaid orders
+                    Fix paid orders
                   </Button>
                 )}
             </HStack>

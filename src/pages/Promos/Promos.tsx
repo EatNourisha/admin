@@ -8,19 +8,18 @@ import {
   PageMotion,
   Topbar,
   Gravatar,
+  Icon,
 } from "components";
 
 import { navigate, useLocation } from "@reach/router";
 import configs from "config";
 import { join, omit, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
-import { currencyFormat } from "utils";
-import useOrders from "hooks/useOrders";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { OrderStatusBadge } from "./OrderStatusBadge";
-import useOrderMutations from "hooks/useOrderMutation";
+import { currencyFormat, when } from "utils";
+import usePromos from "hooks/usePromos";
+import { CouponRo, UserRo } from "interfaces";
 
-export default function Orders() {
+export default function Promos() {
   // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, onPageChange } = usePageFilters({
     limit: 20,
@@ -30,7 +29,7 @@ export default function Orders() {
   const { search } = useLocation();
   const params = useMemo(() => new URLSearchParams(search), [search]);
 
-  const { data, isLoading, key } = useOrders({
+  const { data, isLoading } = usePromos({
     ...omit(state, ["searchPhrase"]),
     searchPhrase: filter?.searchPhrase,
     customer: params.get("customer") ?? undefined,
@@ -38,34 +37,19 @@ export default function Orders() {
 
   console.log("Orders", data);
 
-  const orders = useMemo(
+  const promos = useMemo(
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
     [data]
   );
-  const hasOrders = useMemo(() => (orders ?? []).length > 0, [orders]);
-
-  const { fixPaidOrders, isLoading: isFixing } = useOrderMutations([key]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
+  const hasPromos = useMemo(() => (promos ?? []).length > 0, [promos]);
 
   return (
-    <PageMotion key="orders-root" pb="100px">
-      <Topbar
-        pageTitle="Orders"
-        fix_unpaid_order
-        onFixOrders={fixPaidOrders}
-        isFixing={isFixing}
-      />
+    <PageMotion key="promos-root" pb="100px">
+      <Topbar pageTitle="Promotion Codes" />
       <MainLayoutContainer>
         <Box>
-          {/* <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <Input
+          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
+            {/* <Input
               // w="100%"
               minH="48px"
               minW="340px"
@@ -74,16 +58,16 @@ export default function Orders() {
               value={state?.searchPhrase ?? ""}
               endAdornment={<Icon type="search" />}
               onChange={(e) => setFilter("searchPhrase", e.target.value)}
-            />
+            /> */}
 
             <Button
               ml="0 !important"
               leftIcon={<Icon type="add" />}
-              onClick={() => navigate(configs.paths.addPlan)}
+              onClick={() => navigate(`/promos/create`)}
             >
-              Add
+              Create Promo Code
             </Button>
-          </HStack> */}
+          </HStack>
           <Box
             borderRadius="8px"
             overflow="hidden"
@@ -92,66 +76,84 @@ export default function Orders() {
             <GenericTable
               isLoading={isLoading}
               headers={[
-                "Name",
-                "Reference ID",
-                "Phone Number",
-                "Subtotal",
-                "Delivery Fee",
-                "Total",
+                "Influencer",
+                "Code",
+                "Percent Off",
+                "Amount Off",
+                "Currency",
                 "Status",
                 "Action",
               ]}
             >
-              {hasOrders
-                ? orders?.map((order) => {
-                    const cus = order?.customer;
+              {hasPromos
+                ? promos?.map((promo) => {
+                    const inf =
+                      promo?.influencer ??
+                      when(
+                        typeof promo?.influencer?.customer === "object",
+                        promo?.influencer?.customer as UserRo,
+                        undefined
+                      );
+
+                    const coup = promo?.coupon as CouponRo;
 
                     return (
                       <GenericTableItem
                         isClickable={false}
-                        key={`order-table-item:${order?._id}`}
+                        key={`promo-table-item:${promo?._id}`}
                         cols={[
                           <Gravatar
-                            src={cus?.profilePhotoUrl}
-                            title={join([cus?.first_name, cus?.last_name], " ")}
-                            createdAt={cus?.createdAt}
-                            subtitle={
-                              !cus?.createdAt
-                                ? undefined
-                                : `${formatDistanceToNow(
-                                    parseISO(cus?.createdAt!)
-                                  )} ago`
-                            }
+                            src={undefined}
+                            title={join([inf?.first_name, inf?.last_name], " ")}
+                            subtitle={when(
+                              !!promo?.influencer?.customer,
+                              "nourisha user",
+                              "external"
+                            )}
                           />,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            {order?.ref ?? "--------"}
-                          </Text>,
-                          <Text fontSize="14px">{order?.phone_number}</Text>,
                           <Text fontSize="14px" textTransform="uppercase">
-                            {currencyFormat("gbp").format(order?.subtotal ?? 0)}
+                            {promo?.code ?? "--------"}
+                          </Text>,
+                          <Text fontSize="14px" textTransform="uppercase">
+                            {`${coup?.percent_off ?? 0}%`}
+                          </Text>,
+                          <Text fontSize="14px" textTransform="uppercase">
+                            {currencyFormat(
+                              (coup?.currency as any) ?? "gbp"
+                            ).format(+(coup?.amount_off ?? 0))}
+                          </Text>,
+                          <Text fontSize="14px" textTransform="uppercase">
+                            {(coup?.currency as any) ?? "gbp"}
                           </Text>,
                           <Text fontSize="14px">
-                            {currencyFormat("gbp").format(
-                              order?.delivery_fee ?? 0
-                            )}
+                            {when(!!promo?.active, "Active", "Inactive")}
                           </Text>,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            {currencyFormat("gbp").format(order?.total ?? 0)}
-                          </Text>,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            <OrderStatusBadge type={order?.status} />
-                          </Text>,
+                          //   <Text fontSize="14px" textTransform="uppercase">
+                          //     {currencyFormat("gbp").format(order?.subtotal ?? 0)}
+                          //   </Text>,
+                          //   <Text fontSize="14px">
+                          //     {currencyFormat("gbp").format(
+                          //       order?.delivery_fee ?? 0
+                          //     )}
+                          //   </Text>,
+                          //   <Text fontSize="14px" textTransform="capitalize">
+                          //     {currencyFormat("gbp").format(order?.total ?? 0)}
+                          //   </Text>,
+                          //   <Text fontSize="14px" textTransform="capitalize">
+                          //     <OrderStatusBadge type={order?.status} />
+                          //   </Text>,
                           <HStack>
                             <Button
                               size="sm"
                               variant="outline"
+                              isDisabled
                               onClick={() =>
                                 navigate(
-                                  `${configs.paths.meals}/orders/${order?._id}`
+                                  `${configs.paths.promos}/${promo?._id}`
                                 )
                               }
                             >
-                              View More
+                              View more
                             </Button>
                           </HStack>,
                         ]}
@@ -172,7 +174,7 @@ export default function Orders() {
               
             </PaginatorContainer> */}
 
-            {hasOrders && (
+            {hasPromos && (
               <APaginator
                 flexDir={"row"}
                 isLoading={isLoading}

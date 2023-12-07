@@ -19,6 +19,7 @@ import { EmptyCrate } from "components/Crate/Empty";
 import { Detail } from "components/DetailItem/Detail";
 import Icon from "components/Icon/Icon";
 import { LineupItem } from "components/Lineup/LineupItem";
+
 import useLineup from "hooks/useLineUp";
 import { UserRo } from "interfaces";
 import { join, omit } from "lodash";
@@ -111,6 +112,12 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
                 ],
                 !!user?.address ? ", " : "---"
               )}
+              _desc={{ fontSize: "16px" }}
+            />
+            <Detail
+              isLoading={isLoading}
+              title="Delivery Day"
+              description={user?.delivery_day}
               _desc={{ fontSize: "16px" }}
             />
           </Grid>

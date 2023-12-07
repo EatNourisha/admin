@@ -1,8 +1,8 @@
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import usePartialState from "hooks/usePartialState";
 import useSettingsMutations from "hooks/useSettingsMutations";
-import { SettingsRo } from "interfaces";
-import { useMemo } from "react";
+import { InfluencerRewardType, SettingsRo } from "interfaces";
+import { useCallback, useMemo } from "react";
 
 import isEqual from "lodash/isEqual";
 import { when } from "utils";
@@ -20,6 +20,10 @@ const transformSettingsToFormState = (
     currency: settings?.currency,
     delivery_fee: settings?.delivery_fee,
     delivery_fee_calculation_type: settings?.delivery_fee_calculation_type,
+    influencer_reward: {
+      type: settings?.influencer_reward?.type ?? InfluencerRewardType.FIXED,
+      amount: settings?.influencer_reward?.amount ?? 0,
+    },
   };
 };
 
@@ -43,6 +47,15 @@ export function useSettingsForm(settings?: SettingsRo) {
   );
 
   const { updateSettings, isLoading } = useSettingsMutations(["settings"]);
+
+  const setReward = useCallback(
+    (updates: Partial<SettingsRo["influencer_reward"]>) =>
+      set((state) => ({
+        ...state,
+        influencer_reward: { ...state?.influencer_reward, ...updates } as any,
+      })),
+    [set]
+  );
 
   const saveSettingsChanges = async () => {
     const result = await updateSettings({
@@ -95,5 +108,6 @@ export function useSettingsForm(settings?: SettingsRo) {
     onClose,
     onOpen,
     hasChanges,
+    setReward,
   };
 }
