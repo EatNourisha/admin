@@ -35,3 +35,4 @@ export { default as OrderDetails } from "./Orders/OrderDetails";
 export { default as Promos } from "./Promos/Promos";
 export { default as CreatePromo } from "./Promos/CreatePromo";
 export { default as EditPromo } from "./Promos/EditPromo";
+export { default as PromoDetails } from "./Promos/PromoDetails";

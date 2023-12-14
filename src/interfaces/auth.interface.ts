@@ -56,6 +56,11 @@ export interface UserRo {
   phone: string;
   is_email_verified: boolean;
   delivery_day: string;
+  delivery_date: {
+    customer: string;
+    next_delivery_date: string;
+    delivery_day: string;
+  };
   stripe_id: string;
   primary_role: string;
 
@@ -143,6 +148,7 @@ export interface UserRo {
     suspended: boolean;
   };
   notes: string;
+  ref_code: string;
 }
 
 export interface AuthPayload {

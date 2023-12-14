@@ -31,17 +31,20 @@ import { MealRo } from "interfaces";
 // import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
 import useMeals from "hooks/useMeals";
 import useMealMutations from "hooks/useMealMutations";
-import { navigate } from "@reach/router";
+import { navigate, useLocation } from "@reach/router";
 import { currencyFormat } from "utils";
 
 export default function Meals() {
   // const [isLoading, setIsLoading] = useState(true);
 
+  const { search } = useLocation();
+  const params = useMemo(() => new URLSearchParams(search), [search]);
+
   const { isOpen, onClose /*, onOpen */ } = useDisclosure();
 
   const { state, filter, onPageChange } = usePageFilters({
-    limit: 12,
-    page: 1,
+    limit: +(params.get("limit") ?? 12),
+    page: +(params.get("page") ?? 1),
   });
 
   const { data, isLoading, key } = useMeals({

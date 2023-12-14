@@ -1,10 +1,17 @@
-import { ApiResponse, PromoRo } from "interfaces";
+import { ApiResponse, GetPromoByID } from "interfaces";
 import useSWR from "swr";
+import { toQueryString } from "utils";
 import { get } from "utils/makeRequest";
 
-export default function usePromo(id: string) {
-  const key = `discounts/promos/${id}`;
-  const { data, error } = useSWR<ApiResponse<PromoRo>>(key, get);
+interface IUsePromoFilters {
+  limit?: number;
+  page?: number;
+}
+
+export default function usePromo(id: string, filters?: IUsePromoFilters) {
+  const queries = toQueryString(filters ?? {});
+  const key = `discounts/promos/${id}?${queries}`;
+  const { data, error } = useSWR<ApiResponse<GetPromoByID>>(key, get);
 
   // console.log("PROFILE", data);
 

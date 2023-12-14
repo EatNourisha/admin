@@ -53,7 +53,7 @@ export default function Providers({ children }: any) {
           value={{
             use: [trackLiveQueries],
             onError: (error, key) => {
-              if (![403, 404].includes(error.status)) {
+              if (![403, 404].includes(error?.status)) {
                 console.log("ERROR", error, key);
                 actions?.setError({
                   message: error?.message,

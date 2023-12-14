@@ -146,7 +146,6 @@ export default function Promos() {
                             <Button
                               size="sm"
                               variant="outline"
-                              isDisabled
                               onClick={() =>
                                 navigate(
                                   `${configs.paths.promos}/${promo?._id}`

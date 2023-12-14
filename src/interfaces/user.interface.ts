@@ -1,5 +1,5 @@
 import { PaginatedDocument } from "./apiResponse.interface";
-import { UserRo } from "./auth.interface";
+import { ReferralRo, UserRo } from "./auth.interface";
 
 export interface PlanRo {
   product_id: string;
@@ -281,5 +281,19 @@ export interface CreatePromoDto
   expires_at?: number;
 }
 
+export interface EarningsRo {
+  _id: string;
+  balance: number;
+  refs: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type GetPromos = PaginatedDocument<PromoRo[]>;
+export type GetPromoByID = {
+  promo: PromoRo;
+  earnings: EarningsRo;
+  referrals: PaginatedDocument<ReferralRo[]>;
+};
+
 export type GetMealAnalysis = PaginatedDocument<MealAnalysisRo[]>;

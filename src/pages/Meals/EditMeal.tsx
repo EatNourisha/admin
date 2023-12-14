@@ -15,7 +15,7 @@ import {
   Switch,
   Text,
 } from "@chakra-ui/react";
-import { navigate, useParams } from "@reach/router";
+import { navigate, useLocation, useParams } from "@reach/router";
 import {
   Gravatar,
   Icon,
@@ -28,7 +28,7 @@ import {
   Textarea,
 } from "components";
 
-import configs from "config";
+// import configs from "config";
 import { useMemo } from "react";
 import { useMealForm } from "./useMealForm";
 // import { PerkItem } from "./PerkItem";
@@ -40,7 +40,10 @@ import { RepeatIcon } from "@chakra-ui/icons";
 export default function EditMeal() {
   //   const toast = useToast();
   const { id } = useParams();
+  const { pathname } = useLocation();
   const { data: meal, isLoading } = useMeal(id);
+
+  console.log("Pathname", pathname);
 
   const {
     set,
@@ -359,7 +362,8 @@ export default function EditMeal() {
         onClose={onClose}
         title="Confirm"
         onConfirm={submitForm(() => {
-          navigate(`${configs.paths.meals}`, { replace: true });
+          // navigate(`${configs.paths.meals}`, { replace: true });
+          navigate(-1);
         })}
         buttonText={["Save"]}
         description="Are you sure you want to save changes to this meal"

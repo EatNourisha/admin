@@ -170,7 +170,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
           />
         ))}
 
-        <Center w="100%" my="44px !important" px="26px">
+        <Center w="100%" my="12px !important" px="26px">
           <Divider color="brand.primary" borderColor="brand.primary" />
         </Center>
 
@@ -190,7 +190,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
         <Button
           // pos="absolute"
           // bottom="20px"
-          mt="16px !important"
+          mt="5px !important"
           leftIcon={<Icon type="logout" />}
           variant="ghost"
           p="16px 38px"

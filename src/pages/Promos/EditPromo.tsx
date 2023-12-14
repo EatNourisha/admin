@@ -10,8 +10,6 @@ import {
   Text,
   RadioGroup,
   Radio,
-  useDisclosure,
-  useToast,
   Checkbox,
 } from "@chakra-ui/react";
 import { navigate, useParams } from "@reach/router";
@@ -26,21 +24,22 @@ import {
   ConfirmationModal,
 } from "components";
 
-import { CouponDuration, CouponRo, PromoRo } from "interfaces";
-import { capitalize, omit } from "lodash";
-import { useCallback, useMemo, useRef } from "react";
+import { CouponDuration } from "interfaces";
+import { capitalize } from "lodash";
+import { useMemo } from "react";
 
-import usePartialState from "hooks/usePartialState";
-import { generatePromoCode, when } from "utils";
-import usePromoMutations from "hooks/usePromoMutation";
+import { when } from "utils";
 import configs from "config";
 import usePromo from "hooks/usePromo";
+import { usePromoForm } from "./usePromoForm";
 
 export default function EditPromo() {
   //   const toast = useToast();
 
   const { id } = useParams();
-  const { data: promo, isLoading } = usePromo(id);
+  const { data, isLoading } = usePromo(id);
+
+  console.log("Promo", data);
 
   const {
     set,
@@ -55,7 +54,7 @@ export default function EditPromo() {
     setRestrictions,
     percent_or_amount_field,
     submitForm,
-  } = usePromoForm(promo);
+  } = usePromoForm(data?.promo);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -201,6 +200,7 @@ export default function EditPromo() {
                 <Text fontWeight="600">Promo</Text>
 
                 <RadioGroup
+                  isDisabled
                   onChange={(value) => {
                     set({ by: value as any });
                     if (value === "amount")
@@ -229,24 +229,9 @@ export default function EditPromo() {
                     borderColor="brand.neutral200"
                     textTransform="uppercase"
                     placeholder={""}
-                    value={state?.code ?? ""}
-                    onChange={(e) => set({ code: e.target.value })}
-                    endAdornment={
-                      <Button
-                        right="18px"
-                        size="xs"
-                        minH="32px"
-                        borderRadius="5px"
-                        bg="gray.500"
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          set({ code: generatePromoCode() });
-                        }}
-                      >
-                        GENERATE
-                      </Button>
-                    }
+                    isDisabled
+                    defaultValue={state?.code ?? ""}
+                    // onChange={(e) => set({ code: e.target.value })}
                   />
                 </FormControl>
                 <FormControl>
@@ -255,6 +240,7 @@ export default function EditPromo() {
                     placeholder="Select Currency"
                     borderRadius="4px"
                     value={state?.coupon?.currency ?? ""}
+                    isDisabled
                     onChange={(e) => {
                       setCoupon({ currency: e.target.value });
                       setRestrictions({
@@ -276,6 +262,7 @@ export default function EditPromo() {
                     borderColor="brand.neutral200"
                     placeholder={""}
                     type="number"
+                    isDisabled
                     min={when(state?.by === "percent", 0, 1)}
                     max={when(state?.by === "percent", 100, undefined)}
                     step={0.1}
@@ -298,6 +285,7 @@ export default function EditPromo() {
                   <Select
                     placeholder="Select Duration"
                     borderRadius="4px"
+                    isDisabled
                     value={state?.coupon?.duration ?? ""}
                     onChange={(e) =>
                       setCoupon({ duration: e.target.value as any })
@@ -323,7 +311,8 @@ export default function EditPromo() {
                     type="number"
                     isRequired={false}
                     min={0}
-                    isDisabled={state?.coupon?.duration !== "repeating"}
+                    // isDisabled={state?.coupon?.duration !== "repeating"}
+                    isDisabled
                     value={state?.coupon?.duration_in_months ?? ""}
                     onChange={(e) =>
                       setCoupon({ duration_in_months: e.target.value })
@@ -340,6 +329,7 @@ export default function EditPromo() {
                 <Checkbox
                   size="sm"
                   colorScheme="red"
+                  disabled
                   isChecked={
                     state?.restrictions?.first_time_transaction ?? false
                   }
@@ -364,6 +354,7 @@ export default function EditPromo() {
                     type="number"
                     isRequired={false}
                     min={0}
+                    isDisabled
                     value={state?.restrictions?.minimum_amount ?? ""}
                     onChange={(e) =>
                       setRestrictions({ minimum_amount: e.target.value })
@@ -384,6 +375,7 @@ export default function EditPromo() {
                     placeholder={""}
                     type="number"
                     min={0}
+                    isDisabled
                     isRequired={false}
                     value={state?.coupon?.max_redemptions ?? ""}
                     onChange={(e) => {
@@ -404,6 +396,7 @@ export default function EditPromo() {
                     placeholder={""}
                     isRequired={false}
                     type="date"
+                    isDisabled
                     value={state?.expires_at ?? ""}
                     onChange={(e) => {
                       set({ expires_at: e.target.value });
@@ -431,7 +424,7 @@ export default function EditPromo() {
                   isLoading={isSubmiting}
                   type="submit"
                 >
-                  Create Promo
+                  Save Promo Changes
                 </Button>
               </HStack>
             </Stack>
@@ -451,139 +444,4 @@ export default function EditPromo() {
       />
     </PageMotion>
   );
-}
-
-export interface IPromoFormState
-  extends Omit<PromoRo, "_id" | "createdAt" | "updatedAt" | "coupon"> {
-  coupon: CouponRo;
-  by: "percent" | "amount";
-}
-
-const transformPromoToFormState = (promo: PromoRo): IPromoFormState | any => {
-  return { ...promo, by: "amount" };
-};
-
-function usePromoForm(promo?: PromoRo) {
-  const toast = useToast();
-  const { isOpen, onClose, onOpen } = useDisclosure();
-
-  // const initialChanges = useRef<IPromoFormState>(
-  //   transformPromoToFormState((promo ?? {}) as any)
-  // );
-  const hasChanges = useRef<boolean>(false);
-
-  const { createPromo, isLoading } = usePromoMutations();
-
-  const [state, set] = usePartialState<IPromoFormState>(
-    transformPromoToFormState((promo ?? {}) as any),
-    [promo]
-  );
-
-  console.log("State", state);
-
-  const percent_or_amount_field = useMemo(
-    () => when(state?.by === "percent", "percent_off", "amount_off"),
-    [state?.by]
-  );
-
-  const setCoupon = useCallback(
-    (updates: Partial<CouponRo>) =>
-      set((state) => ({
-        ...state,
-        coupon: { ...state?.coupon, ...updates } as any,
-      })),
-    [set]
-  );
-
-  const setInflu = useCallback(
-    (updates: Partial<IPromoFormState["influencer"]>) =>
-      set((state) => ({
-        ...state,
-        influencer: { ...state?.influencer, ...updates } as any,
-      })),
-    [set]
-  );
-
-  const setRestrictions = useCallback(
-    (updates: Partial<IPromoFormState["restrictions"]>) =>
-      set((state) => ({
-        ...state,
-        restrictions: { ...state?.restrictions, ...updates } as any,
-      })),
-    [set]
-  );
-
-  const createNewPromo = async () => {
-    const result = await createPromo({
-      ...omit(state as any, ["by"]),
-      coupon: {
-        ...state?.coupon,
-        duration: (state?.coupon?.duration as any) ?? "once",
-        currency: state?.coupon?.currency ?? "gpb",
-        amount_off: when(
-          !!state?.coupon?.amount_off,
-          +(state?.coupon?.amount_off ?? 0),
-          undefined
-        ),
-        percent_off: when(
-          !!state?.coupon?.percent_off,
-          // Number(Number(state?.coupon?.percent_off ?? 0).toFixed(2)),
-          +(state?.coupon?.percent_off ?? 0),
-          undefined
-        ),
-      },
-      restrictions: {
-        first_time_transaction:
-          state?.restrictions?.first_time_transaction ?? false,
-        minimum_amount: when(
-          +(state?.restrictions?.minimum_amount ?? 0) > 0,
-          +(state?.restrictions?.minimum_amount ?? 0),
-          undefined
-        ),
-        minimum_amount_currency: when(
-          +(state?.restrictions?.minimum_amount ?? 0) > 0,
-          state?.restrictions?.minimum_amount_currency,
-          undefined
-        ),
-      },
-    } as any);
-
-    return result;
-  };
-
-  const submitForm = (callback?: (result: PromoRo) => void) => async () => {
-    onClose();
-    const is_update = !!promo;
-    const result = await when(is_update, async () => promo, createNewPromo)();
-    if (!!result) {
-      callback && callback(result);
-      toast({
-        position: "bottom-right",
-        title: "Success 🎉",
-        description: `Promo successfully ${when(
-          is_update,
-          "updated",
-          "created"
-        )}`,
-        status: "success",
-        duration: 4000,
-        isClosable: true,
-      });
-    }
-  };
-
-  return {
-    state,
-    set,
-    setCoupon,
-    setInflu,
-    onOpen,
-    onClose,
-    isOpen,
-    hasChanges: hasChanges.current,
-    percent_or_amount_field,
-    setRestrictions,
-    isSubmiting: isLoading,
-    submitForm,
-  };
 }

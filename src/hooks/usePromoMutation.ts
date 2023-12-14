@@ -2,13 +2,7 @@ import { useCallback } from "react";
 import { useSWRConfig } from "swr";
 import { destroy, post, put } from "utils/makeRequest";
 
-import {
-  ApiResponse,
-  AddNewPlanDto,
-  PlanRo,
-  CreatePromoDto,
-  PromoRo,
-} from "interfaces";
+import { ApiResponse, CreatePromoDto, PromoRo } from "interfaces";
 
 import useErrorStore from "stores/error";
 import usePartialState from "./usePartialState";
@@ -60,12 +54,13 @@ export default function usePromoMutations(keys?: string[]) {
     [set, actions, keys, mutate]
   );
 
-  const deletePlan = useCallback(
+  const deletePromo = useCallback(
     async (id: string) => {
       set({ isLoading: true, isSuccess: false });
       try {
-        const res = (await destroy<ApiResponse<PlanRo>, void>(`/plans/${id}`))
-          .data as PlanRo;
+        const res = (
+          await destroy<ApiResponse<PromoRo>, void>(`/discounts/promos/${id}`)
+        ).data as PromoRo;
 
         keys?.forEach(async (key) => await mutate(key));
         set({ isSuccess: true, isLoading: false });
@@ -74,7 +69,7 @@ export default function usePromoMutations(keys?: string[]) {
       } catch (error: any) {
         set({ isError: true });
         actions?.setError({
-          action: { type: "plans/delete", payload: { id } },
+          action: { type: "promo/delete", payload: { id } },
           message: error?.message,
           status: error?.statusCode,
           showUser: true,
@@ -85,16 +80,16 @@ export default function usePromoMutations(keys?: string[]) {
     [set, actions, keys, mutate]
   );
 
-  const updatePlan = useCallback(
-    async (id: string, data: Partial<AddNewPlanDto>) => {
+  const updatePromo = useCallback(
+    async (id: string, data: Partial<CreatePromoDto>) => {
       set({ isLoading: true, isSuccess: false });
       try {
         const res = (
-          await put<ApiResponse<PlanRo>, Partial<AddNewPlanDto>>(
-            `/plans/${id}`,
+          await put<ApiResponse<PromoRo>, Partial<CreatePromoDto>>(
+            `/discounts/promos/${id}`,
             data
           )
-        ).data as PlanRo;
+        ).data as PromoRo;
 
         keys?.forEach(async (key) => await mutate(key));
         mutate(`/plans`);
@@ -104,7 +99,7 @@ export default function usePromoMutations(keys?: string[]) {
       } catch (error: any) {
         set({ isError: true });
         actions?.setError({
-          action: { type: "plans/update", payload: { id, ...data } },
+          action: { type: "promo/update", payload: { id, ...data } },
           message: error?.message,
           status: error?.statusCode,
           showUser: true,
@@ -116,9 +111,9 @@ export default function usePromoMutations(keys?: string[]) {
   );
 
   return {
-    updatePlan,
+    updatePromo,
     createPromo,
-    deletePlan,
+    deletePromo,
     ...state,
   };
 }

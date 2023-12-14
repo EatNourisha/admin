@@ -31,6 +31,7 @@ import { useMemo } from "react";
 import { generatePromoCode, when } from "utils";
 import { usePromoForm } from "./usePromoForm";
 import configs from "config";
+import { add } from "date-fns";
 
 export default function CreatePromo() {
   //   const toast = useToast();
@@ -194,6 +195,7 @@ export default function CreatePromo() {
                 <Text fontWeight="600">Promo</Text>
 
                 <RadioGroup
+                  colorScheme="orange"
                   onChange={(value) => {
                     set({ by: value as any });
                     if (value === "amount")
@@ -269,7 +271,7 @@ export default function CreatePromo() {
                     borderColor="brand.neutral200"
                     placeholder={""}
                     type="number"
-                    min={when(state?.by === "percent", 0, 1)}
+                    min={when(state?.by === "percent", 0, 0)}
                     max={when(state?.by === "percent", 100, undefined)}
                     step={0.1}
                     value={
@@ -332,7 +334,7 @@ export default function CreatePromo() {
 
                 <Checkbox
                   size="sm"
-                  colorScheme="red"
+                  colorScheme="orange"
                   isChecked={
                     state?.restrictions?.first_time_transaction ?? false
                   }
@@ -397,6 +399,9 @@ export default function CreatePromo() {
                     placeholder={""}
                     isRequired={false}
                     type="date"
+                    min={
+                      add(new Date(), { days: 1 }).toISOString().split("T")[0]
+                    }
                     value={state?.expires_at ?? ""}
                     onChange={(e) => {
                       set({ expires_at: e.target.value });

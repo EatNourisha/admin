@@ -5,6 +5,8 @@ import { CouponRo, PromoRo } from "interfaces";
 import { useCallback, useMemo, useRef } from "react";
 import { when } from "utils";
 import omit from "lodash/omit";
+import { useParams } from "@reach/router";
+import { format, parseISO } from "date-fns";
 
 export interface IPromoFormState
   extends Omit<PromoRo, "_id" | "createdAt" | "updatedAt" | "coupon"> {
@@ -13,11 +15,23 @@ export interface IPromoFormState
 }
 
 const transformPromoToFormState = (promo: PromoRo): IPromoFormState | any => {
-  return { ...promo, by: "amount" };
+  return {
+    ...promo,
+    by: "amount",
+    expires_at: when(
+      !!promo?.expires_at,
+      format(
+        parseISO(promo?.expires_at ?? new Date().toISOString()),
+        "yyyy-MM-dd"
+      ),
+      undefined
+    ),
+  };
 };
 
 export function usePromoForm(promo?: PromoRo) {
   const toast = useToast();
+  const { id } = useParams();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   // const initialChanges = useRef<IPromoFormState>(
@@ -25,7 +39,7 @@ export function usePromoForm(promo?: PromoRo) {
   // );
   const hasChanges = useRef<boolean>(false);
 
-  const { createPromo, isLoading } = usePromoMutations();
+  const { createPromo, updatePromo, isLoading } = usePromoMutations();
 
   const [state, set] = usePartialState<IPromoFormState>(
     transformPromoToFormState((promo ?? {}) as any),
@@ -99,6 +113,45 @@ export function usePromoForm(promo?: PromoRo) {
           undefined
         ),
       },
+      expires_at: state?.expires_at,
+    } as any);
+
+    return result;
+  };
+
+  const savePromoChanges = async () => {
+    const result = await updatePromo(id, {
+      ...omit(state as any, ["by"]),
+      coupon: {
+        ...state?.coupon,
+        duration: (state?.coupon?.duration as any) ?? "once",
+        currency: state?.coupon?.currency ?? "gpb",
+        amount_off: when(
+          !!state?.coupon?.amount_off,
+          +(state?.coupon?.amount_off ?? 0),
+          undefined
+        ),
+        percent_off: when(
+          !!state?.coupon?.percent_off,
+          // Number(Number(state?.coupon?.percent_off ?? 0).toFixed(2)),
+          +(state?.coupon?.percent_off ?? 0),
+          undefined
+        ),
+      },
+      restrictions: {
+        first_time_transaction:
+          state?.restrictions?.first_time_transaction ?? false,
+        minimum_amount: when(
+          +(state?.restrictions?.minimum_amount ?? 0) > 0,
+          +(state?.restrictions?.minimum_amount ?? 0),
+          undefined
+        ),
+        minimum_amount_currency: when(
+          +(state?.restrictions?.minimum_amount ?? 0) > 0,
+          state?.restrictions?.minimum_amount_currency,
+          undefined
+        ),
+      },
     } as any);
 
     return result;
@@ -107,7 +160,7 @@ export function usePromoForm(promo?: PromoRo) {
   const submitForm = (callback?: (result: PromoRo) => void) => async () => {
     onClose();
     const is_update = !!promo;
-    const result = await when(is_update, async () => promo, createNewPromo)();
+    const result = await when(is_update, savePromoChanges, createNewPromo)();
     if (!!result) {
       callback && callback(result);
       toast({

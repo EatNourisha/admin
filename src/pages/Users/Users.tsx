@@ -18,7 +18,7 @@ import configs from "config";
 import useUsers from "hooks/useUsers";
 import { join, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { useExport } from "hooks/useExports";
 
 export default function Users() {
@@ -127,7 +127,14 @@ export default function Users() {
                     <Text fontSize="14px">{value?.email}</Text>,
                     <Text fontSize="14px">{value?.phone}</Text>,
                     <Text fontSize="14px" textTransform="capitalize">
-                      {value?.delivery_day ?? "--------"}
+                      {!value?.delivery_date?.next_delivery_date &&
+                        (value?.delivery_day ?? "------")}
+
+                      {!!value?.delivery_date?.next_delivery_date &&
+                        format(
+                          parseISO(value?.delivery_date?.next_delivery_date),
+                          "EEE dd, MMM yyyy"
+                        )}
                     </Text>,
                     <SubscriptionBadge
                       type={
