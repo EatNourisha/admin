@@ -43,11 +43,19 @@ export interface RequestPasswordResetDto {
   email: string;
 }
 
+export interface AllergyRo {
+  _id: string;
+  description: string;
+  name: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
 export interface UserRo {
   _id: string;
   email: string;
 
-  //Deprecated
   firstName: string;
   lastName: string;
 
@@ -56,13 +64,21 @@ export interface UserRo {
   phone: string;
   is_email_verified: boolean;
   delivery_day: string;
-  delivery_date: {
+  delivery_info: {
     customer: string;
     next_delivery_date: string;
     delivery_day: string;
+    createdAt: string;
+    is_lineup_change_locked: boolean;
+    next_lineup_change_date: string;
+    updatedAt: string;
   };
   stripe_id: string;
   primary_role: string;
+
+  preference: {
+    allergies: AllergyRo[] | string[];
+  };
 
   address: {
     address_: string;

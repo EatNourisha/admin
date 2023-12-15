@@ -45,6 +45,7 @@ import usePageFilters from "hooks/usePageFilters";
 import useLineup from "hooks/useLineUp";
 import { EmptyCrate } from "components/Crate/Empty";
 import useUserMutations from "hooks/useUserMutations";
+import { AllergyRo } from "interfaces/auth.interface";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -58,7 +59,14 @@ export default function UserDetails() {
 
   const lineup = useMemo(
     () =>
-      omit(lineupData, ["_id", "createdAt", "updatedAt", "customer", "__v"]),
+      omit(lineupData, [
+        "_id",
+        "createdAt",
+        "updatedAt",
+        "customer",
+        "__v",
+        "delivery_date",
+      ]),
     [lineupData]
   );
 
@@ -75,6 +83,22 @@ export default function UserDetails() {
     () => !!user?.control?.suspended,
     [user?.control?.suspended]
   );
+
+  const delivery_day = useMemo(() => {
+    const info = user?.delivery_info;
+    if (!!info && info?.next_delivery_date)
+      return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
+    return info?.delivery_day ?? "------";
+  }, [user]);
+
+  const allergies = useMemo(() => {
+    const allergys = (user?.preference?.allergies as AllergyRo[]) ?? [];
+    if (allergys?.length < 1) return "------";
+    return join(
+      allergys?.map((a) => a.name),
+      ", "
+    );
+  }, [user]);
 
   const toggleUserSuspense = async () => {
     const result = await suspendUser(id, !!user?.control?.suspended);
@@ -254,6 +278,7 @@ export default function UserDetails() {
                 isLoading={isLoading}
                 title="Email"
                 description={user?.email}
+                _desc={{ textTransform: "lowercase" }}
               />
               <Detail
                 isLoading={isLoading}
@@ -263,12 +288,13 @@ export default function UserDetails() {
               <Detail
                 isLoading={isLoading}
                 title="Delivery Day"
-                description={user?.delivery_day}
+                // description={user?.delivery_day}
+                description={delivery_day}
               />
               <Detail
                 isLoading={isLoading}
                 title="Allergies"
-                description={join(["Nuts", "Sea Foods"], ", ")}
+                description={allergies}
               />
               <Detail
                 isLoading={isLoading}
@@ -472,7 +498,7 @@ function Detail(props: DetailProps) {
         mt="8px"
         {..._desc}
       >
-        <Text fontSize="18px" textTransform="capitalize">
+        <Text fontSize="18px" textTransform="capitalize" {..._desc}>
           {description ?? "--------"}
         </Text>
       </Skeleton>

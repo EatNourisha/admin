@@ -40,7 +40,14 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
   const { data: lineupData, isLoading } = useLineup(user?._id);
   const lineup = useMemo(
     () =>
-      omit(lineupData, ["_id", "createdAt", "updatedAt", "customer", "__v"]),
+      omit(lineupData, [
+        "_id",
+        "createdAt",
+        "updatedAt",
+        "customer",
+        "__v",
+        "delivery_date",
+      ]),
     [lineupData]
   );
 

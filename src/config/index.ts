@@ -1,15 +1,10 @@
 const configs = {
   authKey: "x231nxj",
-  // baseUrl: "http://localhost:8080/v1",
+  baseUrl: "http://localhost:8080/v1",
   // baseUrl: "https://api-stage.eatnourisha.com/v1",
-  baseUrl: "https://api.eatnourisha.com/v1",
+  // baseUrl: "https://api.eatnourisha.com/v1",
 
   containerW: "8xl",
-  DO_SPACES_KEY: "G224YB4WBEY5CX2DABQC",
-  DO_SPACES_SECRET: "go8SxgqLsKl5FMP3Kvl0XOoRrffGk2IowWcSMskf6eE",
-  DO_SPACES_URL: "https://koinpoll.sfo3.digitaloceanspaces.com",
-  DO_SPACES_ENDPOINT: "sfo3.digitaloceanspaces.com",
-  DO_BUCKET: "aegle",
 
   AWS_BUCKET: "nourisha-bucket",
   AWS_REGION: "us-east-1",

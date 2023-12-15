@@ -6,8 +6,10 @@ import LineupDetailModal from "components/Modals/LineupDetails";
 import LineupStatus from "components/Status/LineupStatus";
 import SubscriptionBadge from "components/SubscriptionBadge/SubscriptionBadge";
 import configs from "config";
+import { format, parseISO } from "date-fns";
 import { PlanRo, SubscriptionRo, UserRo } from "interfaces";
 import { join } from "lodash";
+import { useMemo } from "react";
 
 interface WeeklyMealLineUpProps {
   data: SubscriptionRo[];
@@ -35,6 +37,13 @@ function Item(props: ItemProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const delivery_day = useMemo(() => {
+    const info = user?.delivery_info;
+    if (!!info && info?.next_delivery_date)
+      return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
+    return user?.delivery_day ?? info?.delivery_day ?? "------";
+  }, [user]);
+
   return (
     <>
       <GenericTableItem
@@ -49,9 +58,7 @@ function Item(props: ItemProps) {
           <Text textTransform="capitalize">
             {user?.address?.city ?? "------------"}
           </Text>,
-          <Text textTransform="capitalize">
-            {user?.delivery_day ?? "------------"}
-          </Text>,
+          <Text textTransform="capitalize">{delivery_day}</Text>,
           <SubscriptionBadge type={(plan?.slug as any) ?? "no_subscription"} />,
           <Button
             size="sm"
