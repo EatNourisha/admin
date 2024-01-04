@@ -39,9 +39,14 @@ function Item(props: ItemProps) {
 
   const delivery_day = useMemo(() => {
     const info = user?.delivery_info;
-    if (!!info && info?.next_delivery_date)
+    if (!!info && !!info?.next_delivery_date) {
+      // const day = parseISO(info?.next_delivery_date).getDay();
+      // /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
+      // if ([6, 0, 1].includes(day)) return "------";
       return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
-    return user?.delivery_day ?? info?.delivery_day ?? "------";
+    }
+
+    return info?.delivery_day ?? "------";
   }, [user]);
 
   return (

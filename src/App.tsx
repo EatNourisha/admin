@@ -1,33 +1,47 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 
 import Router from "Router";
-import useAuthStore from "stores/auth";
-import ls from "utils/secureStorage";
+// import useAuthStore from "stores/auth";
+// import ls from "utils/secureStorage";
 
-import configs from "config";
+// import configs from "config";
+// import { getToken } from "utils";
 
 function App() {
-  const { hydrate, dehydrate } = useAuthStore();
+  // const { hydrate, dehydrate } = useAuthStore();
 
-  const isSignedIn = useCallback(() => {
-    const auth = ls.get(configs.authKey);
-    return auth?.isSignedIn && auth?.token;
-  }, []);
+  // const isSignedIn = useCallback(() => {
+  //   const auth = ls.get(configs.authKey);
+  //   return auth?.isSignedIn && auth?.token;
+  // }, []);
 
-  const authExpired = useCallback(() => {
-    const auth = ls.get(configs.authKey);
-    return auth?.isSignedIn && auth?.token && new Date().getTime() > auth?.exp;
-  }, []);
+  // const authExpired = useCallback(() => {
+  //   const auth = ls.get(configs.authKey);
+  //   return auth?.isSignedIn && auth?.token && new Date().getTime() > auth?.exp;
+  // }, []);
 
-  useEffect(() => {
-    if (authExpired()) {
-      dehydrate();
-    }
+  // useEffect(() => {
+  //   (async () => {
+  //     if ("Notification" in window) {
+  //       const result = await Notification.requestPermission();
+  //       console.log("Notification Permission", result);
+  //       if (result === "granted") {
+  //         const token = await getToken().;
+  //         console.log("Token", token);
+  //       }
+  //     }
+  //   })();
+  // }, []);
 
-    if (isSignedIn()) {
-      hydrate();
-    }
-  }, [dehydrate, hydrate, authExpired, isSignedIn]);
+  // useEffect(() => {
+  //   if (authExpired()) {
+  //     dehydrate();
+  //   }
+
+  //   if (isSignedIn()) {
+  //     hydrate();
+  //   }
+  // }, [dehydrate, hydrate, authExpired, isSignedIn]);
 
   return <Router />;
 }

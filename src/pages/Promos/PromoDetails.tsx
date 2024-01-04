@@ -42,6 +42,7 @@ import { EmptyCrate } from "components/Crate/Empty";
 import usePromo from "hooks/usePromo";
 import { ReferralRo } from "interfaces/auth.interface";
 import usePromoMutations from "hooks/usePromoMutation";
+import { capitalize } from "lodash";
 
 export default function PromoDetails() {
   const { id } = useParams();
@@ -50,7 +51,10 @@ export default function PromoDetails() {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const { state, onPageChange } = usePageFilters({ limit: 10, page: 1 });
+  const { state, onPageChange, setFilter } = usePageFilters({
+    limit: 10,
+    page: 1,
+  });
 
   const { data, isLoading, key } = usePromo(id, { ...state });
 
@@ -72,6 +76,17 @@ export default function PromoDetails() {
     [referrals]
   );
   const isActive = useMemo(() => !!data?.promo?.active, [data?.promo]);
+
+  const handleRefFilter = (e: any) => {
+    e?.preventDefault();
+    const value = e.target.value;
+    if (value !== "all") {
+      setFilter("is_subscribed", when(value === "pending", "false", "true"));
+      onPageChange(1);
+    } else {
+      setFilter("is_subscribed", undefined);
+    }
+  };
 
   const togglePromoStatus = async () => {
     action.current = "switch";
@@ -385,19 +400,27 @@ export default function PromoDetails() {
           </Box>
 
           <Box position="sticky" top="100px">
-            <HStack justifyContent="space-between">
+            <HStack alignItems="center" justifyContent="space-between">
               <Heading as="h5" fontSize="lg">
                 Referrals
               </Heading>
 
               <Select
-                mt="10px"
                 placeholder="Select Option"
-                minH="48px"
-                maxW="180px"
-                visibility="hidden"
+                minH="38px"
+                maxW="160px"
+                alignSelf="center"
+                borderRadius="10px"
+                fontSize="14px"
+                onChange={handleRefFilter}
+                // visibility="hidden"
               >
-                <option>All time</option>
+                <option value="all">All</option>
+                {["subscribed", "pending"].map((name) => (
+                  <option key={name} value={name}>
+                    {capitalize(name)}
+                  </option>
+                ))}
               </Select>
             </HStack>
 

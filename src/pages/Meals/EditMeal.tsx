@@ -205,6 +205,22 @@ export default function EditMeal() {
                     }
                   />
                 </FormControl>
+
+                <FormControl>
+                  <InputLabel>Available Quantity</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    type="number"
+                    min={0}
+                    value={state?.available_quantity ?? ""}
+                    onChange={(e) =>
+                      set({ available_quantity: e.target.value })
+                    }
+                  />
+                </FormControl>
               </HStack>
 
               <FormControl>

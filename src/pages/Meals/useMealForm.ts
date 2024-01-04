@@ -46,6 +46,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
       editMode: false,
       removed: false,
     })),
+    available_quantity: meal?.available_quantity,
     files: [],
   };
 };

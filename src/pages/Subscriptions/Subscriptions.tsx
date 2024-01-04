@@ -23,10 +23,13 @@ import usePlans from "hooks/usePlans";
 
 export default function Subscriptions() {
   // const [isLoading, setIsLoading] = useState(true);
-  const { state, filter, setFilter, onPageChange } = usePageFilters({
-    limit: 10,
-    page: 1,
-  });
+  const { state, filter, setFilter, onPageChange } = usePageFilters(
+    {
+      limit: 10,
+      page: 1,
+    },
+    false
+  );
 
   const { data: plans, isLoading: isLoadingPlans } = usePlans({});
 
@@ -51,6 +54,11 @@ export default function Subscriptions() {
     }
   };
 
+  const handleSort = (value: string) => {
+    if (value !== "all") setFilter("sort", value);
+    else setFilter("sort", undefined);
+  };
+
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
 
@@ -59,13 +67,21 @@ export default function Subscriptions() {
   //   };
   // }, [isLoading]);
 
+  const sortOptions = [
+    { label: "All", value: "all" },
+    { label: "Today", value: "today" },
+    { label: "This Week", value: "this_week" },
+    { label: "Last Week", value: "last_week" },
+    { label: "This Month", value: "this_month" },
+  ];
+
   return (
     <PageMotion key="subscriptions-root" pb="100px">
       <Topbar pageTitle="Subscriptions" />
       <MainLayoutContainer>
         <Box>
           <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <HStack gridGap="16px">
+            <HStack w="100%" gridGap="16px" justifyContent="space-between">
               {/* <Input
                 // w="100%"
                 minH="48px"
@@ -91,7 +107,7 @@ export default function Subscriptions() {
                   mt="10px"
                   disabled={isLoading || isLoadingPlans}
                   borderWidth="1.5px"
-                  placeholder="Select Option"
+                  // placeholder="Select Option"
                   minH="52px"
                   borderRadius="8px"
                   value={filter?.subType}
@@ -102,6 +118,34 @@ export default function Subscriptions() {
                   {(plans?.data ?? []).map((plan) => (
                     <option value={plan?._id}>
                       {capitalize(plan?.name ?? "")}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl w="fit-content" ml="0 !important" minW="250px">
+                <InputLabel
+                  isLoading={isLoadingPlans}
+                  fontSize="14px"
+                  fontWeight="600"
+                  display="inline-block"
+                >
+                  Sort:
+                </InputLabel>
+                <Select
+                  flex="2"
+                  mt="10px"
+                  disabled={isLoading || isLoadingPlans}
+                  borderWidth="1.5px"
+                  placeholder="Select Option"
+                  minH="52px"
+                  borderRadius="8px"
+                  value={filter?.sort}
+                  onChange={(e) => handleSort(e.target.value)}
+                  // maxW="300px"
+                >
+                  {sortOptions.map((sort) => (
+                    <option key={sort.value} value={sort.value}>
+                      {sort.label}
                     </option>
                   ))}
                 </Select>

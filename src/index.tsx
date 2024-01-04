@@ -4,6 +4,7 @@ import "./styles/global.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Providers from "./Providers";
+import { isProd } from "config";
 
 import { Buffer } from "buffer";
 (window as any).Buffer = Buffer;
@@ -12,6 +13,24 @@ import { Buffer } from "buffer";
 // if (!$element) throw new Error("Root element not found");
 
 // const root = ReactDOM.createRoot($element);
+
+(window as any).log = console.log;
+// Disable console logs in production.
+isProd && (console.log = () => {});
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register(`${process.env.PUBLIC_URL}/firebase-message-sw.js`, {
+      scope: "/",
+    })
+    .then((reg) => {
+      console.log("Service worker ready", reg);
+    });
+
+  navigator.serviceWorker.ready.then((reg) => {
+    console.log("Service worker ready", reg);
+  });
+}
 
 ReactDOM.render(
   <React.StrictMode>

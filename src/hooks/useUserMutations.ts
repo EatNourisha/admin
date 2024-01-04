@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useSWRConfig } from "swr";
-import { put } from "utils/makeRequest";
+import { post, put } from "utils/makeRequest";
 
 import { ApiResponse, UserRo } from "interfaces";
 
@@ -142,11 +142,35 @@ export default function useUserMutations(keys?: string[]) {
     [set, actions, keys, mutate]
   );
 
+  const syncUsersToMailchimp = useCallback(async () => {
+    set({ isLoading: true, isSuccess: false });
+    try {
+      const res = (
+        await post<ApiResponse<any>, null>(`/customers/sync-contacts`, null)
+      ).data as any;
+
+      keys?.forEach(async (key) => await mutate(key));
+      set({ isSuccess: true, isLoading: false });
+
+      return res;
+    } catch (error: any) {
+      set({ isError: true });
+      actions?.setError({
+        action: { type: "users/sync-contacts", payload: null },
+        message: error?.message,
+        status: error?.statusCode,
+        showUser: true,
+      });
+    }
+    set({ isLoading: false });
+  }, [set, actions, keys, mutate]);
+
   return {
     makeAdmin,
     addNote,
     suspendUser,
     revokeAdminPrivilege,
+    syncUsersToMailchimp,
     ...state,
   };
 }

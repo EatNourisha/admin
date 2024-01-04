@@ -1,5 +1,5 @@
 import { ApiResponse } from "interfaces";
-import {  GetReferralsRo } from "interfaces/auth.interface";
+import { GetReferralsRo } from "interfaces/auth.interface";
 import { omit } from "lodash";
 import useSWR from "swr";
 import { when } from "utils";
@@ -11,11 +11,16 @@ interface IUseReferralFilter {
   page?: number;
   limit?: number;
   customer?: string;
+  ref_code?: string;
 }
 
 export default function useReferrals(filter: IUseReferralFilter = {}) {
-  const queries = toQueryString(omit(filter, ['subscribed']));
-  const key = when(!filter?.subscribed, `/referrals/admin/invites?${queries}`, `/referrals/admin/subscribed_invites?${queries}`);
+  const queries = toQueryString(omit(filter, ["subscribed"]));
+  const key = when(
+    !filter?.subscribed,
+    `/referrals/admin/invites?${queries}`,
+    `/referrals/admin/subscribed_invites?${queries}`
+  );
   const { data, error } = useSWR<ApiResponse<GetReferralsRo>>(key, get);
 
   console.log("REFERRALS", data);

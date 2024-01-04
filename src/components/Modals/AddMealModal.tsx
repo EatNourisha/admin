@@ -41,6 +41,7 @@ interface IMealFormState {
   file: File;
   isUploading?: boolean;
   is_available?: boolean;
+  available_quantity: string | number;
 }
 
 export default function AddMealModal(props: AddMealModalProps) {
@@ -171,6 +172,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
     {
       name: meal?.name,
       is_available: meal?.is_available ?? true,
+      available_quantity: 0,
     },
     [meal]
   );
@@ -199,6 +201,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       name: state?.name!,
       image_url: image_url as string,
       is_available: state?.is_available ?? true,
+      available_quantity: state?.available_quantity ?? 0,
       meals: [],
     });
 

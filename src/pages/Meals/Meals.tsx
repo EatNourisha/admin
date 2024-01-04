@@ -124,7 +124,16 @@ interface MealItemProps extends Partial<MealRo>, BoxProps {
 }
 
 function MealItem(props: MealItemProps) {
-  const { _id, name, image_url, keys, price, is_available, ...xprops } = props;
+  const {
+    _id,
+    name,
+    image_url,
+    keys,
+    price,
+    is_available,
+    available_quantity,
+    ...xprops
+  } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -191,6 +200,12 @@ function MealItem(props: MealItemProps) {
           <Text>Delivery Fee</Text>
           <Text>
             {currencyFormat("gbp").format(+(price?.deliveryFee ?? 0))}
+          </Text>
+        </HStack>
+        <HStack mt="0px !important" fontSize="xs" color="brand.black">
+          <Text>Available Quantity:</Text>
+          <Text fontSize="sm" fontWeight="600">
+            {available_quantity ?? "Not specified"}
           </Text>
         </HStack>
 

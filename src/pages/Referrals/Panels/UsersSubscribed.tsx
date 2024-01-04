@@ -1,10 +1,12 @@
-import { Box, BoxProps, Stack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, HStack, Stack, Text } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import {
   APaginator,
   GenericTable,
   GenericTableItem,
   Gravatar,
+  Icon,
+  Input,
 } from "components";
 import configs from "config";
 import { formatDistanceToNow, parseISO } from "date-fns";
@@ -21,9 +23,12 @@ interface Props extends BoxProps {
 
 export function UsersSubscribed(props: Props) {
   const { customer } = props;
-  const { filter, onPageChange } = usePageFilters({ page: 1, limit: 10 });
+  const { state, onPageChange, setFilter } = usePageFilters({
+    page: 1,
+    limit: 10,
+  });
   const { data, isLoading } = useReferrals({
-    ...filter,
+    ...state,
     customer,
     subscribed: true,
   });
@@ -33,6 +38,22 @@ export function UsersSubscribed(props: Props) {
 
   return (
     <Stack my="20px">
+      <HStack mb="20px !important">
+        <Input
+          // w="100%"
+          minH="48px"
+          minW="340px"
+          maxW="400px"
+          placeholder="Filter referrals by influencer's refcode"
+          value={state?.ref_code ?? ""}
+          endAdornment={<Icon type="search" />}
+          onChange={(e) => {
+            e.preventDefault();
+            setFilter("ref_code", e.target.value);
+          }}
+        />
+      </HStack>
+
       <Box
         borderRadius="8px"
         overflow="hidden"
@@ -96,9 +117,13 @@ export function UsersSubscribed(props: Props) {
                       createdAt={value?.inviter?.createdAt}
                       subtitle={when(!!promo, "Influencer", "")}
                       onClick={() => {
-                        if (!value?.inviter || !promo?.influencer?.customer)
-                          return;
-                        navigate(`${configs.paths.users}/${inviter?._id}`);
+                        if (!!promo)
+                          navigate(`${configs.paths.promos}/${promo?._id}`);
+                        else if (
+                          !!value?.inviter ||
+                          !!(promo as any)?.influencer?.customer
+                        )
+                          navigate(`${configs.paths.users}/${inviter?._id}`);
                       }}
                     />,
                     <Text fontSize="14px" textTransform="capitalize">
@@ -135,8 +160,8 @@ export function UsersSubscribed(props: Props) {
             flexDir={"row"}
             isLoading={isLoading}
             totalCount={data?.totalCount}
-            limit={10}
-            page={1}
+            limit={state?.limit}
+            page={state?.page}
             onPageChange={onPageChange}
           />
         )}

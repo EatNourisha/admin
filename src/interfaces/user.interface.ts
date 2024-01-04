@@ -64,6 +64,7 @@ export interface MealRo {
   };
   images?: string[];
   description?: string;
+  available_quantity: string | number;
   _id: string;
 }
 
@@ -146,11 +147,33 @@ export interface OrderRo {
   items: OrderItemRo[];
 }
 
+export interface NotificationRo {
+  _id: string;
+  tag: string;
+  title: string;
+  customer?: UserRo | string;
+  content: string;
+  is_admin: boolean;
+  is_broadcast?: boolean;
+  delivered?: boolean;
+  status: "read" | "unread";
+  metadata: {
+    [key: string]: any;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type GetBillHistory = PaginatedDocument<TransactionRo[]>;
 export type GetSubscriptions = PaginatedDocument<SubscriptionRo[]>;
 export type GetPlans = PaginatedDocument<PlanRo[]>;
 export type GetOrders = PaginatedDocument<OrderRo[]>;
 export type GetMeals = PaginatedDocument<MealRo[]>;
+export type GetNotifications = {
+  read: number;
+  unread: number;
+  notifications: PaginatedDocument<NotificationRo[]>;
+};
 export type GetOrderById = {
   order: OrderRo;
   items: PaginatedDocument<OrderItemRo[]>;

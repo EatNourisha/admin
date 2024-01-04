@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Box, Button, HStack, Text } from "@chakra-ui/react";
+import { useCallback, useMemo, useState } from "react";
+import { Box, Button, HStack, Text, useToast } from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
@@ -20,8 +20,12 @@ import { join, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { useExport } from "hooks/useExports";
+import { when } from "utils";
+import { UserRo } from "interfaces";
+import useUserMutations from "hooks/useUserMutations";
 
 export default function Users() {
+  const toast = useToast();
   // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, setFilter, onPageChange } = usePageFilters({
     limit: 10,
@@ -35,6 +39,8 @@ export default function Users() {
     searchPhrase: filter?.searchPhrase,
   });
 
+  const { syncUsersToMailchimp, isLoading: isSyncing } = useUserMutations();
+
   const { /*exportUserDocs, */ isDownloading, isLoading: isExporting } =
     useExport();
 
@@ -43,6 +49,18 @@ export default function Users() {
     [data]
   );
   const hasCustomers = useMemo(() => (customers ?? []).length > 0, [customers]);
+
+  const delivery_day = useCallback((user: UserRo) => {
+    const info = user?.delivery_info;
+    if (!!info && info?.next_delivery_date) {
+      const day = parseISO(info?.next_delivery_date).getDay();
+      /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
+      if ([6, 0, 1].includes(day)) return "------";
+      return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
+    }
+
+    return info?.delivery_day ?? "------";
+  }, []);
 
   // const exportUsers = async () => {
   //   await exportUserDocs((progs) => setProgress(progs));
@@ -55,6 +73,21 @@ export default function Users() {
   //     clearTimeout(timer);
   //   };
   // }, [isLoading]);
+
+  const handleSyncContacts = async (e: any) => {
+    e.preventDefault();
+    const result = await syncUsersToMailchimp();
+    if (!!result) {
+      toast({
+        position: "bottom-right",
+        title: "Success 🎉",
+        description: `Successfully synced users to mailchimp`,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <PageMotion key="users-root" pb="100px">
@@ -80,13 +113,16 @@ export default function Users() {
               }}
             />
 
-            {/* <Button
+            <Button
+              size="md"
               ml="0 !important"
               leftIcon={<Icon type="export" />}
-              onClick={exportUsers}
+              onClick={handleSyncContacts}
+              isLoading={isSyncing}
+              isDisabled={isSyncing}
             >
-              Export
-            </Button> */}
+              Sync to mailchimp
+            </Button>
           </HStack>
           <Box
             borderRadius="8px"
@@ -127,20 +163,16 @@ export default function Users() {
                     <Text fontSize="14px">{value?.email}</Text>,
                     <Text fontSize="14px">{value?.phone}</Text>,
                     <Text fontSize="14px" textTransform="capitalize">
-                      {!value?.delivery_info?.next_delivery_date &&
-                        (value?.delivery_day ?? "------")}
-
-                      {!!value?.delivery_info?.next_delivery_date &&
-                        format(
-                          parseISO(value?.delivery_info?.next_delivery_date),
-                          "EEE dd, MMM yyyy"
-                        )}
+                      {delivery_day(value)}
                     </Text>,
                     <SubscriptionBadge
-                      type={
-                        (value?.subscription?.plan?.slug as any) ??
+                      type={when(
+                        ["active"].includes(
+                          value?.subscription?.status ?? "past_due"
+                        ),
+                        (value?.subscription?.plan?.name as any) ?? "Active",
                         "no_subscription"
-                      }
+                      )}
                     />,
                     <Button size="sm" variant="outline">
                       View More

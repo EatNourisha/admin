@@ -6,6 +6,7 @@ import { get } from "utils/makeRequest";
 interface IUsePromoFilters {
   limit?: number;
   page?: number;
+  is_subscribed?: boolean;
 }
 
 export default function usePromo(id: string, filters?: IUsePromoFilters) {

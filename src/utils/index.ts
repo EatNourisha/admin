@@ -18,3 +18,4 @@ export { when } from "./when";
 export { slugify } from "./slugify";
 
 export * from "./generateCode";
+export * from "./firebase";

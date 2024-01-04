@@ -86,8 +86,14 @@ export default function UserDetails() {
 
   const delivery_day = useMemo(() => {
     const info = user?.delivery_info;
-    if (!!info && info?.next_delivery_date)
+    if (!!info && !!info?.next_delivery_date) {
+      const day = parseISO(info?.next_delivery_date).getDay();
+      console.log("Delivery Info", { day, info });
+      /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
+      if ([6, 0, 1].includes(day)) return "------";
       return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
+    }
+
     return info?.delivery_day ?? "------";
   }, [user]);
 

@@ -19,7 +19,8 @@ interface IFilterState {
 }
 
 export default function usePageFilters<T extends IFilterState>(
-  initialState: Partial<T>
+  initialState: Partial<T>,
+  set_url_param = true
 ) {
   const { search, pathname } = useLocation();
   const params = useMemo(() => new URLSearchParams(search), [search]);
@@ -40,17 +41,21 @@ export default function usePageFilters<T extends IFilterState>(
 
     const delayFunc = debounce((value) => {
       setFilter({ [key]: value } as any);
-      params.set(key as any, value);
-      navigate(`?${params.toString()}`);
+      if (!!set_url_param) {
+        params.set(key as any, value);
+        navigate(`?${params.toString()}`);
+      }
     }, 800);
     delayFunc(_value);
   };
 
   const onPageChange = (page: number) => {
     set({ page });
-    params.set("page", String(page));
-    console.log("Page change", params.toString());
-    navigate(`${pathname}?${params.toString()}`);
+    if (!!set_url_param) {
+      params.set("page", String(page));
+      console.log("Page change", params.toString());
+      navigate(`${pathname}?${params.toString()}`);
+    }
   };
 
   const onNextPage = (page: string) => {
