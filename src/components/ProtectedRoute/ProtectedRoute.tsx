@@ -1,6 +1,6 @@
 import { ComponentType, FC } from "react";
 
-import { Redirect, RouteComponentProps } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 
 import config from "config";
 import ls from "utils/secureStorage";
@@ -32,7 +32,8 @@ const ProtectedRoute: FC<ProtectedRouteProps> = (props) => {
       <Component isFetchingUser={false} {...rest} />
     ) : (
       // @ts-ignore
-      <Redirect to={config.paths.login} noThrow />
+      // <Redirect to={config.paths.login} noThrow />
+      <></>
     );
   };
 
