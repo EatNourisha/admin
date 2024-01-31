@@ -9,7 +9,7 @@ interface IUseMealsFilter {
 
 export default function useMeals(filter: IUseMealsFilter) {
   const queries = toQueryString(filter);
-  const key = `meals/pack?${queries}`;
+  const key = `meals/pack/admin?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetMeals>>(key, get);
 
   return {
