@@ -30,6 +30,7 @@ import {
   CreatePromo,
   EditPromo,
   PromoDetails,
+  SendMail,
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -114,6 +115,9 @@ const AppRouter = () => {
           <ProtectedRoute path="/" component={Admins} />
           <ProtectedRoute path="/add" component={AddAdmins} />
           <ProtectedRoute path="/settings" component={Settings} />
+        </RootPage>
+        <RootPage path={configs.paths.emails}>
+          <ProtectedRoute path="/" component={SendMail} />
         </RootPage>
       </Layout>
     </Router>
