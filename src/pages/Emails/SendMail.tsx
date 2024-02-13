@@ -34,25 +34,23 @@ export default function SendMail() {
   const [subject, setSubject] = useState<string>("");
   const [content, setContent] = useState<string>("")
 
-  const { activeUser } = SendEmail();
+  const { activeUser, isLoading, isSuccess, isError } = SendEmail();
 
   const handleSendMail = async () => {
-    // Implement your logic to send the email here
+   
     try {
-        // Call the activeUser function to send the email
-        const result = await activeUser({
-          subject: subject,
-          message: content, // Add your message here
+        
+        await activeUser({
           subscriptionStatus: email,
+          subject: subject,
+          message: content, 
         });
         
-        console.log("Email sent successfully:", result);
+      
       } catch (error) {
         console.error("Error sending email:", error);
       }
-    // console.log("Email:", email);
-    // console.log("Subject:", subject);
-    // console.log("content", content);
+
   };
 
   return (
@@ -85,7 +83,6 @@ export default function SendMail() {
                     placeholder={"Enter Subject"}
                     value={subject}
                     onChange={(e) => {
-                        console.log("sub", e.target.value)
                         setSubject(e.target.value)}
                 }
                   
@@ -102,7 +99,10 @@ export default function SendMail() {
                     onChange={(e) => setEmail(e.target.value)}
                   >
                     <option value="active">Active</option>
-                    <option value="group2">Group 2</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="incomplete_expired">Incomplete Expired</option>
+                    <option value="expired">Expired</option>
+                    <option value="">No Subscription</option>
                   </Select>
                 </FormControl>
               </HStack>
@@ -122,10 +122,10 @@ export default function SendMail() {
                 <Button
                   //   disabled={isDisabled}
                   //   isLoading={isSubmiting}
-                  onClick={()=>handleSendMail()}
+                  onClick={handleSendMail}
                   type="button"
                 >
-                  Send Email
+                   {isSuccess ? "Email Sent" : isError ? "Error Sending" : "Send Email"}
                 </Button>
               </HStack>
             </Stack>

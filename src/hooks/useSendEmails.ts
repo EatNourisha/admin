@@ -11,9 +11,9 @@ interface IState {
 }
 
 interface SendMail {
+    subscriptionStatus: string;
     subject: string;
     message: string;
-    subscriptionStatus: string;
 }
 export default function SendEmail(keys?: string[]) {
     const { mutate } = useSWRConfig();
@@ -23,7 +23,6 @@ export default function SendEmail(keys?: string[]) {
         isError: false,
     });
 
-    // const { actions } = useErrorStore();
 
     const activeUser = useCallback(
         async (data: SendMail) => {
