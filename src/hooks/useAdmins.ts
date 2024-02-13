@@ -23,4 +23,4 @@ export default function useAdmins(filter: IUseAdminsFilter) {
     isLoading: !error && !data,
     error,
   };
-}
+} 

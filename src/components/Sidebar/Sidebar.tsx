@@ -95,11 +95,18 @@ const pageLinks = [
     to: "/profile",
   },
   {
+    activeIcon: BroadcastIcon,
+    icon: BroadcastIcon,
+    label: "Send Email",
+    to: "/emails",
+  },
+  {
     activeIcon: AdminIcon,
     icon: AdminIcon,
     label: "Administrators",
     to: "/admins",
   },
+ 
 ];
 
 const Sidebar: FC<SidebarProps> = (props) => {
@@ -122,16 +129,26 @@ const Sidebar: FC<SidebarProps> = (props) => {
   );
 
   return (
+    <Box 
+    bg="brand.black"
+    minW="var(--sideNavWidth)"
+    maxW="var(--sideNavWidth)"
+    py="45px"
+    height="100vh"
+    pos="fixed"
+    top="0"
+    
+    display={"flex"}
+    alignItems={"center"}
+    justifyContent={"center"}
+    {...xprops}
+
+    >
     <Box
-      bg="brand.black"
-      minW="var(--sideNavWidth)"
-      maxW="var(--sideNavWidth)"
-      py="45px"
-      minH="100vh"
-      pos="fixed"
-      top="0"
-      overflowY="scroll"
-      {...xprops}
+   
+     width={"100%"}
+     height={"95%"}
+     overflow="auto"
     >
       <VStack
         color="white"
@@ -213,6 +230,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
           Logout
         </Button>
       </VStack>
+    </Box>
     </Box>
   );
 };

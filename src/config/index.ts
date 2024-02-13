@@ -34,6 +34,7 @@ const configs = {
     appointments: "/appointments",
     subscriptions: "/subscriptions",
     addAdministrator: "/admins/add",
+    emails: "/emails"
 
     // faqs: "/faqs",
     // support: "/support",
