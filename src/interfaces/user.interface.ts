@@ -55,6 +55,8 @@ export interface MealRo {
   meals: string[];
   name: string;
   slug: string;
+  orderType: string;
+  country: string;
   updatedAt: string;
   price?: {
     amount: string;
