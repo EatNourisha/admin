@@ -71,6 +71,8 @@ export default function AddMeal() {
         state?.name &&
         state?.price?.amount &&
         state?.price?.currency &&
+        state?.orderType &&
+        state?.country &&
         state?.price?.deliveryFee &&
         state?.description
       ) ||
@@ -181,6 +183,35 @@ export default function AddMeal() {
                   />
                 </FormControl>
               </HStack>
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Order Type</InputLabel>
+                  <Select
+                    placeholder="Select Order Type"
+                    borderRadius="4px"
+                    value={state?.orderType ?? "subscription"}
+                    onChange={(e) => set({ orderType: e.target.value })}
+                  >
+                    <option value={"subscription"}>Subscription</option>
+                    <option value={"single order"}>Single Order</option>
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <InputLabel>Country</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    isRequired={false}
+                    value={state?.country ?? ""}
+                    onChange={(e) => set({ country: e.target.value })}
+                  
+          
+                  />
+                </FormControl>
+              </HStack>
+              
               <HStack gridGap="24px">
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
