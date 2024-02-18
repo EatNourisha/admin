@@ -194,6 +194,7 @@ export default function AddMeal() {
                   >
                     <option value={"subscription"}>Subscription</option>
                     <option value={"single order"}>Single Order</option>
+                    <option value={"both"}>Both</option>
                   </Select>
                 </FormControl>
                 <FormControl>
