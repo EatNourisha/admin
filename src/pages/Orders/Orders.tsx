@@ -86,7 +86,7 @@ export default function Orders() {
           </HStack> */}
           <Box
             borderRadius="8px"
-            overflow="hidden"
+            overflow="scroll"
             shadow="0px 2px 12px rgba(0, 0, 0, 0.05)"
           >
             <GenericTable
@@ -126,6 +126,9 @@ export default function Orders() {
                           <Text fontSize="14px" textTransform="capitalize">
                             {order?.ref ?? "--------"}
                           </Text>,
+                          //  <Text fontSize="14px" textTransform="capitalize">
+                          //   {order?.ref ?? "--------"}
+                          // </Text>,
                           <Text fontSize="14px">{order?.phone_number}</Text>,
                           <Text fontSize="14px" textTransform="uppercase">
                             {currencyFormat("gbp").format(order?.subtotal ?? 0)}
@@ -147,7 +150,7 @@ export default function Orders() {
                               variant="outline"
                               onClick={() =>
                                 navigate(
-                                  `${configs.paths.meals}/orders/${order?._id}`
+                                  `${configs.paths.order}/${order?._id}`
                                 )
                               }
                             >
