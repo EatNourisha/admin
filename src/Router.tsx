@@ -71,7 +71,10 @@ const AppRouter = () => {
         <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
         </RootPage>
-
+        <RootPage path={configs.paths.order}>
+          <ProtectedRoute path="/" component={Orders} />
+          <ProtectedRoute path="/orders/:id" component={OrderDetails} />
+        </RootPage>
         <RootPage path={configs.paths.promos}>
           <ProtectedRoute path="/" component={Promos} />
           <ProtectedRoute path="/create" component={CreatePromo} />

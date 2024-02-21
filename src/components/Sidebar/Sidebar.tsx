@@ -64,6 +64,12 @@ const pageLinks = [
     to: "/subscriptions",
   },
   {
+    activeIcon: SubscriptionsIcon,
+    icon: SubscriptionsIcon,
+    label: "Single Order",
+    to: "/single-order",
+  },
+  {
     activeIcon: PlansIcon,
     icon: PlansIcon,
     label: "Plans",
