@@ -180,13 +180,13 @@ const Sidebar: FC<SidebarProps> = (props) => {
         py="40px"
         overflowY="scroll"
       >
-        {take(pageLinks, 8).map((link, i) => (
+        {take(pageLinks, 9).map((link, i) => (
           <SidebarLink
             key={i}
             {...link}
             isCurrent={isCurrent(link.to)}
             mb={
-              i === take(pageLinks, 8).length - 1
+              i === take(pageLinks, 9).length - 1
                 ? "0 !important"
                 : "8px !important"
             }
