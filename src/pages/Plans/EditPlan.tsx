@@ -64,6 +64,7 @@ export default function EditPlan() {
       !(
         state?.name &&
         state?.amount &&
+        state?.country &&
         state?.currency &&
         state?.subscription_interval
       ) ||
@@ -167,6 +168,19 @@ export default function EditPlan() {
                       </option>
                     ))}
                   </Select>
+                </FormControl>
+              </HStack>
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Country</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={"Add a country"}
+                    value={state?.country ?? ""}
+                    onChange={(e) => set({ country: e.target.value })}
+                  />
                 </FormControl>
               </HStack>
               <HStack gridGap="24px">

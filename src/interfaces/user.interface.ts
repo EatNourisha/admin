@@ -6,6 +6,7 @@ export interface PlanRo {
   price_id: string;
   name: string;
   description: string;
+  country: string;
   slug: string;
   amount: number;
   currency: string;
