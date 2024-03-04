@@ -61,6 +61,7 @@ export default function AddPlan() {
         state?.name &&
         state?.amount &&
         state?.currency &&
+        state?.country &&
         state?.subscription_interval &&
         state?.delivery_fee &&
         state?.perks
@@ -164,6 +165,21 @@ export default function AddPlan() {
                       </option>
                     ))}
                   </Select>
+                </FormControl>
+              </HStack>
+
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Country</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={"Add Country"}
+                    value={state?.country ?? ""}
+                    onChange={(e) => set({ country: e.target.value })}
+                   
+                  />
                 </FormControl>
               </HStack>
 

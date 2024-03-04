@@ -37,6 +37,7 @@ const transformPlanToFormState = (plan: PlanRo): IPlanFormState => {
     amount: String(plan?.amount ?? ""),
     currency: plan?.currency ?? "gbp",
     description: plan?.description,
+    country: plan?.country,
     subscription_interval: plan?.subscription_interval,
     delivery_fee: plan?.delivery_fee,
     perks: (plan?.perks ?? []).map((perk, i) => ({

@@ -82,6 +82,7 @@ export default function Plans() {
                 "Currency",
                 "Amount",
                 "Interval",
+                "Country",
                 "Action",
               ]}
             >
@@ -106,6 +107,9 @@ export default function Plans() {
                         <Text fontSize="14px" textTransform="capitalize">
                           {plan?.subscription_interval}ly
                         </Text>,
+                        <Text fontSize="14px" textTransform="capitalize">
+                        {plan?.country ?? "--------"}
+                      </Text>,
                         <HStack>
                           <Button
                             size="sm"
