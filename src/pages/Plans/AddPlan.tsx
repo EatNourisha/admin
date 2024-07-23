@@ -165,6 +165,41 @@ export default function AddPlan() {
                 </FormControl>
               </HStack>
 
+              <HStack>
+
+              <FormControl>
+                  <InputLabel>Country</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    value={state?.country ?? ""}
+                    onChange={(e) => set({ country: e.target.value })}
+                    
+                  />
+                </FormControl>
+              </HStack>
+
+
+
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Weekend</InputLabel>
+                  <Select
+                    placeholder="Select weekend"
+                    borderRadius="4px"
+                    value={state?.weekend}
+                    onChange={(e) =>
+                      set({ weekend: e.target.value })
+                    }
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </Select>
+                </FormControl>
+              </HStack>
+
               <FormControl>
                 <InputLabel>Description</InputLabel>
                 <Textarea

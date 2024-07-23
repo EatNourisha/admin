@@ -37,7 +37,9 @@ const transformPlanToFormState = (plan: PlanRo): IPlanFormState => {
     amount: String(plan?.amount ?? ""),
     currency: plan?.currency ?? "gbp",
     description: plan?.description,
+    country:plan?.country,
     subscription_interval: plan?.subscription_interval,
+    weekend:plan?.weekend,
     perks: (plan?.perks ?? []).map((perk, i) => ({
       index: i,
       content: perk,
@@ -118,6 +120,8 @@ export function usePlanForm(plan?: PlanRo) {
       ...(state as any),
       amount: +(state?.amount ?? 0),
       perks: (state?.perks ?? []).map((pk) => pk?.content),
+      weekend:state?.weekend === "yes",
+      country:state?.country,
     });
 
     return result;

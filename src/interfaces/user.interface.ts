@@ -11,6 +11,8 @@ export interface PlanRo {
   currency: string;
   subscription_interval: string;
   perks: string[];
+  weekend:string;
+  country:string;
 }
 
 export interface SubscriptionRo {

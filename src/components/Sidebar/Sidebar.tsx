@@ -44,6 +44,18 @@ const pageLinks = [
     to: "/dashboard",
   },
   {
+    activeIcon: AdminIcon,
+    icon: AdminIcon,
+    label: "Meal extra",
+    to: "/meal_extra",
+  },
+  {
+    activeIcon: AdminIcon,
+    icon: AdminIcon,
+    label: "Gift card",
+    to: "/giftcards/list",
+  },
+  {
     activeIcon: UsersIcon,
     icon: UsersIcon,
     label: "Users",
@@ -86,6 +98,8 @@ const pageLinks = [
     label: "Administrators",
     to: "/admins",
   },
+
+ 
 ];
 
 const Sidebar: FC<SidebarProps> = (props) => {

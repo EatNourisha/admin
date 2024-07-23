@@ -1,7 +1,8 @@
 const configs = {
   authKey: "x231nxj",
   // baseUrl: "http://localhost:8080/v1",
-  baseUrl: "http://api-stage.eatnourisha.com/v1",
+  baseUrl: "https://api-stage.eatnourisha.com/v1/",
+  
 
   containerW: "8xl",
   DO_SPACES_KEY: "G224YB4WBEY5CX2DABQC",
@@ -42,6 +43,13 @@ const configs = {
     appointments: "/appointments",
     subscriptions: "/subscriptions",
     addAdministrator: "/admins/add",
+
+
+    giftCards:"/giftcards",
+
+
+    meal_extra:"/meal_extra"
+
 
     // faqs: "/faqs",
     // support: "/support",

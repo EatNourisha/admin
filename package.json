@@ -29,6 +29,7 @@
     "classnames": "^2.3.2",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
+    "formik": "^2.4.6",
     "framer-motion": "^10.12.18",
     "immer": "^10.0.2",
     "lodash": "^4.17.21",
@@ -43,6 +44,7 @@
     "swr": "^2.2.0",
     "typescript": "^5.1.6",
     "web-vitals": "^3.4.0",
+    "yup": "^1.4.0",
     "zustand": "^4.3.9"
   },
   "scripts": {
