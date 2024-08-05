@@ -13,6 +13,8 @@ import {
   ModalHeader,
   Stack,
   FormControl,
+  HStack,
+  Select,
 } from "@chakra-ui/react";
 
 import Input from "components/Input/Input";
@@ -36,9 +38,17 @@ interface AddMealModalProps extends Omit<ModalProps, "children" | "id"> {
 
 interface IMealFormState {
   name: string;
+  calories: string;
   file: File;
   isUploading?: boolean;
+  orderType?: string;
+  country?: string;
+  price: {
+    amount: string;
+    deliveryFee: string;
+  };
   is_available?: boolean;
+  available_quantity: string;
 }
 
 export default function AddMealModal(props: AddMealModalProps) {
@@ -105,6 +115,81 @@ export default function AddMealModal(props: AddMealModalProps) {
                 value={state?.name ?? ""}
                 onChange={(e) => set({ name: e.target.value })}
               />
+              <HStack mt={"16px"}>
+                <Input
+                  placeholder="Enter meal amount"
+                  value={state?.price?.amount ?? ""}
+                  type="number"
+                  onChange={(e) =>
+                    set({
+                      price: {
+                        ...state?.price!,
+                        amount: e.target.value,
+                      },
+                    })
+                  }
+                />
+
+                <Input
+                  placeholder="Enter meal delivery fee"
+                  value={state?.price?.deliveryFee ?? ""}
+                  type="number"
+                  onChange={(e) =>
+                    set({
+                      price: {
+                        ...state!.price!,
+                        deliveryFee: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </HStack>
+
+              <HStack>
+                <Input
+                  mt={5}
+                  placeholder="Enter KCal"
+                  type="number"
+                  value={state?.calories ?? ""}
+                  onChange={(e) => set({ calories: e.target.value })}
+                />
+
+                <Input
+                  mt={5}
+                  placeholder="Available quantity"
+                  type="number"
+                  value={state?.available_quantity ?? ""}
+                  onChange={(e) => set({ available_quantity: e.target.value })}
+                />
+              </HStack>
+              <Select
+                mt={5}
+                placeholder="Country"
+                flex={1}
+                borderRadius="4px"
+                value={state?.country ?? ""}
+                onChange={(e) => set({ country: e.target.value })}
+              >
+                {["Nigeria", "Rwanda", "Ghana"].map((country, index) => (
+                  <option value={country} key={`country_option_${index}`}>
+                    {country}
+                  </option>
+                ))}
+              </Select>
+
+              <Select
+                placeholder="Order type"
+                flex={1}
+                mt={5}
+                borderRadius="4px"
+                value={state?.orderType ?? ""}
+                onChange={(e) => set({ orderType: e.target.value })}
+              >
+                <option value={"bulk-order"}>Bulk order</option>
+                <option value={"single-order"}>Single order</option>
+                <option value={"subscription"}>Subscription</option>
+                <option value={"both"}>Both</option>
+              </Select>
             </FormControl>
           </Stack>
         </ModalBody>
@@ -133,6 +218,11 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
   const [state, set, reset] = usePartialState<IMealFormState>(
     {
       name: meal?.name,
+      price:meal?.price,
+      calories:meal?.calories,
+      orderType:meal?.orderType,
+      country:meal?.country,
+      available_quantity:meal?.available_quantity,
     },
     [meal]
   );
@@ -151,15 +241,20 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       image_url = res.location;
       set({ isUploading: false });
     } catch (error) {
-      console.log("Upload Error", error);
       set({ isUploading: false });
     }
 
     const res = addNewMeal({
       name: state?.name!,
+      calories: state.calories,
+      price: state.price!,
+      country: state.country!,
+      orderType: state.orderType!,
+      images: image_url!,
       image_url: image_url as string,
       is_available: true,
-      meals: [],
+      meals: ["64134812fcdf10e5b19b2d4d"],
+      available_quantity: state.available_quantity!,
     });
 
     return res;
@@ -182,10 +277,17 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
         set({ isUploading: false });
       }
     }
+
+    console.log(state?.price)
     const res = await updateMeal(meal?._id, {
       name: state?.name ?? meal?.name,
       image_url: image_url ?? meal?.image_url,
       is_available: state?.is_available ?? meal?.is_available,
+      calories:state?.calories ?? state?.calories,
+      price: state?.price?? state?.price,
+      orderType: state?.orderType?? meal?.orderType,
+      country: state?.country?? meal?.country,
+      available_quantity: state?.available_quantity?? meal?.available_quantity,
     });
 
     return res;
@@ -206,8 +308,6 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       //   initialChanges.current = meal?.name;
     }
   }, [state, hasChanges, meal]);
-
-  console.log("Changes", state, hasChanges);
 
   return {
     state,

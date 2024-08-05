@@ -45,19 +45,8 @@ export default function Meals() {
     searchPhrase: filter?.searchPhrase,
   });
 
-  const meals = useMemo(
-    () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
-    [data]
-  );
+  const meals = useMemo(() => (data?.data ? data?.data : []), [data]);
   const hasMeals = useMemo(() => (meals ?? []).length > 0, [meals]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
 
   return (
     <PageMotion key="meals-root" pb="100px">
@@ -116,7 +105,7 @@ interface MealItemProps extends Partial<MealRo>, BoxProps {
 }
 
 function MealItem(props: MealItemProps) {
-  const { name, keys, ...xprops } = props;
+  const { name, images,keys, ...xprops } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -217,6 +206,11 @@ function MealItem(props: MealItemProps) {
           _id: props?._id,
           image_url: props?.image_url,
           is_available: props?.is_available,
+          country:props?.country,
+          orderType:props?.orderType,
+          price:props?.price,
+          calories: props?.calories,
+          available_quantity: props?.available_quantity,
         }}
         keys={keys}
         isOpen={editIsOpen}

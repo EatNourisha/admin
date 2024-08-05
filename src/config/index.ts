@@ -1,7 +1,9 @@
 const configs = {
   authKey: "x231nxj",
   // baseUrl: "http://localhost:8080/v1",
-  baseUrl: "http://api-stage.eatnourisha.com/v1",
+  // baseUrl: "https://api-stage.eatnourisha.com/v1/",
+  baseUrl:"https://api.eatnourisha.com/v1",
+  
 
   containerW: "8xl",
   DO_SPACES_KEY: "G224YB4WBEY5CX2DABQC",
@@ -10,10 +12,15 @@ const configs = {
   DO_SPACES_ENDPOINT: "sfo3.digitaloceanspaces.com",
   DO_BUCKET: "aegle",
 
-  AWS_BUCKET: "rapyd",
+  // AWS_BUCKET: "rapyd",
+  // AWS_REGION: "us-east-1",
+  // AWS_ACCESS_KEY: "AKIAXT64XBHMCZ54Y2YN",
+  // AWS_SECRET_KEY: "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",
+
+  AWS_BUCKET: "nourisha-bucket",
   AWS_REGION: "us-east-1",
-  AWS_ACCESS_KEY: "AKIAXT64XBHMCZ54Y2YN",
-  AWS_SECRET_KEY: "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",
+  AWS_ACCESS_KEY: "AKIARYIJOAE6YMB2DQGQ",
+  AWS_SECRET_KEY: "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",
 
   // AWS_BUCKET: "rapydcars-uploads",
   // AWS_REGION: "us-east-1",
@@ -42,6 +49,13 @@ const configs = {
     appointments: "/appointments",
     subscriptions: "/subscriptions",
     addAdministrator: "/admins/add",
+
+
+    giftCards:"/giftcards",
+
+
+    meal_extra:"/meal_extra"
+
 
     // faqs: "/faqs",
     // support: "/support",

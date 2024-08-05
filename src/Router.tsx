@@ -25,6 +25,9 @@ import { Layout, ProtectedRoute, RootPage } from "components";
 // import { AnimatePresence } from "framer-motion";
 
 import configs from "config";
+import GiftCards from "pages/GiftCards/GiftCards";
+import ListGiftCards from "pages/GiftCards/ListGiftCards";
+import ListMealExtra from "pages/MealExtra/ListMealExtra";
 
 // const FramerRouter = ({ children }: any) => (
 //   <Location>
@@ -87,6 +90,16 @@ const AppRouter = () => {
         <RootPage path={configs.paths.administrators}>
           <ProtectedRoute path="/" component={Admins} />
           <ProtectedRoute path="/add" component={AddAdmins} />
+        </RootPage>
+
+        <RootPage path={configs.paths.giftCards}>
+          <ProtectedRoute path="/" component={GiftCards} />
+          <ProtectedRoute path="/list" component={ListGiftCards} />
+        </RootPage>
+
+
+        <RootPage path={configs.paths.meal_extra}>
+          <ProtectedRoute path="/" component={ListMealExtra} />
         </RootPage>
       </Layout>
     </Router>

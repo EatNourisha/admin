@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useCallback } from "react";
 // import { useSWRConfig } from "swr";
 import { post } from "utils/makeRequest";

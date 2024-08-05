@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box, BoxProps } from "@chakra-ui/react";
 import Main from "../Main/Main";
 import Sidebar from "../Sidebar/Sidebar";
