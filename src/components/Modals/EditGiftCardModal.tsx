@@ -125,7 +125,7 @@ import { IGiftCard } from "pages/GiftCards/ListGiftCards";
                 />
               </FormControl>
               <Button
-                disabled={!name?.length}
+                disabled={loading}
                 isLoading={loading}
                 mr={3}
                 mt={10}

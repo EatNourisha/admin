@@ -53,11 +53,20 @@ export interface MealRo {
   createdAt: string;
   image_url: string;
   is_available: boolean;
+  calories?:string;
   meals: string[];
+  price: {
+    amount: string;
+    deliveryFee: string;
+  };
+  country: string;
+  orderType: string;
+  images?:string;
   name: string;
   slug: string;
   updatedAt: string;
   _id: string;
+  available_quantity:string;
 }
 
 export interface MealPackRo {

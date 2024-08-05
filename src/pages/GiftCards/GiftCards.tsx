@@ -9,6 +9,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { navigate } from "@reach/router";
 import {
   Input,
   InputLabel,
@@ -19,10 +20,12 @@ import {
 import { createGiftCardScheme } from "config/scheme";
 import { FormikHelpers, useFormik } from "formik";
 import { ApiResponse } from "interfaces";
+import { useState } from "react";
 import { post } from "utils/makeRequest";
 
 function GiftCards() {
   const toast = useToast();
+  const [ loading, setLoading] = useState(false);
   const onSubmit = async (
     data: {
       name: string;
@@ -31,6 +34,7 @@ function GiftCards() {
     },
     action: FormikHelpers<any>
   ) => {
+    setLoading(true);
     const res = (await post<ApiResponse<any>, {}>(`/gift/custom`, data))
       .data as any;
     if (res?._id) {
@@ -43,6 +47,9 @@ function GiftCards() {
         isClosable: true,
       });
       action.resetForm();
+      navigate("/giftcards/list");
+    setLoading(false);
+
     }
   };
   const { values, handleChange, handleSubmit, errors, isValid } = useFormik({
@@ -131,7 +138,7 @@ function GiftCards() {
               <HStack className="flex">
                 <Button
                   disabled={!isValid}
-                  //   isLoading={isSubmiting}
+                    isLoading={loading}
                   type="submit"
                 >
                   Add Gift Card

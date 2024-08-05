@@ -21,6 +21,7 @@ import { PlanRo, UserRo } from "interfaces";
 import { format, parseISO } from "date-fns";
 import { navigate } from "@reach/router";
 import configs from "config";
+import SubscriptionPopover from "components/SubscriptionPopover/SubscriptionPopover";
 
 export default function Users() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +93,7 @@ export default function Users() {
             shadow="0px 2px 12px rgba(0, 0, 0, 0.05)"
           >
             <GenericTable
+              overflowX="scroll"
               isLoading={isLoading}
               headers={[
                 "Fullname",
@@ -99,6 +101,7 @@ export default function Users() {
                 "Start Date",
                 "End Date",
                 "Subscription Type",
+                "Actions",
               ]}
             >
               {subscriptions?.map((sub) => {
@@ -120,8 +123,8 @@ export default function Users() {
                           navigate(`${configs.paths.users}/${user?._id}`)
                         }
                       />,
-                      <Text fontSize="14px">{user?.email}</Text>,
-                      <Text fontSize="14px">
+                      <Text  width={100} fontSize="14px">{user?.email}</Text>,
+                      <Text  width={100} >
                         {!!sub?.start_date
                           ? format(
                               parseISO(
@@ -131,7 +134,7 @@ export default function Users() {
                             )
                           : "--------------"}
                       </Text>,
-                      <Text fontSize="14px" textTransform="capitalize">
+                      <Text textTransform="capitalize">
                         {!!sub?.end_date
                           ? format(
                               parseISO(
@@ -144,6 +147,7 @@ export default function Users() {
                       <SubscriptionBadge
                         type={(plan?.slug as any) ?? "no_subscription"}
                       />,
+                      <SubscriptionPopover subscription={sub} />,
                     ]}
                   />
                 );
