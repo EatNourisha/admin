@@ -132,6 +132,7 @@ function MealItem(props: MealItemProps) {
     price,
     is_available,
     available_quantity,
+    calories,
     ...xprops
   } = props;
 
@@ -206,6 +207,13 @@ function MealItem(props: MealItemProps) {
           <Text>Available Quantity:</Text>
           <Text fontSize="sm" fontWeight="600">
             {available_quantity ?? "Not specified"}
+          </Text>
+        </HStack>
+
+        <HStack mt="0px !important" fontSize="xs" color="brand.black">
+          <Text>Calories:</Text>
+          <Text fontSize="sm" fontWeight="600">
+            {calories ?? "Not specified"}
           </Text>
         </HStack>
 

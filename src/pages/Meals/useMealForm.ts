@@ -41,6 +41,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
     is_available: meal?.is_available,
     orderType: meal?.orderType,
     country: meal?.country,
+    calories:meal?.calories,
     meals: meal?.meals ?? [],
     images: (meal?.images ?? []).map((image, i) => ({
       index: i,

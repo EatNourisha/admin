@@ -65,6 +65,7 @@ export interface MealRo {
     previousAmount: number;
     currency: string;
   };
+  calories?:string;
   images?: string[];
   description?: string;
   available_quantity: string | number;

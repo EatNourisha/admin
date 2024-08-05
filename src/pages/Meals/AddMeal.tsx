@@ -251,6 +251,19 @@ export default function AddMeal() {
                 </FormControl>
               </HStack>
 
+
+              <FormControl>
+                <InputLabel>Calories</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a calorie count"
+                  value={state?.calories ?? ""}
+                  type="text"
+                  onChange={(e) => set({ calories: e.target.value })}
+                />
+              </FormControl>
+
               <FormControl>
                 <InputLabel>Description</InputLabel>
                 <Textarea
