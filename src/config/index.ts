@@ -4,6 +4,8 @@ const configs = {
   // baseUrl: "https://api-stage.eatnourisha.com/v1",
   baseUrl: "https://api.eatnourisha.com/v1",
 
+  
+
   containerW: "8xl",
 
   AWS_BUCKET: "nourisha-bucket",
