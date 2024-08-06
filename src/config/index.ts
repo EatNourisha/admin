@@ -1,8 +1,8 @@
 const configs = {
   authKey: "x231nxj",
   // baseUrl: "http://localhost:8080/v1",
-  // baseUrl: "https://api-stage.eatnourisha.com/v1",
-  baseUrl: "https://api.eatnourisha.com/v1",
+  baseUrl: "https://api-stage.eatnourisha.com/v1",
+  // baseUrl: "https://api.eatnourisha.com/v1",
 
   
 
@@ -38,6 +38,7 @@ const configs = {
     addAdministrator: "/admins/add",
     emails: "/emails",
     order: "/single-order",
+    giftCard:"/gift_cards",
 
     // faqs: "/faqs",
     // support: "/support",

@@ -34,6 +34,8 @@ const SubscriptionsIcon = () => <Icon type="subscriptions" />;
 const ReferralIcon = () => <Icon type="referral" />;
 const PlansIcon = () => <Icon type="plans" />;
 const BroadcastIcon = () => <Icon type="broadcast" />;
+const GiftCardIcon = () => <Icon type="giftCard" />;
+
 
 const ProfileIcon = () => <Icon type="profile" />;
 const AdminIcon = () => <Icon type="admin" />;
@@ -56,6 +58,12 @@ const pageLinks = [
     icon: MealsIcon,
     label: "Meals",
     to: "/meals",
+  },
+  {
+    activeIcon: GiftCardIcon,
+    icon: GiftCardIcon,
+    label: "Gift Card",
+    to: "/gift_cards",
   },
   {
     activeIcon: SubscriptionsIcon,

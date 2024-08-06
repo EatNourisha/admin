@@ -52,6 +52,19 @@ export interface AllergyRo {
   createdAt: string;
 }
 
+export interface GiftCardRo {
+  _id: string;
+  amount: number;
+  product_id: string;
+  price_id: string;
+  name: string;
+  currency: string;
+  subscription_interval: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
 export interface UserRo {
   _id: string;
   email: string;
@@ -222,3 +235,4 @@ export type GetUsersRO = HashedDocumentPagination<UserRo[]>;
 
 export type GetReferralsRo = PaginatedDocument<ReferralRo[]>;
 export type GetUsersRo = PaginatedDocument<UserRo[]>;
+export type GetGiftCardRo = PaginatedDocument<GiftCardRo[]>;

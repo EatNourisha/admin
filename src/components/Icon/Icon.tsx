@@ -14,6 +14,7 @@ import { ReactComponent as FileIcon } from "assets/svgs/file.svg";
 import { ReactComponent as FolderIcon } from "assets/svgs/folder.svg";
 import { ReactComponent as HashIcon } from "assets/svgs/hash.svg";
 import { ReactComponent as CheckedIcon } from "assets/svgs/checked.svg";
+import { ReactComponent as GiftCardIcon } from "assets/svgs/gift-card.svg";
 import { ReactComponent as CancelIcon } from "assets/svgs/cancel.svg";
 import { ReactComponent as AddIcon } from "assets/svgs/add.svg";
 import { ReactComponent as DeleteIcon } from "assets/svgs/delete.svg";
@@ -45,6 +46,7 @@ import { useMemo } from "react";
 
 export type IconNames =
   | "dashboard"
+  |"giftCard"
   | "profile"
   | "admin"
   | "logout"
@@ -124,6 +126,7 @@ export default function Icon(props: IconProps) {
       date: DateIcon,
       time: TimeIcon,
       plus: PlusSquareIcon,
+      giftCard:GiftCardIcon,
 
       // Nourisha
       logo: LogoIcon,

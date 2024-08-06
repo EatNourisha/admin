@@ -38,3 +38,8 @@ export { default as EditPromo } from "./Promos/EditPromo";
 export { default as PromoDetails } from "./Promos/PromoDetails";
 
 export { default as SendMail } from "./Emails/SendMail"
+export { default as ListGiftCard } from "./GiftCard/ListGiftCard"
+export { default as AddGiftCard } from "./GiftCard/AddGiftCard"
+
+
+

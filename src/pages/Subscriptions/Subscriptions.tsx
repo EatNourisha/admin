@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Box, FormControl, HStack, Select, Text } from "@chakra-ui/react";
 import {
   APaginator,
@@ -20,6 +20,7 @@ import { format, parseISO } from "date-fns";
 import { navigate } from "@reach/router";
 import configs from "config";
 import usePlans from "hooks/usePlans";
+import SubscriptionPopover from "./SubscriptionPopover";
 
 export default function Subscriptions() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +45,7 @@ export default function Subscriptions() {
     () => (subscriptions ?? []).length > 0,
     [subscriptions]
   );
+
 
   const handleSubscriptionType = (value: string) => {
     setFilter("subType", value);
@@ -173,6 +175,7 @@ export default function Subscriptions() {
                 "Start Date",
                 "End Date",
                 "Subscription Type",
+                "Action",
               ]}
             >
               {hasSubscriptions
@@ -184,9 +187,6 @@ export default function Subscriptions() {
                       <GenericTableItem
                         isClickable={false}
                         key={`subscription-table-item:${sub?._id}`}
-                        // onClick={() =>
-                        //   navigate(`${configs.paths.users}/${user?._id}`)
-                        // }
                         cols={[
                           <Gravatar
                             src={user?.profilePhotoUrl}
@@ -222,6 +222,7 @@ export default function Subscriptions() {
                           <SubscriptionBadge
                             type={(plan?.slug as any) ?? "no_subscription"}
                           />,
+                          <SubscriptionPopover sub={sub} />
                         ]}
                       />
                     );

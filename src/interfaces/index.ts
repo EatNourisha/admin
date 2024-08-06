@@ -15,6 +15,7 @@ export type {
   GetUsersRO,
   GetUsersRo,
   UpdateProfileDto,
+  GiftCardRo
 } from "./auth.interface";
 export type { default as AppStatus } from "./appStatus.type";
 export type { default as ErrorType } from "./errorType.type";
