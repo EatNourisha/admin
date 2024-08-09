@@ -65,6 +65,15 @@ const pageLinks = [
     label: "Gift Card",
     to: "/gift_cards",
   },
+
+  {
+    activeIcon: GiftCardIcon,
+    icon: GiftCardIcon,
+    label: "Line up",
+    to: "/lineUp",
+  },
+
+
   {
     activeIcon: SubscriptionsIcon,
     icon: SubscriptionsIcon,

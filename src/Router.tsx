@@ -32,7 +32,8 @@ import {
   PromoDetails,
   SendMail,
   ListGiftCard,
-  AddGiftCard
+  AddGiftCard,
+  ListLineup
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -118,6 +119,12 @@ const AppRouter = () => {
           <ProtectedRoute path="/orders" component={Orders} />
           <ProtectedRoute path="/orders/:id" component={OrderDetails} />
         </RootPage>
+
+        <RootPage path={configs.paths.lineUp}>
+          <ProtectedRoute path="/" component={ListLineup} />
+        </RootPage>
+
+
         {/* <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
         </RootPage> */}

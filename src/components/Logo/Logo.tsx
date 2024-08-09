@@ -17,14 +17,6 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>((props, ref) => {
     >
       <HStack ref={ref}>
         <Image src={AegleLogo} alt="" />
-        {/* <Stack>
-          <Text color="brand.black" fontWeight="700">
-            Koinpoll
-          </Text>
-          <Text mt="0 !important" color="brand.black" fontWeight="700">
-            Admin
-          </Text>
-        </Stack> */}
       </HStack>
     </Link>
   );

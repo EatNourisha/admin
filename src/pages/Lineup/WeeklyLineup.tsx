@@ -1,44 +1,135 @@
 import {
-  Modal,
-  ModalProps,
-  ModalContentProps,
-  ModalBodyProps,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  VStack,
-  Heading,
-  Grid,
-  Stack,
-  ModalFooter,
   Button,
   Divider,
+  Grid,
+  Heading,
   HStack,
+  Icon,
+  Modal,
+  ModalBody,
+  ModalBodyProps,
+  ModalCloseButton,
+  ModalContent,
+  ModalContentProps,
+  ModalOverlay,
+  ModalProps,
+  Stack,
+  Text,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
+import { navigate } from "@reach/router";
+import { Logo } from "components";
 import { EmptyCrate } from "components/Crate/Empty";
 import { Detail } from "components/DetailItem/Detail";
-import Icon from "components/Icon/Icon";
+import { GenericTableItem } from "components/GenericTable/GenericTable";
+import Gravatar from "components/Gravatar/Gravatar";
 import { LineupItem } from "components/Lineup/LineupItem";
-
+import LineupStatus from "components/Status/LineupStatus";
+import SubscriptionBadge from "components/SubscriptionBadge/SubscriptionBadge";
+import configs from "config";
+import { format, parseISO } from "date-fns";
 import useLineup from "hooks/useLineUp";
-import { UserRo } from "interfaces";
+import useUser from "hooks/useUser";
+import { PlanRo, SubscriptionRo, UserRo } from "interfaces";
 import { join, omit } from "lodash";
-import { useMemo } from "react";
-import { when } from "utils";
+import moment from "moment";
+import { useEffect, useMemo, useState } from "react";
+import { ILineUpItem } from "types";
+import { get, when } from "utils";
+
+interface WeeklyMealLineUpProps {
+  data: ILineUpItem[];
+  isLoading?: boolean;
+}
+
+export function WeeklyMealLineUp(props: WeeklyMealLineUpProps) {
+  const { data } = props;
+
+  return (
+    <>
+      {(data ?? []).map((sub) => (
+        <Item {...sub} />
+      ))}
+    </>
+  );
+}
+
+interface ItemProps extends ILineUpItem {}
+
+function Item(props: ItemProps) {
+  const [user, setUser] = useState<{ data: UserRo; loading: boolean }>({
+    data: {} as UserRo,
+    loading: true,
+  });
+  const { customer, delivery_date, status } = props;
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const getUser = async () => {
+    const data = await get(`customers/${customer}`);
+    //@ts-ignore
+    setUser({ loading: false, data: data?.data });
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  return (
+    <>
+      <GenericTableItem
+        cols={[
+          <Gravatar
+            title={join([user?.data?.first_name, user?.data?.last_name], " ")}
+            onClick={() =>
+              navigate(`${configs.paths.users}/${user?.data?._id ?? ""}`)
+            }
+          />,
+          <Text textTransform="capitalize">{status}</Text>,
+          <Text textTransform="capitalize">
+            {user?.data?.address?.city ?? "------------"}
+          </Text>,
+          <Text textTransform="capitalize">{moment(delivery_date).format("d/MM/y")}</Text>,
+         
+          <Button
+            size="sm"
+            variant="outline"
+            // isDisabled={!user?.lineup}
+            onClick={onOpen}
+          >
+            View Lineup
+          </Button>,
+        ]}
+      />
+
+      {!!user?.data && (
+        <LineupDetailModal
+          lineupData={props}
+          {...props}
+          user={user.data}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
+    </>
+  );
+}
 
 interface LineupDetailModalProps extends Omit<ModalProps, "children" | "id"> {
   user: UserRo;
   isLoading?: boolean;
-
   _content?: ModalContentProps;
   _body?: ModalBodyProps;
+  lineupData: ILineUpItem;
 }
 
-export default function LineupDetailModal(props: LineupDetailModalProps) {
-  const { user, isOpen, onClose, _content, _body, ...xprops } = props;
+const LineupDetailModal = (props: LineupDetailModalProps) => {
+  const { user, isOpen, onClose, _content, _body, lineupData, ...xprops } =
+    props;
 
-  const { data: lineupData, isLoading } = useLineup(user?._id);
+  // const { isLoading } = useLineup(user?._id);
+  const isLoading = false;
   const lineup = useMemo(
     () =>
       omit(lineupData, [
@@ -93,9 +184,9 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
           overflowX="hidden"
           overflowY="scroll"
         >
-           <VStack mt="5px" py="32px">
-            <Icon type="fullLogo" h="72px" color="brand.primary" />
-          </VStack>
+          <HStack justifyContent={"center"} mt={10} alignItems="center">
+            <Logo width={100} height={100}  />
+          </HStack>
           <Heading mt="5px" fontSize="24px" fontWeight="600">
             Weekly Lineup
           </Heading>
@@ -142,6 +233,10 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
             borderStyle="dashed"
             borderColor="black"
           />
+         
+         <Text fontSize={16} color="#000" fontWeight={700}>
+         Week {lineupData?.week}
+         </Text>
 
           <Stack
             mt="16px"
@@ -200,4 +295,10 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
       </ModalContent>
     </Modal>
   );
-}
+};
+
+// const LineupItem =()=>{
+//   return  (
+
+//   )
+// }

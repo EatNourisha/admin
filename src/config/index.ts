@@ -1,8 +1,8 @@
 const configs = {
   authKey: "x231nxj",
   // baseUrl: "http://localhost:8080/v1",
-  baseUrl: "https://api-stage.eatnourisha.com/v1",
-  // baseUrl: "https://api.eatnourisha.com/v1",
+  // baseUrl: "https://api-stage.eatnourisha.com/v1",
+  baseUrl: "https://api.eatnourisha.com/v1",
 
   
 
@@ -40,6 +40,9 @@ const configs = {
     order: "/single-order",
     giftCard:"/gift_cards",
 
+    lineUp: "/lineUp",
+
+
     // faqs: "/faqs",
     // support: "/support",
     // privacyPolicy: "/policy",
@@ -70,5 +73,17 @@ export const isDev = String(process.env.NODE_ENV).toLowerCase().includes("dev");
 // export const hideDevLogs = String(process.env.REACT_APP_HIDE_DEV_LOG)
 //   .toLowerCase()
 //   .includes("true");
+
+
+export const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+];
+
 
 export default configs;
