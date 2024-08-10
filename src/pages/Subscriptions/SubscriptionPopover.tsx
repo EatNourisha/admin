@@ -70,7 +70,7 @@ export default ({ sub }: { sub: SubscriptionRo }) => {
           <HStack gap="5px">
             <Icon icon="cil:options" />
             <Text textAlign="center" className="text-primary text-center">
-              {sub.status}
+              {sub.status === "incomplete_expired" ? "Incomplete":sub.status}
             </Text>
           </HStack>
         </PopoverTrigger>

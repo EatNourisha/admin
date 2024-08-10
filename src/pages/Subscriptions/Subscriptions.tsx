@@ -36,7 +36,7 @@ export default function Subscriptions() {
 
   const { data, isLoading } = useSubscriptions({
     ...omit(state, "subType"),
-    status: filter?.status ?? "active",
+    // status: filter?.status ?? "active",
     plan: filter?.plan,
   });
 
@@ -198,7 +198,7 @@ export default function Subscriptions() {
                               navigate(`${configs.paths.users}/${user?._id}`)
                             }
                           />,
-                          <Text fontSize="14px">{user?.email}</Text>,
+                          <Text width="130px" fontSize="14px">{user?.email}</Text>,
                           <Text fontSize="14px">
                             {!!sub?.start_date
                               ? format(
