@@ -80,6 +80,16 @@ const pageLinks = [
     label: "Subscribed Users",
     to: "/subscriptions",
   },
+
+
+  {
+    activeIcon: ReferralIcon,
+    icon: ReferralIcon,
+    label: "Referal",
+    to: "/referrals",
+  },
+
+
   {
     activeIcon: SubscriptionsIcon,
     icon: SubscriptionsIcon,

@@ -125,9 +125,9 @@ const AppRouter = () => {
         </RootPage>
 
 
-        {/* <RootPage path={configs.paths.referrals}>
+        <RootPage path={configs.paths.referrals}>
           <ProtectedRoute path="/" component={Referrals} />
-        </RootPage> */}
+        </RootPage>
         <RootPage path={configs.paths.profile}>
           <ProtectedRoute path="/" component={Profile} />
           <ProtectedRoute path="/edit" component={EditProfile} />
