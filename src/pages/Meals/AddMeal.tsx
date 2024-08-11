@@ -194,6 +194,7 @@ export default function AddMeal() {
                   >
                     <option value={"subscription"}>Subscription</option>
                     <option value={"single order"}>Single Order</option>
+                    <option value={"bulk-order"}>Bulk Order</option>
                     <option value={"both"}>Both</option>
                   </Select>
                 </FormControl>
@@ -261,6 +262,19 @@ export default function AddMeal() {
                   value={state?.calories ?? ""}
                   type="text"
                   onChange={(e) => set({ calories: e.target.value })}
+                />
+              </FormControl>
+
+
+              <FormControl>
+                <InputLabel>Category</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a category"
+                  value={state?.category ?? ""}
+                  type="text"
+                  onChange={(e) => set({ category: e.target.value })}
                 />
               </FormControl>
 

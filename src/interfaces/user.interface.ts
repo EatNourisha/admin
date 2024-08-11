@@ -55,6 +55,7 @@ export interface MealRo {
   is_available: boolean;
   meals: string[];
   name: string;
+  category: string;
   slug: string;
   orderType: string;
   country: string;

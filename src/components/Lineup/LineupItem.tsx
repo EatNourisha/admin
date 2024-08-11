@@ -14,8 +14,7 @@ export function LineupItem(props: LineupItemProps) {
   const { day, pack, ...xprops } = props;
   const keys = Object.keys(pack);
 
-  // alert(JSON.stringify(keys))
-  // keys and pack
+
 
   return daysOfWeek.map((d) => d.toUpperCase()).includes(day.toUpperCase()) ? (
     <Box {...xprops}>
@@ -72,7 +71,7 @@ function Meal(props: MealProps) {
           {title}
         </Text>
         {foodItem?.mealId?.name ? (
-          <Text fontSize="12px" textTransform="capitalize">
+          <Text fontSize="14px" textTransform="capitalize">
             {foodItem?.mealId?.name}
           </Text>
         ) : (

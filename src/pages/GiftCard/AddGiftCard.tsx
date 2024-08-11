@@ -40,7 +40,7 @@ import { ApiResponse, GiftCardRo } from "interfaces";
 export default function AddMeal() {
   //   const toast = useToast();
 
-  const [values, setValues] = useState<GiftCardRo>({} as GiftCardRo);
+  const [values, setValues] = useState<GiftCardRo>({ subscription_interval:"month"} as GiftCardRo);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -132,31 +132,22 @@ export default function AddMeal() {
 
               <FormControl>
                 <InputLabel>Subscription Interval</InputLabel>
-                <Select
+                <Input
                   bg="white !important"
                   borderWidth="2px"
                   borderColor="brand.neutral200"
-                  placeholder="Enter subscription interval"
-                  value={values?.subscription_interval}
-                  onChange={(e) =>
-                    setValues({
-                      ...values,
-                      subscription_interval: e.target.value,
-                    })
-                  }
-                >
-                  <option value="month">month</option>
-                  <option value="year">year</option>
-                </Select>
+                  placeholder={""}
+                  value={"month"}
+                  opacity={0.3}
+                  isReadOnly
+                />
+               
               </FormControl>
 
               <Divider />
 
               <HStack>
-                <Button
-                    isLoading={loading}
-                  type="submit"
-                >
+                <Button isLoading={loading} type="submit">
                   Save Changes
                 </Button>
               </HStack>

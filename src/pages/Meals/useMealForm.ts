@@ -35,6 +35,7 @@ export interface IMealFormState
 const transformMealToFormState = (meal: MealRo): IMealFormState => {
   return {
     name: meal?.name,
+    category: meal?.category,
     price: { ...meal?.price } as any,
     description: meal?.description,
     image_url: meal?.image_url,

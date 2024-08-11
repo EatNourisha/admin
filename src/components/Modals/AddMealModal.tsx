@@ -39,6 +39,7 @@ interface AddMealModalProps extends Omit<ModalProps, "children" | "id"> {
 interface IMealFormState {
   name: string;
   file: File;
+  category:string;
   orderType: "subscription" | "single order";
   country: string;
   isUploading?: boolean;
@@ -201,6 +202,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
 
     const res = addNewMeal({
       name: state?.name!,
+      category: state?.category!,
       image_url: image_url as string,
       orderType: state?.orderType ?? "subscription",
       country: state?.country ?? "Nigeria",

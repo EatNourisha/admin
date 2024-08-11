@@ -41,7 +41,9 @@ export default function ListLineup() {
 
       if (week) {
         setLineUpData({ ...lineUpData, loading: true });
-        const data = await get(`/lineups/all?week=${week}`);
+        const queryString =
+          week === "all" ? "/lineups/all" :`/lineups/all?week=${week}`;
+        const data = await get(queryString);
         //@ts-ignore
         setLineUpData({ loading: false, data: data?.data });
       }
@@ -60,6 +62,7 @@ export default function ListLineup() {
             </Heading>
             <HStack>
               <Select width="150px" onChange={(e) => setWeek(e.target.value)}>
+              <option value="all">All</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -81,16 +84,16 @@ export default function ListLineup() {
             ) : null}
           </GenericTable>
 
-          {/* {!!lineUpData.data.length && (
+          {!!lineUpData.data.length && (
             <APaginator
               flexDir={"row"}
               isLoading={!lineUpData.loading}
-                totalCount={data?.totalCount}
-                limit={state?.limit}
-                page={state?.page}
-                onPageChange={onPageChange}
+                totalCount={10}
+                limit={10}
+                page={1}
+                onPageChange={()=> {}}
             />
-          )} */}
+          )}
         </Stack>
       </MainLayoutContainer>
     </PageMotion>

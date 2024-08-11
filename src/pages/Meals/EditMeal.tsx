@@ -265,6 +265,18 @@ export default function EditMeal() {
                 />
               </FormControl>
 
+
+              <FormControl>
+                <InputLabel>Category</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add category"
+                  value={state?.category ?? ""}
+                  onChange={(e) => set({ category: e.target.value })}
+                />
+              </FormControl>
+
               <FormControl>
                 <InputLabel>Description</InputLabel>
                 <Textarea
