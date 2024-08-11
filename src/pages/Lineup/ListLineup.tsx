@@ -18,15 +18,20 @@ export default function ListLineup() {
   }>({ data: [], loading: true });
   const [status, setStatus] = useState("");
   const [week, setWeek] = useState("");
+  const [page, setPage] = useState(1);
+
 
   const getLineUps = async () => {
-    const data = await get("/lineups/all");
+    setLineUpData({ ...lineUpData, loading: true });
+    const data = await get(`/lineups/all?page=${page}&limit=10`);
     //@ts-ignore
     setLineUpData({ loading: false, data: data?.data });
   };
+
+ 
   useEffect(() => {
     getLineUps();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     const getStatusLineup = async () => {
@@ -42,7 +47,7 @@ export default function ListLineup() {
       if (week) {
         setLineUpData({ ...lineUpData, loading: true });
         const queryString =
-          week === "all" ? "/lineups/all" :`/lineups/all?week=${week}`;
+          week === "all" ? "/lineups/all" : `/lineups/all?week=${week}`;
         const data = await get(queryString);
         //@ts-ignore
         setLineUpData({ loading: false, data: data?.data });
@@ -62,7 +67,7 @@ export default function ListLineup() {
             </Heading>
             <HStack>
               <Select width="150px" onChange={(e) => setWeek(e.target.value)}>
-              <option value="all">All</option>
+                <option value="all">All</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -79,19 +84,26 @@ export default function ListLineup() {
             isLoading={lineUpData.loading}
             headers={["Fullname", "Status", "City", "Delivery day", "Action"]}
           >
-            {!!lineUpData.data.length ? (
-              <WeeklyMealLineUp data={lineUpData.data} isLoading={false} />
+            {/* @ts-ignore */}
+            {!!lineUpData.data?.lineups?.length ? (
+              <WeeklyMealLineUp
+                //@ts-ignore
+                data={lineUpData.data?.lineups}
+                isLoading={false}
+              />
             ) : null}
           </GenericTable>
-
-          {!!lineUpData.data.length && (
+          {/* @ts-ignore */}
+          {!!lineUpData.data?.lineups?.length && (
             <APaginator
               flexDir={"row"}
               isLoading={!lineUpData.loading}
-                totalCount={10}
-                limit={10}
-                page={1}
-                onPageChange={()=> {}}
+              /* @ts-ignore */
+              totalCount={lineUpData.data?.totalCount}
+              limit={10}
+              page={page}
+              /* @ts-ignore */
+              onPageChange={(p)=> setPage(p)}
             />
           )}
         </Stack>

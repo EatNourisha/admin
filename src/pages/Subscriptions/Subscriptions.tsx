@@ -23,7 +23,6 @@ import usePlans from "hooks/usePlans";
 import SubscriptionPopover from "./SubscriptionPopover";
 
 export default function Subscriptions() {
-  // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, setFilter, onPageChange } = usePageFilters(
     {
       limit: 10,
@@ -36,7 +35,6 @@ export default function Subscriptions() {
 
   const { data, isLoading } = useSubscriptions({
     ...omit(state, "subType"),
-    // status: filter?.status ?? "active",
     plan: filter?.plan,
   });
 
@@ -61,13 +59,11 @@ export default function Subscriptions() {
     else setFilter("sort", undefined);
   };
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
+  const handleStatusSort = (value: string) => {
+    if (value !== "all") setFilter("status", value);
+    else setFilter("status", undefined);
+  };
 
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
 
   const sortOptions = [
     { label: "All", value: "all" },
@@ -77,6 +73,14 @@ export default function Subscriptions() {
     { label: "This Month", value: "this_month" },
   ];
 
+  const statusOptions = [
+    { label: "All", value: "all" },
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "in_active" },
+    { label: "Past due", value: "past_due" },
+    { label: "Incomplete", value: "incomplete_expired" },
+  ];
+
   return (
     <PageMotion key="subscriptions-root" pb="100px">
       <Topbar pageTitle="Subscriptions" />
@@ -84,16 +88,6 @@ export default function Subscriptions() {
         <Box>
           <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
             <HStack w="100%" gridGap="16px" justifyContent="space-between">
-              {/* <Input
-                // w="100%"
-                minH="48px"
-                minW="340px"
-                maxW="400px"
-                placeholder="Search Users"
-                value={state?.searchPhrase ?? ""}
-                endAdornment={<Icon type="search" />}
-                onChange={(e) => setFilter("searchPhrase", e.target.value)}
-              /> */}
 
               <FormControl w="fit-content" ml="0 !important" minW="250px">
                 <InputLabel
@@ -124,6 +118,36 @@ export default function Subscriptions() {
                   ))}
                 </Select>
               </FormControl>
+
+              <FormControl w="fit-content" ml="0 !important" minW="250px">
+                <InputLabel
+                  isLoading={isLoadingPlans}
+                  fontSize="14px"
+                  fontWeight="600"
+                  display="inline-block"
+                >
+                  Status:
+                </InputLabel>
+                <Select
+                  flex="2"
+                  mt="10px"
+                  disabled={isLoading || isLoadingPlans}
+                  borderWidth="1.5px"
+                  placeholder="Select Option"
+                  minH="52px"
+                  borderRadius="8px"
+                  value={filter?.sort}
+                  onChange={(e) => handleStatusSort(e.target.value)}
+                >
+                  {statusOptions.map((sort) => (
+                    <option key={sort.value} value={sort.value}>
+                      {sort.label}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
+
               <FormControl w="fit-content" ml="0 !important" minW="250px">
                 <InputLabel
                   isLoading={isLoadingPlans}
@@ -143,7 +167,6 @@ export default function Subscriptions() {
                   borderRadius="8px"
                   value={filter?.sort}
                   onChange={(e) => handleSort(e.target.value)}
-                  // maxW="300px"
                 >
                   {sortOptions.map((sort) => (
                     <option key={sort.value} value={sort.value}>
@@ -154,13 +177,7 @@ export default function Subscriptions() {
               </FormControl>
             </HStack>
 
-            {/* <Button
-              ml="0 !important"
-              leftIcon={<Icon type="export" />}
-              isDisabled={isLoading || !hasSubscriptions}
-            >
-              Export
-            </Button> */}
+         
           </HStack>
           <Box
             borderRadius="8px"
@@ -232,14 +249,6 @@ export default function Subscriptions() {
           </Box>
 
           <Box>
-            {/* <PaginatorContainer>
-              <Paginator
-                {...pageData}
-                onPrev={(prev) => onPrevPage(prev)}
-                onNext={(next) => onNextPage(next)}
-              />
-              
-            </PaginatorContainer> */}
 
             {hasSubscriptions && (
               <APaginator

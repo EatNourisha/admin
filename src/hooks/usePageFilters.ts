@@ -34,7 +34,6 @@ export default function usePageFilters<T extends IFilterState>(
   const [state, set] = usePartialState<T | IFilterState>(initialState);
   const [filter, setFilter] = usePartialState<T | IFilterState>(initialState);
 
-  console.log("FILTERS", filter);
 
   const handleFilter = (key: keyof T, _value: any) => {
     set({ [key]: _value } as any);
@@ -53,7 +52,6 @@ export default function usePageFilters<T extends IFilterState>(
     set({ page });
     if (!!set_url_param) {
       params.set("page", String(page));
-      console.log("Page change", params.toString());
       navigate(`${pathname}?${params.toString()}`);
     }
   };
