@@ -211,8 +211,6 @@ export default function EditMeal() {
                     isRequired={false}
                     value={state?.country ?? ""}
                     onChange={(e) => set({ country: e.target.value })}
-                  
-          
                   />
                 </FormControl>
               </HStack>
@@ -265,7 +263,6 @@ export default function EditMeal() {
                 />
               </FormControl>
 
-
               <FormControl>
                 <InputLabel>Category</InputLabel>
                 <Input
@@ -288,37 +285,71 @@ export default function EditMeal() {
                 />
               </FormControl>
 
-              <FormControl
-                display="flex"
-                w="fit-content"
-                alignSelf="flex-start"
-              >
-                <Switch
-                  ml="8px"
-                  aria-label="switch meal availability"
-                  disabled={isLoading}
-                  isChecked={state?.is_available}
-                  onChange={() => set({ is_available: !state?.is_available })}
-                  sx={{
-                    "--switch-track-width": "26px",
-                    ".chakra-switch__track": {
-                      bg: "brand.neutral400",
-                      padding: "3px",
-                      borderRadius: "26px",
-                    },
-                    ".chakra-switch__track[data-checked]": {
-                      bg: "#03CCAA",
-                      padding: "3px",
-                    },
-                    ".chakra-switch__thumb": {
-                      shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                    },
-                  }}
-                />
-                <InputLabel ml="8px" htmlFor="isChecked">
-                  {when(!!state?.is_available, "Available", "Unavailable")}
-                </InputLabel>
-              </FormControl>
+              <HStack justifyContent={"space-between"}>
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml="8px"
+                    aria-label="switch meal availability"
+                    disabled={isLoading}
+                    isChecked={state?.is_available}
+                    onChange={() => set({ is_available: !state?.is_available })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    {when(!!state?.is_available, "Available", "Unavailable")}
+                  </InputLabel>
+                </FormControl>
+
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml="8px"
+                    aria-label="switch meal availability"
+                    disabled={isLoading}
+                    isChecked={state?.isSwallow}
+                    onChange={() => set({ isSwallow: !state?.isSwallow })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    {when(!!state?.isSwallow, "Swallow", "Not Swallow")}
+                  </InputLabel>
+                </FormControl>
+              </HStack>
 
               <Divider />
 

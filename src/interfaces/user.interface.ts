@@ -53,6 +53,7 @@ export interface MealRo {
   createdAt: string;
   image_url: string;
   is_available: boolean;
+  isSwallow: boolean;
   meals: string[];
   name: string;
   category: string;
@@ -273,6 +274,7 @@ export interface PromoRo {
   };
   createdAt: string;
   updatedAt: string;
+  redeemed_by:UserRo[];
 }
 
 export interface CreatePromoDto

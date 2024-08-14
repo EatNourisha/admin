@@ -34,13 +34,13 @@ import {
 import { navigate, useParams } from "@reach/router";
 import { format, parseISO } from "date-fns";
 import join from "lodash/join";
-import { ReactNode, useMemo, useRef } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { currencyFormat, when } from "utils";
 import { CouponRo } from "interfaces";
 import usePageFilters from "hooks/usePageFilters";
 import { EmptyCrate } from "components/Crate/Empty";
 import usePromo from "hooks/usePromo";
-import { ReferralRo } from "interfaces/auth.interface";
+import { ReferralRo, UserRo } from "interfaces/auth.interface";
 import usePromoMutations from "hooks/usePromoMutation";
 import { capitalize } from "lodash";
 
@@ -48,6 +48,7 @@ export default function PromoDetails() {
   const { id } = useParams();
   const toast = useToast();
   const action = useRef<string>("none");
+  const [onReferal, setOnReferal] = useState(true);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -58,12 +59,15 @@ export default function PromoDetails() {
 
   const { data, isLoading, key } = usePromo(id, { ...state });
 
-  console.log("Promo Details", data);
 
   const influencer = useMemo(() => data?.promo?.influencer, [data]);
   const coupon = useMemo(() => data?.promo?.coupon as CouponRo, [data]);
   const earnings = useMemo(() => data?.earnings, [data]);
   const referrals = useMemo(() => data?.referrals, [data]);
+  const redeemed_by = useMemo(() => data?.promo?.redeemed_by, [data]);
+
+
+
 
   const {
     updatePromo,
@@ -74,6 +78,11 @@ export default function PromoDetails() {
   const hasReferrals = useMemo(
     () => (referrals?.data ?? []).length > 0,
     [referrals]
+  );
+
+  const hasRedeemedBy = useMemo(
+    () => (redeemed_by ?? []).length > 0,
+    [redeemed_by]
   );
   const isActive = useMemo(() => !!data?.promo?.active, [data?.promo]);
 
@@ -91,6 +100,7 @@ export default function PromoDetails() {
   const togglePromoStatus = async () => {
     action.current = "switch";
     const result = await updatePromo(id, { active: !data?.promo?.active });
+
     if (!!result) {
       toast({
         position: "bottom-right",
@@ -123,12 +133,13 @@ export default function PromoDetails() {
     }
   };
 
+
   return (
     <PageMotion key="promo-details">
       <Topbar pageTitle="Promotion Code" />
       <MainLayoutContainer>
         <Grid
-          templateColumns={{ xl: "1.3fr 1fr", "2xl": "1.5fr 1fr" }}
+          templateColumns={{ xl: "1.3fr 1fr", "2xl": "1.5fr  1fr" }}
           gap="24px"
         >
           <Box
@@ -150,16 +161,6 @@ export default function PromoDetails() {
               >
                 Back
               </Button>
-              {/* <Button
-              size="xs"
-              color="brand.black"
-              variant="transparent"
-              fontSize="md"
-              fontWeight="600"
-              leftIcon={<Icon type="edit" />}
-            >
-              Edit
-            </Button> */}
               <HStack gridGap="10px">
                 <FormControl
                   display="flex"
@@ -385,6 +386,7 @@ export default function PromoDetails() {
                         {(earnings?.refs ?? []).length}
                       </Text>
                     </Stack>
+
                     <Stack flex="1">
                       <Text fontSize="xs" color="brand.neutral500">
                         Discounts
@@ -399,68 +401,154 @@ export default function PromoDetails() {
             )}
           </Box>
 
-          <Box position="sticky" top="100px">
-            <HStack alignItems="center" justifyContent="space-between">
-              <Heading as="h5" fontSize="lg">
-                Referrals
-              </Heading>
-
-              <Select
-                placeholder="Select Option"
-                minH="38px"
-                maxW="160px"
-                alignSelf="center"
-                borderRadius="10px"
-                fontSize="14px"
-                onChange={handleRefFilter}
-                // visibility="hidden"
+          <Box>
+            <HStack gap="40px" justifyContent="center" mb="10px">
+              <Text
+                style={{
+                  borderBottom: onReferal ? "3px solid orange" : "none",
+                }}
+                cursor="pointer"
+                onClick={() => setOnReferal(true)}
               >
-                <option value="all">All</option>
-                {["subscribed", "pending"].map((name) => (
-                  <option key={name} value={name}>
-                    {capitalize(name)}
-                  </option>
-                ))}
-              </Select>
+                Referal
+              </Text>
+              <Text
+                style={{
+                  borderBottom: !onReferal ? "3px solid orange" : "none",
+                }}
+                cursor="pointer"
+                onClick={() => setOnReferal(false)}
+              >
+                Redeemed By
+              </Text>
             </HStack>
+            {onReferal ? (
+              <Box >
+                <HStack alignItems="center" justifyContent="space-between">
+                  <Heading as="h5" fontSize="lg">
+                    Referrals
+                  </Heading>
 
-            <Stack
-              mt="16px"
-              borderRadius="8px"
-              overflow="hidden"
-              p="14px"
-              shadow={when(
-                !hasReferrals,
-                "0px 2px 12px rgba(0, 0, 0, 0.05)",
-                "none"
-              )}
-              gridGap="16px"
-            >
-              {!!referrals?.data &&
-                !isLoading &&
-                (referrals.data ?? []).map((ref) => (
-                  <ReferralItem key={ref?._id} {...ref} />
-                ))}
+                  <Select
+                    placeholder="Select Option"
+                    minH="38px"
+                    maxW="160px"
+                    alignSelf="center"
+                    borderRadius="10px"
+                    fontSize="14px"
+                    onChange={handleRefFilter}
+                    // visibility="hidden"
+                  >
+                    <option value="all">All</option>
+                    {["subscribed", "pending"].map((name) => (
+                      <option key={name} value={name}>
+                        {capitalize(name)}
+                      </option>
+                    ))}
+                  </Select>
+                </HStack>
 
-              {isLoading && !hasReferrals && <Loader my="80px" />}
+                <Stack
+                  mt="16px"
+                  borderRadius="8px"
+                  overflow="hidden"
+                  p="14px"
+                  shadow={when(
+                    !hasReferrals,
+                    "0px 2px 12px rgba(0, 0, 0, 0.05)",
+                    "none"
+                  )}
+                  gridGap="16px"
+                >
+                  {!!referrals?.data &&
+                    !isLoading &&
+                    (referrals.data ?? []).map((ref) => (
+                      <ReferralItem key={`referal_${ref?._id}`} {...ref} />
+                    ))}
 
-              {!isLoading && !hasReferrals && (
-                <EmptyCrate
-                  description={"This promo has no referrals at the moment"}
-                />
-              )}
+                  {isLoading && !hasReferrals && <Loader my="80px" />}
 
-              {hasReferrals && (
-                <APaginator
-                  flexDir={"row"}
-                  isLoading={isLoading}
-                  totalCount={referrals?.totalCount}
-                  limit={state?.limit}
-                  page={state?.page}
-                  onPageChange={onPageChange}
-                />
-              )}
-            </Stack>
+                  {!isLoading && !hasReferrals && (
+                    <EmptyCrate
+                      description={"This promo has no referrals at the moment"}
+                    />
+                  )}
+
+                  {hasReferrals && (
+                    <APaginator
+                      flexDir={"row"}
+                      isLoading={isLoading}
+                      totalCount={referrals?.totalCount}
+                      limit={state?.limit}
+                      page={state?.page}
+                      onPageChange={onPageChange}
+                    />
+                  )}
+                </Stack>
+              </Box>
+            ) : (
+              <Box >
+                <HStack alignItems="center" justifyContent="space-between">
+                  <Heading as="h5" fontSize="lg">
+                    Redeemed by
+                  </Heading>
+
+                  <Select
+                    placeholder="Select Option"
+                    minH="38px"
+                    maxW="160px"
+                    alignSelf="center"
+                    borderRadius="10px"
+                    fontSize="14px"
+                    onChange={handleRefFilter}
+                    // visibility="hidden"
+                  >
+                    <option value="all">All</option>
+                    {["subscribed", "pending"].map((name) => (
+                      <option key={name} value={name}>
+                        {capitalize(name)}
+                      </option>
+                    ))}
+                  </Select>
+                </HStack>
+
+                <Stack
+                  mt="16px"
+                  borderRadius="8px"
+                  overflow="hidden"
+                  p="14px"
+                  shadow={when(
+                    !hasReferrals,
+                    "0px 2px 12px rgba(0, 0, 0, 0.05)",
+                    "none"
+                  )}
+                  gridGap="16px"
+                >
+                  {!!redeemed_by &&
+                    !isLoading &&
+                    (redeemed_by ?? []).map((ref) => (
+                      <RedeemedByItem key={`redeemed_by_${ref?._id}`}  {...ref} />
+                    ))}
+
+                  {isLoading && !hasRedeemedBy && <Loader my="80px" />}
+
+                  {!isLoading && !hasRedeemedBy && (
+                    <EmptyCrate description={"This promo has no redeemed by"} />
+                  )}
+
+                  {hasRedeemedBy && (
+                    <APaginator
+                      flexDir={"row"}
+                      isLoading={isLoading}
+                      totalCount={referrals?.totalCount}
+                      limit={state?.limit}
+                      page={state?.page}
+                      onPageChange={onPageChange}
+                    />
+                  )}
+                </Stack>
+              </Box>
+            )}
           </Box>
         </Grid>
 
@@ -572,6 +660,50 @@ function ReferralItem(props: ReferralItemProps) {
               textTransform="uppercase"
             >
               {currencyFormat("gbp").format(reward ?? 0)}
+            </Text>
+          </Stack>
+        )}
+      </HStack>
+    </Box>
+  );
+}
+
+function RedeemedByItem(props: UserRo) {
+  const { email, last_name, first_name, subscription, delivery_day, _id } =
+    props;
+  return (
+    <Box
+      w="100%"
+      p="20px"
+      shadow="base"
+      border="1px solid"
+      borderColor="brand.neutral100"
+      borderRadius="10px"
+      bg="white"
+    >
+      <HStack justifyContent="space-between">
+        <Gravatar
+          variant="horizSingle"
+          // src={user?.profilePhotoUrl}
+          title={join([first_name, last_name], " ")}
+          // subtitle={format(parseISO(delivery_day), "EEE dd, MMM yyyy")}
+          onClick={() => navigate(`/users/${_id}`)}
+          _container={{
+            flex: 3.5,
+            alignSelf: "center",
+            justifyContent: "flex-start",
+          }}
+        />
+
+        <Divider orientation="vertical" />
+
+        {!!subscription && (
+          <Stack flex="1" gap="0">
+            <Text fontSize="10px" textAlign="center" color="brand.neutral500">
+              Email
+            </Text>
+            <Text mt="0 !important" fontSize="sm" fontWeight="600">
+              {email}
             </Text>
           </Stack>
         )}
