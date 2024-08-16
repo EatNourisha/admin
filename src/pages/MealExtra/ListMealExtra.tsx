@@ -15,10 +15,10 @@ import {
   PageMotion,
   Topbar,
 } from "components";
-import AddMealExtra from "components/Modals/AddMealExtra";
 import { useEffect, useState } from "react";
 import { get, destroy } from "utils/makeRequest";
 import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
+import AddMealExtra from "components/Modals/AddMealExtra";
 
 export interface IMealExtra {
   _id?: string;

@@ -27,6 +27,7 @@ const configs = {
     dashboard: "/dashboard",
     administrators: "/admins",
     meals: "/meals",
+    meal_extra:"/meal_extra",
     plans: "/plans",
     broadcasts: "/broadcasts",
     sendBroadcast: "/broadcasts/send",

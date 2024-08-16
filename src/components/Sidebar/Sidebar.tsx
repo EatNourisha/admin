@@ -60,6 +60,12 @@ const pageLinks = [
     to: "/meals",
   },
   {
+    activeIcon: MealsIcon,
+    icon: MealsIcon,
+    label: "Meal Extra",
+    to: "/meal_extra",
+  },
+  {
     activeIcon: GiftCardIcon,
     icon: GiftCardIcon,
     label: "Gift Card",
@@ -89,12 +95,7 @@ const pageLinks = [
     to: "/referrals",
   },
 
-  {
-    activeIcon: ProfileIcon,
-    icon: ReferralIcon,
-    label: "Promotion",
-    to: "/promos",
-  },
+
 
 
   {
@@ -146,6 +147,8 @@ const pageLinks = [
     label: "Administrators",
     to: "/admins",
   },
+
+  
  
 ];
 
@@ -214,7 +217,7 @@ const Sidebar: FC<SidebarProps> = (props) => {
         py="40px"
         overflowY="scroll"
       >
-        {take(pageLinks, 9).map((link, i) => (
+        {take(pageLinks, pageLinks.length-2).map((link, i) => (
           <SidebarLink
             key={i}
             {...link}

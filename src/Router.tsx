@@ -41,6 +41,7 @@ import { Layout, ProtectedRoute, RootPage } from "components";
 // import { AnimatePresence } from "framer-motion";
 
 import configs from "config";
+import ListMealExtra from "pages/MealExtra/ListMealExtra";
 
 // const FramerRouter = ({ children }: any) => (
 //   <Location>
@@ -119,6 +120,12 @@ const AppRouter = () => {
           <ProtectedRoute path="/orders" component={Orders} />
           <ProtectedRoute path="/orders/:id" component={OrderDetails} />
         </RootPage>
+
+        <RootPage path={configs.paths.meal_extra}>
+          <ProtectedRoute path="/" component={ListMealExtra} />
+        </RootPage>
+
+        
 
         <RootPage path={configs.paths.lineUp}>
           <ProtectedRoute path="/" component={ListLineup} />
