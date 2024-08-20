@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Box, Button, HStack, Text, useToast } from "@chakra-ui/react";
 import {
   APaginator,
+  ConfirmationModal,
   GenericTable,
   GenericTableItem,
   Icon,
@@ -12,15 +13,12 @@ import {
 } from "components";
 
 import { navigate } from "@reach/router";
-import configs from "config";
-import { join, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
-import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { useExport } from "hooks/useExports";
-import { when } from "utils";
-import { UserRo } from "interfaces";
 import useUserMutations from "hooks/useUserMutations";
 import useGiftCard from "hooks/useGiftCards";
+import { destroy } from "utils";
 
 export default function GiftCards() {
   const toast = useToast();
@@ -37,30 +35,29 @@ export default function GiftCards() {
     searchPhrase: filter?.searchPhrase,
   });
 
-  const { syncUsersToMailchimp, isLoading: isSyncing } = useUserMutations();
+  const { isLoading: isSyncing } = useUserMutations();
 
-  const { /*exportUserDocs, */ isDownloading, isLoading: isExporting } =
+  const { isDownloading, isLoading: isExporting } =
     useExport();
 
-  const customers = useMemo(
+  const giftCards = useMemo(
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
     [data]
   );
-  const hasCustomers = useMemo(() => (customers ?? []).length > 0, [customers]);
 
-  const delivery_day = useCallback((user: UserRo) => {
-    const info = user?.delivery_info;
-    if (!!info && info?.next_delivery_date) {
-      const day = parseISO(info?.next_delivery_date).getDay();
-      /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
-      if ([6, 0, 1].includes(day)) return "------";
-      return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
-    }
+  const hasCustomers = useMemo(() => (giftCards ?? []).length > 0, [giftCards]);
 
-    return info?.delivery_day ?? "------";
-  }, []);
+  const [deleteGiftCard, setDeleteGiftCard] = useState({
+    id: "",
+    show: false,
+    loading: false,
+  });
 
-
+  const handleDeleteGiftCard = async () => {
+    setDeleteGiftCard({ ...deleteGiftCard, loading: true });
+    const res = await destroy(`/gift/custom/${deleteGiftCard.id}`);
+    setDeleteGiftCard({ show:false,id:"", loading: false });
+  };
 
   return (
     <PageMotion key="users-root" pb="100px">
@@ -68,6 +65,15 @@ export default function GiftCards() {
         pageTitle="Gift Cards"
         isDownloading={isDownloading || isExporting}
         progressValue={progress}
+      />
+      <ConfirmationModal
+        isOpen={deleteGiftCard.show}
+        onClose={() => setDeleteGiftCard({ show: false, id: "", loading:false })}
+        title="Confirm deletion"
+        description="Are you sure you want to proceed?"
+        onConfirm={handleDeleteGiftCard}
+        buttonText={["Continue"]}
+        isLoading={deleteGiftCard.loading}
       />
       <MainLayoutContainer>
         <Box>
@@ -90,7 +96,7 @@ export default function GiftCards() {
               size="md"
               ml="0 !important"
               leftIcon={<Icon type="export" />}
-              onClick={()=> navigate("/gift_cards/add")}
+              onClick={() => navigate("/gift_cards/add")}
               isLoading={isSyncing}
               isDisabled={isSyncing}
             >
@@ -106,13 +112,10 @@ export default function GiftCards() {
               isLoading={isLoading}
               headers={["Name", "Amount", "Subscription Interval", "Action"]}
             >
-              {customers?.map((value) => (
+              {giftCards?.map((value) => (
                 <GenericTableItem
                   isClickable={false}
                   key={`customer-table-item:${value?._id}`}
-                  onClick={() =>
-                    navigate(`${configs.paths.users}/${value?._id}`)
-                  }
                   cols={[
                     <Text fontSize="14px">{value?.name}</Text>,
                     <Text fontSize="14px">{value?.amount}</Text>,
@@ -121,11 +124,27 @@ export default function GiftCards() {
                     </Text>,
 
                     <HStack>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        onClick={() =>
+                          navigate(`gift_cards/edit/${value?._id}`)
+                        }
+                        size="sm"
+                        variant="outline"
+                      >
                         Edit
                       </Button>
 
-                      <Button size="sm" variant="ghost">
+                      <Button
+                        onClick={() =>
+                          setDeleteGiftCard({
+                            show: true,
+                            id: value?._id,
+                            loading: false,
+                          })
+                        }
+                        size="sm"
+                        variant="ghost"
+                      >
                         Delete
                       </Button>
                     </HStack>,

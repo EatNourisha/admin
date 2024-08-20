@@ -34,6 +34,7 @@ export interface IPlanFormState
 const transformPlanToFormState = (plan: PlanRo): IPlanFormState => {
   return {
     name: plan?.name,
+    five_day:plan?.five_day,
     amount: String(plan?.amount ?? ""),
     currency: plan?.currency ?? "gbp",
     description: plan?.description,
@@ -128,7 +129,7 @@ export function usePlanForm(plan?: PlanRo) {
   const savePlanChanges = async () => {
     const result = await updatePlan(id, {
       ...(state as any),
-      amount: +(state?.amount ?? 0),
+      // amount: +(state?.amount ?? 0),
       perks: (state?.perks ?? []).map((pk) => pk?.content),
     });
 

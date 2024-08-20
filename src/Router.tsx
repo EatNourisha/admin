@@ -33,7 +33,8 @@ import {
   SendMail,
   ListGiftCard,
   AddGiftCard,
-  ListLineup
+  ListLineup,
+  EditGiftCard
 } from "pages";
 
 import { Layout, ProtectedRoute, RootPage } from "components";
@@ -108,6 +109,7 @@ const AppRouter = () => {
         <RootPage path={configs.paths.giftCard}>
           <ProtectedRoute path="/" component={ListGiftCard} />
           <ProtectedRoute path="/add" component={AddGiftCard} />
+          <ProtectedRoute path="/edit/:id" component={EditGiftCard} />
         </RootPage>
 
 

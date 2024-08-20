@@ -8,6 +8,7 @@ import {
   HStack,
   Select,
   Stack,
+  Switch,
   Text,
 } from "@chakra-ui/react";
 import { navigate, useParams } from "@reach/router";
@@ -31,6 +32,7 @@ import { useMemo } from "react";
 import { usePlanForm } from "./usePlanForm";
 import { PerkItem } from "./PerkItem";
 import usePlan from "hooks/usePlan";
+import { when } from "utils";
 
 export default function EditPlan() {
   //   const toast = useToast();
@@ -211,6 +213,42 @@ export default function EditPlan() {
                   value={state?.description ?? ""}
                   onChange={(e) => set({ description: e.target.value })}
                 />
+              </FormControl>
+
+              <FormControl
+                display="flex"
+                w="fit-content"
+                alignSelf="flex-start"
+              >
+                <Switch
+                  ml="8px"
+                  aria-label="switch meal availability"
+                  disabled={isSubmiting}
+                  isChecked={state?.five_day}
+                  onChange={() => set({ five_day: !state?.five_day })}
+                  sx={{
+                    "--switch-track-width": "26px",
+                    ".chakra-switch__track": {
+                      bg: "brand.neutral400",
+                      padding: "3px",
+                      borderRadius: "26px",
+                    },
+                    ".chakra-switch__track[data-checked]": {
+                      bg: "#03CCAA",
+                      padding: "3px",
+                    },
+                    ".chakra-switch__thumb": {
+                      shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    },
+                  }}
+                />
+                <InputLabel ml="8px" htmlFor="isChecked">
+                  {when(
+                    !!state?.five_day,
+                    "Is a five day plan",
+                    "Not a five day plan"
+                  )}
+                </InputLabel>
               </FormControl>
 
               <Divider />

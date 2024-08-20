@@ -19,7 +19,7 @@ interface IUseUsersFilter {
 export default function useGiftCard(filter: IUseUsersFilter) {
   const queries = toQueryString(filter);
   const key = `gift?${queries}`;
-  const { data, error } = useSWR<ApiResponse<GetGiftCardRo>>(key, get);
+  const { data, error,  } = useSWR<ApiResponse<GetGiftCardRo>>(key, get);
 
   // console.log("USERS", data);
 

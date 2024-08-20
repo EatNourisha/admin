@@ -13,6 +13,7 @@ export interface PlanRo {
   subscription_interval: string;
   delivery_fee: string;
   perks: string[];
+  five_day: boolean;
 }
 
 export interface SubscriptionRo {

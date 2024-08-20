@@ -40,7 +40,10 @@ export { default as PromoDetails } from "./Promos/PromoDetails";
 export { default as SendMail } from "./Emails/SendMail"
 export { default as ListGiftCard } from "./GiftCard/ListGiftCard"
 export { default as AddGiftCard } from "./GiftCard/AddGiftCard";
+export { default as EditGiftCard } from "./GiftCard/EditGiftCard";
+
 export { default as ListLineup } from "./Lineup/ListLineup";
+
 
 
 
