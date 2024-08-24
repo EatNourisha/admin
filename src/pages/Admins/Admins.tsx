@@ -5,7 +5,6 @@ import {
   // Select,
   VStack,
   Image,
-  Icon,
   Text,
   useToast,
   useDisclosure,
@@ -14,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 
 import {
+  Icon,
+
   APaginator,
   ConfirmationModal,
   GenericTable,
