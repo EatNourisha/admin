@@ -5,17 +5,20 @@ import {
   // Select,
   VStack,
   Image,
+  Icon,
   Text,
   useToast,
   useDisclosure,
+  FormControl,
+  Switch,
 } from "@chakra-ui/react";
+
 import {
   APaginator,
   ConfirmationModal,
   GenericTable,
   GenericTableItem,
   Gravatar,
-  Icon,
   Input,
   Link,
   Loader,
@@ -27,13 +30,97 @@ import {
 import EmptyFolder from "assets/images/folder.png";
 import configs from "config";
 import { navigate } from "@reach/router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import isEmpty from "lodash/isEmpty";
 import usePageFilters from "hooks/usePageFilters";
 
 import useAdmins from "hooks/useAdmins";
 import { join } from "lodash";
 import useUserMutations from "hooks/useUserMutations";
+import { destroy, get, post } from "utils";
+import { SpinnerIcon } from "@chakra-ui/icons";
+import { NotificationButton } from "components/Topbar/Topbar";
+
+const CSStatus = ({ adminId }: { adminId: string }) => {
+  const [isCS, setIsCS] = useState(false);
+  const [isLoading, setLoading] = useState(true);
+
+  const checkCSStatus = async () => {
+    await get(`cs/get/cs/${adminId}`)
+      .then(() => {
+        setIsCS(true);
+      })
+      .catch(() => {
+        setIsCS(false);
+      });
+
+    setLoading(false);
+  };
+
+  const onUpdateCSStatus = () => {
+    setLoading(true);
+    if (isCS) {
+      destroy(`cs/${adminId}`);
+    } else {
+      post(`cs/${adminId}`, {});
+    }
+    setIsCS(!isCS);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    checkCSStatus();
+  }, []);
+  return (
+    <FormControl
+      display="flex"
+      w="fit-content"
+      alignSelf="flex-start"
+      justifyContent="center"
+      width="100%"
+    >
+      {isLoading ? (
+        <div
+          className="rotate"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <NotificationButton
+          hasNewNotifications={false}
+          isLoading={true}
+          />
+        </div>
+      ) : (
+        <Switch
+          ml="8px"
+          aria-label="switch meal availability"
+          disabled={isLoading}
+          isChecked={isCS}
+          onChange={onUpdateCSStatus}
+          sx={{
+            "--switch-track-width": "26px",
+            ".chakra-switch__track": {
+              bg: "brand.neutral400",
+              padding: "3px",
+              borderRadius: "26px",
+            },
+            ".chakra-switch__track[data-checked]": {
+              bg: "#03CCAA",
+              padding: "3px",
+            },
+            ".chakra-switch__thumb": {
+              shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            },
+          }}
+        />
+      )}
+    </FormControl>
+  );
+};
 
 function EmptyState() {
   return (
@@ -139,7 +226,13 @@ export default function Admins() {
           >
             <GenericTable
               isLoading={isLoading}
-              headers={["Fullname", "Email", "Phone Number", "Action"]}
+              headers={[
+                "Fullname",
+                "Email",
+                "Phone Number",
+                "Action",
+                "CX Status",
+              ]}
             >
               {admins?.map((admin) => (
                 <GenericTableItem
@@ -171,6 +264,7 @@ export default function Admins() {
                         Revoke Privilege
                       </Button>
                     </HStack>,
+                    <CSStatus adminId={admin?._id} />,
                   ]}
                 />
               ))}

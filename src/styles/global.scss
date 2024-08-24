@@ -19,7 +19,19 @@ body {
   box-sizing: border-box;
 }
 
+.rotate {
+  // animation: rotate infinite linear ease-in-out;
+  animation: rotate 30s linear 3s infinite;
+}
 
+@keyframes rotate {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
 // ::-webkit-scrollbar {
 //   width: 12px;
 //   height: 12px;

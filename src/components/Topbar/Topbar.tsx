@@ -64,7 +64,7 @@ interface NotificationButtonProps extends Omit<ButtonProps, "children"> {
   hasNewNotifications: boolean;
 }
 
-const NotificationButton = (props: NotificationButtonProps) => {
+export const NotificationButton = (props: NotificationButtonProps) => {
   const { hasNewNotifications, ...xprops } = props;
   return (
     <Button
