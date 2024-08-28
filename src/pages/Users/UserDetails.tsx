@@ -46,6 +46,8 @@ import useLineup from "hooks/useLineUp";
 import { EmptyCrate } from "components/Crate/Empty";
 import useUserMutations from "hooks/useUserMutations";
 import { AllergyRo } from "interfaces/auth.interface";
+import Modal from "components/Modal";
+import ReportModal from "components/Modals/ReportModal";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -453,6 +455,10 @@ export default function UserDetails() {
               )}
             </Stack>
           </Box>
+          <Box display="flex" flexDirection="column" gap="1.5rem">
+            <Report userId={user?._id!} />
+            <FollowUp userId={user?._id!}  />
+          </Box>
         </Grid>
       </MainLayoutContainer>
     </PageMotion>
@@ -724,5 +730,67 @@ function Note(props: NoteProps) {
         </Button>
       )}
     </Box>
+  );
+}
+
+function Report({ userId }:{ userId:string}) {
+  const [ openReportModal, setReportModal ] = useState(false);
+  return (
+    <form className="flex gap-4 flex-col">
+      <Modal show={openReportModal} onClose={()=>setReportModal(!openReportModal)}>
+        <ReportModal  userId={userId}  close={()=> setReportModal(false)} />
+      </Modal>
+      <div className="flex justify-between">
+        <p className="text-sm" style={{ color: "#7e8494" }}>
+          REPORT
+        </p>
+        <p className=" text-sm text-primary cursor-pointer" onClick={()=> setReportModal(true)}>VIEW REPORT HISTORY</p>
+      </div>
+
+      <textarea
+        placeholder="Enter report here"
+        className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
+      ></textarea>
+      <input
+        className="rounded-[0.5rem] h-[3.75rem] w-full border p-4"
+        type="date"
+      />
+      <div className="flex justify-end item-center gap-4">
+        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]">Save</button>
+        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button>
+      </div>
+    </form>
+  );
+}
+
+
+function FollowUp({ userId }:{ userId:string}) {
+  const [ openFollowUpModal, setOpenFollowUpModal ] = useState(false);
+
+  return (
+    <form className="flex gap-4 flex-col">
+      <Modal show={openFollowUpModal} onClose={()=>setOpenFollowUpModal(!openFollowUpModal)}>
+        <ReportModal userId={userId} isFollowUp close={()=> setOpenFollowUpModal(false)} />
+      </Modal>
+      <div className="flex justify-between">
+        <p className="text-sm" style={{ color: "#7e8494" }}>
+        FOLLOW UP
+        </p>
+        <p onClick={()=> setOpenFollowUpModal(true)} className="cursor-pointer text-sm text-primary">VIEW FOLLOW UP HISTORY</p>
+      </div>
+
+      <textarea
+        placeholder="Enter report here"
+        className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
+      ></textarea>
+      <input
+        className="rounded-[0.5rem] h-[3.75rem] w-full border p-4"
+        type="date"
+      />
+      <div className="flex justify-end item-center gap-4">
+        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]">Save</button>
+        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button>
+      </div>
+    </form>
   );
 }

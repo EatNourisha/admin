@@ -14,6 +14,7 @@ export interface PlanRo {
   delivery_fee: string;
   perks: string[];
   five_day: boolean;
+  weekend:boolean;
 }
 
 export interface SubscriptionRo {

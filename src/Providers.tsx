@@ -8,6 +8,8 @@ import { SWRConfig } from "swr";
 // import SuccessProvider from "contexts/success.context";
 import theme from "theme";
 import muiTheme from "theme/muiTheme";
+import "./styles/global.css";
+
 // import store from "store";
 
 // const Providers = ({ children }: any) => {

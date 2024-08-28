@@ -33,6 +33,7 @@ export interface IPlanFormState
 
 const transformPlanToFormState = (plan: PlanRo): IPlanFormState => {
   return {
+    weekend:plan?.weekend,
     name: plan?.name,
     five_day:plan?.five_day,
     amount: String(plan?.amount ?? ""),

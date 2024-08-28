@@ -215,41 +215,75 @@ export default function EditPlan() {
                 />
               </FormControl>
 
-              <FormControl
-                display="flex"
-                w="fit-content"
-                alignSelf="flex-start"
-              >
-                <Switch
-                  ml="8px"
-                  aria-label="switch meal availability"
-                  disabled={isSubmiting}
-                  isChecked={state?.five_day}
-                  onChange={() => set({ five_day: !state?.five_day })}
-                  sx={{
-                    "--switch-track-width": "26px",
-                    ".chakra-switch__track": {
-                      bg: "brand.neutral400",
-                      padding: "3px",
-                      borderRadius: "26px",
-                    },
-                    ".chakra-switch__track[data-checked]": {
-                      bg: "#03CCAA",
-                      padding: "3px",
-                    },
-                    ".chakra-switch__thumb": {
-                      shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                    },
-                  }}
-                />
-                <InputLabel ml="8px" htmlFor="isChecked">
-                  {when(
-                    !!state?.five_day,
-                    "Is a five day plan",
-                    "Not a five day plan"
-                  )}
-                </InputLabel>
-              </FormControl>
+              <HStack justifyContent="space-between">
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml="8px"
+                    aria-label="switch meal availability"
+                    disabled={isSubmiting}
+                    isChecked={state?.five_day}
+                    onChange={() => set({ five_day: !state?.five_day })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    {when(
+                      !!state?.five_day,
+                      "Is a five day plan",
+                      "Not a five day plan"
+                    )}
+                  </InputLabel>
+                </FormControl>
+
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml="8px"
+                    aria-label="switch meal availability"
+                    disabled={isSubmiting}
+                    isChecked={state?.weekend}
+                    onChange={() => set({ weekend: !state?.weekend })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    Weekend
+                  </InputLabel>
+                </FormControl>
+              </HStack>
 
               <Divider />
 

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/global.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Providers from "./Providers";
@@ -35,7 +34,9 @@ if ("serviceWorker" in navigator) {
 ReactDOM.render(
   <React.StrictMode>
     <Providers>
-      <App />
+      <div  className="w-full h-full" id="app_wrapper">
+        <App />
+      </div>
     </Providers>
   </React.StrictMode>,
   document.getElementById("root")
