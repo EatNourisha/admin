@@ -30,14 +30,15 @@ import {
   Loader,
   Textarea,
   InputLabel,
+  ConfirmationModal,
 } from "components";
 
 import { navigate, useParams } from "@reach/router";
 import useUserDetails from "hooks/useUserDetails";
 import { format, parseISO } from "date-fns";
 import join from "lodash/join";
-import { ReactNode, useMemo, useState } from "react";
-import { currencyFormat, when } from "utils";
+import { FormEvent, ReactNode, useMemo, useState } from "react";
+import { currencyFormat, post, when } from "utils";
 import useBillHistory from "hooks/useBillHistory";
 import { TransactionRo } from "interfaces";
 import { capitalize, omit } from "lodash";
@@ -457,7 +458,7 @@ export default function UserDetails() {
           </Box>
           <Box display="flex" flexDirection="column" gap="1.5rem">
             <Report userId={user?._id!} />
-            <FollowUp userId={user?._id!}  />
+            <FollowUp userId={user?._id!} />
           </Box>
         </Grid>
       </MainLayoutContainer>
@@ -733,64 +734,159 @@ function Note(props: NoteProps) {
   );
 }
 
-function Report({ userId }:{ userId:string}) {
-  const [ openReportModal, setReportModal ] = useState(false);
+function Report({ userId }: { userId: string }) {
+  const [openReportModal, setReportModal] = useState(false);
+
+  const [text, setText] = useState("");
+  const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const addFollowUp = async () => {
+    if (text) {
+      setLoading(true);
+      const data = await post(`/cs/report/${userId}`, { text });
+      setLoading(false);
+      setConfirm(false);
+      setText("");
+      toast({
+        position: "bottom-right",
+        title: "Report added",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
   return (
-    <form className="flex gap-4 flex-col">
-      <Modal show={openReportModal} onClose={()=>setReportModal(!openReportModal)}>
-        <ReportModal  userId={userId}  close={()=> setReportModal(false)} />
+    <div className="flex gap-4 flex-col">
+      <Modal
+        show={openReportModal}
+        onClose={() => setReportModal(!openReportModal)}
+      >
+        <ReportModal userId={userId} close={() => setReportModal(false)} />
       </Modal>
+      <ConfirmationModal
+        isOpen={confirm}
+        title="Confirm"
+        isLoading={loading}
+        onConfirm={addFollowUp}
+        onClose={() => setConfirm(false)}
+        description="Are do you want to proceed?"
+      />
       <div className="flex justify-between">
         <p className="text-sm" style={{ color: "#7e8494" }}>
           REPORT
         </p>
-        <p className=" text-sm text-primary cursor-pointer" onClick={()=> setReportModal(true)}>VIEW REPORT HISTORY</p>
+        <p
+          className=" text-sm text-primary cursor-pointer"
+          onClick={() => setReportModal(true)}
+        >
+          VIEW REPORT HISTORY
+        </p>
       </div>
 
       <textarea
+      value={text}
+      onChange={(e)=> setText(e.target.value)}
         placeholder="Enter report here"
         className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
       ></textarea>
-      <input
-        className="rounded-[0.5rem] h-[3.75rem] w-full border p-4"
-        type="date"
-      />
+
       <div className="flex justify-end item-center gap-4">
-        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]">Save</button>
-        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button>
+      <button
+          onClick={() => {
+            if (text) {
+              setConfirm(true);
+            }
+          }}
+          disabled={loading}
+          className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]"
+        >
+          {loading ? "Saving..." : "Save"}
+        </button>
+        {/* <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button> */}
       </div>
-    </form>
+    </div>
   );
 }
 
-
-function FollowUp({ userId }:{ userId:string}) {
-  const [ openFollowUpModal, setOpenFollowUpModal ] = useState(false);
+function FollowUp({ userId }: { userId: string }) {
+  const [openFollowUpModal, setOpenFollowUpModal] = useState(false);
+  const [text, setText] = useState("");
+  const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const addFollowUp = async () => {
+    if (text) {
+      setLoading(true);
+      const data = await post(`/cs/followup/${userId}`, { text });
+      setLoading(false);
+      setConfirm(false);
+      setText("");
+      toast({
+        position: "bottom-right",
+        title: "Follow up added",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
-    <form className="flex gap-4 flex-col">
-      <Modal show={openFollowUpModal} onClose={()=>setOpenFollowUpModal(!openFollowUpModal)}>
-        <ReportModal userId={userId} isFollowUp close={()=> setOpenFollowUpModal(false)} />
+    <div onSubmit={addFollowUp} className="flex gap-4 flex-col">
+      <ConfirmationModal
+        isOpen={confirm}
+        title="Confirm"
+        isLoading={loading}
+        onConfirm={addFollowUp}
+        onClose={() => setConfirm(false)}
+        description="Are do you want to proceed?"
+      />
+
+      <Modal
+        show={openFollowUpModal}
+        onClose={() => setOpenFollowUpModal(!openFollowUpModal)}
+      >
+        <ReportModal
+          userId={userId}
+          isFollowUp
+          close={() => setOpenFollowUpModal(false)}
+        />
       </Modal>
       <div className="flex justify-between">
         <p className="text-sm" style={{ color: "#7e8494" }}>
-        FOLLOW UP
+          FOLLOW UP
         </p>
-        <p onClick={()=> setOpenFollowUpModal(true)} className="cursor-pointer text-sm text-primary">VIEW FOLLOW UP HISTORY</p>
+        <p
+          onClick={() => setOpenFollowUpModal(true)}
+          className="cursor-pointer text-sm text-primary"
+        >
+          VIEW FOLLOW UP HISTORY
+        </p>
       </div>
 
       <textarea
+        onChange={(e) => setText(e.target.value)}
+        value={text}
         placeholder="Enter report here"
         className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
       ></textarea>
-      <input
-        className="rounded-[0.5rem] h-[3.75rem] w-full border p-4"
-        type="date"
-      />
+
       <div className="flex justify-end item-center gap-4">
-        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]">Save</button>
-        <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button>
+        <button
+          onClick={() => {
+            if (text) {
+              setConfirm(true);
+            }
+          }}
+          disabled={loading}
+          className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]"
+        >
+          {loading ? "Saving..." : "Save"}
+        </button>
+        {/* <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button> */}
       </div>
-    </form>
+    </div>
   );
 }

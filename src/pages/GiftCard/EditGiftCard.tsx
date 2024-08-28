@@ -70,7 +70,6 @@ import {
       const res = (
         await get<ApiResponse<GiftCardRo>>(`/gift/${id}`)
       ).data as GiftCardRo;
-      alert(res)
     }
 
     useEffect(()=>{

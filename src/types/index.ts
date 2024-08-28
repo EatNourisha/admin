@@ -75,3 +75,18 @@ export interface ILineUpItem {
   updatedAt: string;
   __v: 0;
 }
+
+
+
+export interface IReport {
+  _id:string;
+  by:{
+    report:[],
+    first_name:string;
+    last_name:string;
+    email:string;
+  },
+  text:string;
+  createdAt: string;
+  updatedAt:string
+}
