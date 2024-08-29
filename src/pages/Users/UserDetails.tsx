@@ -49,6 +49,7 @@ import useUserMutations from "hooks/useUserMutations";
 import { AllergyRo, UserRo } from "interfaces/auth.interface";
 import Modal from "components/Modal";
 import ReportModal from "components/Modals/ReportModal";
+import { IReport } from "types";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -125,8 +126,7 @@ export default function UserDetails() {
     }
   };
 
-  const [ selectedCSId, setSelectedCSId ] = useState("");
-
+  const [selectedCSId, setSelectedCSId] = useState("");
 
   return (
     <PageMotion key="user-details">
@@ -458,10 +458,9 @@ export default function UserDetails() {
             </Stack>
           </Box>
           <Box display="flex" flexDirection="column" gap="1.5rem">
-           
             <SelectAssignedCS setSelectedCSId={setSelectedCSId} />
-            <Report userId={user?._id} csID={selectedCSId} />
-            <FollowUp userId={user?._id} csID={selectedCSId}  />
+            {user?._id && <Report userId={user?._id} csID={selectedCSId} />}
+            {user?._id && <FollowUp userId={user?._id} csID={selectedCSId} />}
           </Box>
         </Grid>
       </MainLayoutContainer>
@@ -737,8 +736,15 @@ function Note(props: NoteProps) {
   );
 }
 
-const SelectAssignedCS = ({ setSelectedCSId }:{ setSelectedCSId:(cs:string)=>void }) => {
-  const [data, setData] = useState<{ loading: boolean; data: {team_member:UserRo, added_by:UserRo, _id:string}[] }>({
+const SelectAssignedCS = ({
+  setSelectedCSId,
+}: {
+  setSelectedCSId: (cs: string) => void;
+}) => {
+  const [data, setData] = useState<{
+    loading: boolean;
+    data: { team_member: UserRo; added_by: UserRo; _id: string }[];
+  }>({
     loading: true,
     data: [],
   });
@@ -749,8 +755,8 @@ const SelectAssignedCS = ({ setSelectedCSId }:{ setSelectedCSId:(cs:string)=>voi
       //@ts-ignore
       data: admins?.data,
     });
-      //@ts-ignore
-    setSelectedCSId(admins?.data[0]?._id)
+    //@ts-ignore
+    setSelectedCSId(admins?.data[0]?._id);
   };
   useEffect(() => {
     fetchCSAdmins();
@@ -761,19 +767,22 @@ const SelectAssignedCS = ({ setSelectedCSId }:{ setSelectedCSId:(cs:string)=>voi
       {data?.loading ? (
         <Loader />
       ) : (
-        <select onChange={(e)=> setSelectedCSId(e.target.value)} className="border-[1px] border-[#7E8494] h-[3.75rem] w-full rounded-[0.5rem] px-3">
-         {
-          data?.data?.map((user, index)=>(
-            <option value={user?._id} key={`cs_user_${index}`}>{user?.team_member?.first_name} {user?.team_member?.lastName}</option>
-          ))
-         }
+        <select
+          onChange={(e) => setSelectedCSId(e.target.value)}
+          className="border-[1px] border-[#7E8494] h-[3.75rem] w-full rounded-[0.5rem] px-3"
+        >
+          {data?.data?.map((user, index) => (
+            <option value={user?._id} key={`cs_user_${index}`}>
+              {user?.team_member?.first_name} {user?.team_member?.lastName}
+            </option>
+          ))}
         </select>
       )}
     </div>
   );
 };
 
-function Report({ userId, csID }: { userId?: string, csID:string }) {
+function Report({ userId, csID }: { userId?: string; csID: string }) {
   const [openReportModal, setReportModal] = useState(false);
 
   const [text, setText] = useState("");
@@ -783,7 +792,7 @@ function Report({ userId, csID }: { userId?: string, csID:string }) {
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      const data = await post(`/cs/report/${userId}`, { text, teamId:csID, });
+      const data = await post(`/cs/report/${userId}`, { text, teamId: csID });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -796,6 +805,18 @@ function Report({ userId, csID }: { userId?: string, csID:string }) {
       });
     }
   };
+
+  const getData = async () => {
+    const data = await get(`cs/report/${userId}`);
+    //@ts-ignore
+    const d = data?.data;
+    if (d && d[0]?.text) {
+      setText(d[0]?.text);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <div className="flex gap-4 flex-col">
       <Modal
@@ -849,7 +870,7 @@ function Report({ userId, csID }: { userId?: string, csID:string }) {
   );
 }
 
-function FollowUp({ userId, csID }: { userId?: string, csID:string }) {
+function FollowUp({ userId, csID }: { userId?: string; csID: string }) {
   const [openFollowUpModal, setOpenFollowUpModal] = useState(false);
   const [text, setText] = useState("");
   const [confirm, setConfirm] = useState(false);
@@ -860,7 +881,7 @@ function FollowUp({ userId, csID }: { userId?: string, csID:string }) {
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      const data = await post(`/cs/followup/${userId}`, { text,teamId:csID });
+      const data = await post(`/cs/followup/${userId}`, { text, teamId: csID });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -873,6 +894,18 @@ function FollowUp({ userId, csID }: { userId?: string, csID:string }) {
       });
     }
   };
+
+  const getData = async () => {
+    const data = await get(`cs/followup/${userId}`);
+    //@ts-ignore
+    const d = data?.data;
+    if (d && d[0]?.text) {
+      setText(d[0]?.text);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div onSubmit={addFollowUp} className="flex gap-4 flex-col mb-8">
@@ -910,7 +943,7 @@ function FollowUp({ userId, csID }: { userId?: string, csID:string }) {
       <textarea
         onChange={(e) => setText(e.target.value)}
         value={text}
-        placeholder="Enter report here"
+        placeholder="Enter follow up here"
         className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
       ></textarea>
 

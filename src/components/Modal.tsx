@@ -10,23 +10,6 @@ export default function Modal({
   onClose?:()=> void;
   children: React.ReactNode;
 }) {
-//   const app_wrapper = document.getElementById("app_wrapper");
-//   useEffect(() => {
-
-//     if (app_wrapper && show) {
-//       app_wrapper!.style.overflowY = "hidden";
-//     } else {
-//       app_wrapper!.style.overflowY = "scroll";
-//     }
-//   }, [show]);
-
-//   useEffect(() => {
-//     return () => {
-//         if(app_wrapper ){
-//             app_wrapper!.style.overflowY = "scroll";
-//         }
-//     };
-//   }, []);
   return (
     <AnimatePresence>
       {show && (
