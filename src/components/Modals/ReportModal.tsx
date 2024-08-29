@@ -13,7 +13,7 @@ function ReportModal({
 }: {
   isFollowUp?: boolean;
   close: () => void;
-  userId: string;
+  userId?: string;
 }) {
   const [deleting, setDeleting] = useState(false);
   const toast = useToast();
@@ -30,9 +30,8 @@ function ReportModal({
   };
 
   const onDelete = async (id: string) => {
-    alert(id)
     setDeleting(true);
-    await destroy(isFollowUp ? `cs/report/${id}` : `cs/followup/${id}`);
+    await destroy(isFollowUp ? `cs/followup/${id}` : `cs/report/${id}`);
     setDeleting(false);
     const newData = data.data.filter((d) => d._id !== id);
     setData({
@@ -77,7 +76,7 @@ function ReportModal({
                   key={`index_report_${index}`}
                   className="flex-1 flex items-start"
                 >
-                  <div>
+                  <div className="flex-1 w-full">
                     <div className="rounded-[0.5rem] p-3 border-[1px] border-[#D9D9D9]">
                       <h4 className="text-black font-inter font-bold text-sm">
                         {rpt?.by?.first_name + " " + rpt?.by?.last_name}
@@ -98,7 +97,7 @@ function ReportModal({
                       onClick={() => onDelete(rpt._id)}
                       color="#FF0000"
                       icon="uiw:delete"
-                      className="w-24 h-w-24 cursor-pointer"
+                      className="h-w-24 cursor-pointer  w-[10%]"
                     />
                   )}
                 </div>

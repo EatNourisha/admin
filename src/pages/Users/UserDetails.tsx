@@ -37,8 +37,8 @@ import { navigate, useParams } from "@reach/router";
 import useUserDetails from "hooks/useUserDetails";
 import { format, parseISO } from "date-fns";
 import join from "lodash/join";
-import { FormEvent, ReactNode, useMemo, useState } from "react";
-import { currencyFormat, post, when } from "utils";
+import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
+import { currencyFormat, get, post, when } from "utils";
 import useBillHistory from "hooks/useBillHistory";
 import { TransactionRo } from "interfaces";
 import { capitalize, omit } from "lodash";
@@ -46,7 +46,7 @@ import usePageFilters from "hooks/usePageFilters";
 import useLineup from "hooks/useLineUp";
 import { EmptyCrate } from "components/Crate/Empty";
 import useUserMutations from "hooks/useUserMutations";
-import { AllergyRo } from "interfaces/auth.interface";
+import { AllergyRo, UserRo } from "interfaces/auth.interface";
 import Modal from "components/Modal";
 import ReportModal from "components/Modals/ReportModal";
 
@@ -72,8 +72,6 @@ export default function UserDetails() {
       ]),
     [lineupData]
   );
-
-  console.log("Lineup", lineup);
 
   const { data: bill_history, isLoading: isLoadingBills } = useBillHistory(id, {
     ...state,
@@ -126,6 +124,9 @@ export default function UserDetails() {
       });
     }
   };
+
+  const [ selectedCSId, setSelectedCSId ] = useState("");
+
 
   return (
     <PageMotion key="user-details">
@@ -457,8 +458,10 @@ export default function UserDetails() {
             </Stack>
           </Box>
           <Box display="flex" flexDirection="column" gap="1.5rem">
-            <Report userId={user?._id!} />
-            <FollowUp userId={user?._id!} />
+           
+            <SelectAssignedCS setSelectedCSId={setSelectedCSId} />
+            <Report userId={user?._id} csID={selectedCSId} />
+            <FollowUp userId={user?._id} csID={selectedCSId}  />
           </Box>
         </Grid>
       </MainLayoutContainer>
@@ -734,7 +737,43 @@ function Note(props: NoteProps) {
   );
 }
 
-function Report({ userId }: { userId: string }) {
+const SelectAssignedCS = ({ setSelectedCSId }:{ setSelectedCSId:(cs:string)=>void }) => {
+  const [data, setData] = useState<{ loading: boolean; data: {team_member:UserRo, added_by:UserRo, _id:string}[] }>({
+    loading: true,
+    data: [],
+  });
+  const fetchCSAdmins = async () => {
+    const admins = await get(`cs`);
+    setData({
+      loading: false,
+      //@ts-ignore
+      data: admins?.data,
+    });
+      //@ts-ignore
+    setSelectedCSId(admins?.data[0]?._id)
+  };
+  useEffect(() => {
+    fetchCSAdmins();
+  }, []);
+  return (
+    <div>
+      <p className="text-[#7E8494] text-[0.75rem] font-inter">ASSIGNED CX</p>
+      {data?.loading ? (
+        <Loader />
+      ) : (
+        <select onChange={(e)=> setSelectedCSId(e.target.value)} className="border-[1px] border-[#7E8494] h-[3.75rem] w-full rounded-[0.5rem] px-3">
+         {
+          data?.data?.map((user, index)=>(
+            <option value={user?._id} key={`cs_user_${index}`}>{user?.team_member?.first_name} {user?.team_member?.lastName}</option>
+          ))
+         }
+        </select>
+      )}
+    </div>
+  );
+};
+
+function Report({ userId, csID }: { userId?: string, csID:string }) {
   const [openReportModal, setReportModal] = useState(false);
 
   const [text, setText] = useState("");
@@ -744,7 +783,7 @@ function Report({ userId }: { userId: string }) {
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      const data = await post(`/cs/report/${userId}`, { text });
+      const data = await post(`/cs/report/${userId}`, { text, teamId:csID, });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -786,14 +825,14 @@ function Report({ userId }: { userId: string }) {
       </div>
 
       <textarea
-      value={text}
-      onChange={(e)=> setText(e.target.value)}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         placeholder="Enter report here"
         className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
       ></textarea>
 
       <div className="flex justify-end item-center gap-4">
-      <button
+        <button
           onClick={() => {
             if (text) {
               setConfirm(true);
@@ -810,16 +849,18 @@ function Report({ userId }: { userId: string }) {
   );
 }
 
-function FollowUp({ userId }: { userId: string }) {
+function FollowUp({ userId, csID }: { userId?: string, csID:string }) {
   const [openFollowUpModal, setOpenFollowUpModal] = useState(false);
   const [text, setText] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+
+
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      const data = await post(`/cs/followup/${userId}`, { text });
+      const data = await post(`/cs/followup/${userId}`, { text,teamId:csID });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -834,7 +875,7 @@ function FollowUp({ userId }: { userId: string }) {
   };
 
   return (
-    <div onSubmit={addFollowUp} className="flex gap-4 flex-col">
+    <div onSubmit={addFollowUp} className="flex gap-4 flex-col mb-8">
       <ConfirmationModal
         isOpen={confirm}
         title="Confirm"
