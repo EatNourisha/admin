@@ -5,7 +5,7 @@ const configs = {
   baseUrl: "https://api.eatnourisha.com/v1",
 
   
-
+  BREAKING_POINT:"800px",
   containerW: "8xl",
 
   AWS_BUCKET: "nourisha-bucket",

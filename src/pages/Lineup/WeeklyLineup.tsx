@@ -62,7 +62,9 @@ function Item(props: ItemProps) {
     data: {} as UserRo,
     loading: true,
   });
-  const { customer, delivery_date, status } = props;
+  const { customer, delivery_date, status, } = props;
+
+
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -90,7 +92,7 @@ function Item(props: ItemProps) {
           <Text textTransform="capitalize">
             {user?.data?.address?.city ?? "------------"}
           </Text>,
-          <Text textTransform="capitalize">{moment(delivery_date).format("d/MM/y")}</Text>,
+          <Text textTransform="capitalize">{moment(delivery_date).format("DD/MM/YYYY")}</Text>,
          
           <Button
             size="sm"

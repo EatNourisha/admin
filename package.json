@@ -38,6 +38,7 @@
     "react-aws-s3-typescript": "^1.1.5",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-responsive": "^10.0.0",
     "react-scripts": "5.0.1",
     "sass": "^1.63.6",
     "secure-ls": "^1.2.6",

@@ -21,6 +21,8 @@ export default function ListLineup() {
   const [page, setPage] = useState(1);
 
 
+
+
   const getLineUps = async () => {
     setLineUpData({ ...lineUpData, loading: true });
     const data = await get(`/lineups/all?page=${page}&limit=10`);
