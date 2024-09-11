@@ -407,7 +407,7 @@ export default function UserDetails() {
             </Box>
           </Box>
 
-          <Box position="sticky" top="100px">
+          <Box className="hidden md:block" position="sticky" top="100px">
             <HStack justifyContent="space-between">
               <Heading as="h5" fontSize="lg">
                 Weekly Meal Lineups
