@@ -33,8 +33,9 @@ import useMeals from "hooks/useMeals";
 import useMealMutations from "hooks/useMealMutations";
 import { navigate, useLocation } from "@reach/router";
 import { currencyFormat } from "utils";
+import useBulkOrder from "hooks/useBulkOrder";
 
-export default function Meals() {
+export default function BulkOrders() {
   // const [isLoading, setIsLoading] = useState(true);
 
   const { search } = useLocation();
@@ -47,7 +48,7 @@ export default function Meals() {
     page: +(params.get("page") ?? 1),
   });
 
-  const { data, isLoading, key } = useMeals({
+  const { data, isLoading, key } = useBulkOrder({
     ...state,
     searchPhrase: filter?.searchPhrase,
   });
@@ -59,13 +60,6 @@ export default function Meals() {
   const hasMeals = useMemo(() => (meals ?? []).length > 0, [meals]);
   const totalCount = useMemo(() => data?.totalCount ?? 0, [data]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
 
   return (
     <PageMotion key="meals-root" pb="100px">

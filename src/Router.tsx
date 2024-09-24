@@ -4,6 +4,7 @@ import {
   Users,
   Profile,
   Admins,
+  BulkOrders,
   UserDetails,
   AddAdmins,
   EditProfile,
@@ -127,6 +128,11 @@ const AppRouter = () => {
 
         <RootPage path={configs.paths.meal_extra}>
           <ProtectedRoute path="/" component={ListMealExtra} />
+        </RootPage>
+
+
+        <RootPage path={configs.paths.bulkOrder}>
+          <ProtectedRoute path="/" component={BulkOrders} />
         </RootPage>
 
         

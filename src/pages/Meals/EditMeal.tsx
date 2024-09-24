@@ -198,6 +198,7 @@ export default function EditMeal() {
                   >
                     <option value={"subscription"}>Subscription</option>
                     <option value={"single order"}>Single Order</option>
+                    <option value={"bulk-order"}>Bulk Order</option>
                     <option value={"both"}>Both</option>
                   </Select>
                 </FormControl>
@@ -264,6 +265,55 @@ export default function EditMeal() {
               </FormControl>
 
               <FormControl>
+                <InputLabel>Spice level</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a spice level"
+                  value={state?.spice_level ?? ""}
+                  type="text"
+                  onChange={(e) => set({ spice_level: e.target.value })}
+                />
+              </FormControl>
+
+
+              <FormControl>
+                <InputLabel>Continent</InputLabel>
+                <Select
+                  placeholder="Select continent"
+                  borderRadius="4px"
+                  value={state?.continent ?? "subscription"}
+                  onChange={(e) => set({ continent: e.target.value })}
+                >
+                  {[
+                    "Asia",
+                    "Africa",
+                    "North America",
+                    "South America",
+                    "Antarctica",
+                    "Europe",
+                    "Australia",
+                  ].map((value, index) => (
+                    <option key={`continent_${index}`} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl>
+                <InputLabel>Weight</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a weight count"
+                  value={state?.weight ?? ""}
+                  type="text"
+                  onChange={(e) => set({ weight: e.target.value })}
+                />
+              </FormControl>
+
+              <FormControl>
                 <InputLabel>Category</InputLabel>
                 <Input
                   borderWidth="2px"
@@ -317,6 +367,9 @@ export default function EditMeal() {
                     {when(!!state?.is_available, "Available", "Unavailable")}
                   </InputLabel>
                 </FormControl>
+
+
+                
 
                 <FormControl
                   display="flex"

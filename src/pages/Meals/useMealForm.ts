@@ -35,15 +35,18 @@ export interface IMealFormState
 const transformMealToFormState = (meal: MealRo): IMealFormState => {
   return {
     name: meal?.name,
+    weight: meal?.weight,
+    continent: meal?.continent,
+    spice_level: meal?.spice_level,
     category: meal?.category,
-    isSwallow:meal?.isSwallow,
+    isSwallow: meal?.isSwallow,
     price: { ...meal?.price } as any,
     description: meal?.description,
     image_url: meal?.image_url,
     is_available: meal?.is_available,
     orderType: meal?.orderType,
     country: meal?.country,
-    calories:meal?.calories,
+    calories: meal?.calories,
     meals: meal?.meals ?? [],
     images: (meal?.images ?? []).map((image, i) => ({
       index: i,
@@ -153,6 +156,8 @@ export function useMealForm(meal?: MealRo) {
       .map((pk) => pk?.url);
 
     const images = [...saved_images, ...uploaded_images];
+
+
 
     const result = await addNewMeal({
       ...(state as any),

@@ -55,11 +55,13 @@ export interface MealRo {
   createdAt: string;
   image_url: string;
   is_available: boolean;
+  continent?:string;
   isSwallow: boolean;
   meals: string[];
   name: string;
   category: string;
   slug: string;
+  weight?:string;
   orderType: string;
   country: string;
   updatedAt: string;
@@ -74,6 +76,7 @@ export interface MealRo {
   description?: string;
   available_quantity: string | number;
   _id: string;
+  spice_level:string;
 }
 
 export interface MealPackRo {
@@ -141,7 +144,7 @@ export interface OrderRo {
   _id: string;
   createdAt: string;
   updatedAt: string;
-
+  isReturningCustomer?:boolean;
   customer: UserRo;
   cart_id: string;
   subtotal: number;

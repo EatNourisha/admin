@@ -40,6 +40,7 @@ interface GravatarProps extends BoxProps {
   isLoading?: boolean;
   initials?: string;
   createdAt?: string;
+  IsReturningCustomer?: boolean;
   onClick?: () => void;
 }
 
@@ -59,6 +60,7 @@ export default function Gravatar(props: GravatarProps) {
     initials,
     createdAt,
     onClick,
+    IsReturningCustomer,
   } = props;
 
   const _orientation = useMemo(() => {
@@ -189,6 +191,11 @@ export default function Gravatar(props: GravatarProps) {
                 {isNew && (
                   <Badge bg="brand.primary" color="white">
                     New
+                  </Badge>
+                )}
+                {IsReturningCustomer && (
+                  <Badge bg="brand.primary" color="white">
+                    Returning Client
                   </Badge>
                 )}
               </HStack>

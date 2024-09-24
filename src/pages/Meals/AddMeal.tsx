@@ -130,6 +130,7 @@ export default function AddMeal() {
                   <Input
                     bg="white !important"
                     borderWidth="2px"
+                    type="number"
                     borderColor="brand.neutral200"
                     placeholder={""}
                     value={state?.price?.amount ?? ""}
@@ -253,6 +254,54 @@ export default function AddMeal() {
                   value={state?.calories ?? ""}
                   type="text"
                   onChange={(e) => set({ calories: e.target.value })}
+                />
+              </FormControl>
+
+              <FormControl>
+                <InputLabel>Continent</InputLabel>
+                <Select
+                  placeholder="Select continent"
+                  borderRadius="4px"
+                  value={state?.continent ?? "subscription"}
+                  onChange={(e) => set({ continent: e.target.value })}
+                >
+                  {[
+                    "Asia",
+                    "Africa",
+                    "North America",
+                    "South America",
+                    "Antarctica",
+                    "Europe",
+                    "Australia",
+                  ].map((value, index) => (
+                    <option key={`continent_${index}`} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl>
+                <InputLabel>Weight</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a weight count"
+                  value={state?.weight ?? ""}
+                  type="text"
+                  onChange={(e) => set({ weight: e.target.value })}
+                />
+              </FormControl>
+
+              <FormControl>
+                <InputLabel>Spice level</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a spice level"
+                  value={state?.spice_level ?? ""}
+                  type="text"
+                  onChange={(e) => set({ spice_level: e.target.value })}
                 />
               </FormControl>
 

@@ -45,6 +45,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
     country: meal?.country,
     calories:meal?.calories,
     meals: meal?.meals ?? [],
+    spice_level:meal?.spice_level,
     images: (meal?.images ?? []).map((image, i) => ({
       index: i,
       url: image,

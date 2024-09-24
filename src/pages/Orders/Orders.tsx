@@ -36,8 +36,6 @@ export default function Orders() {
     customer: params.get("customer") ?? undefined,
   });
 
-  console.log("Orders", data);
-
   const orders = useMemo(
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
     [data]
@@ -46,13 +44,6 @@ export default function Orders() {
 
   const { fixPaidOrders, isLoading: isFixing } = useOrderMutations([key]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
 
   return (
     <PageMotion key="orders-root" pb="100px">
@@ -64,26 +55,6 @@ export default function Orders() {
       />
       <MainLayoutContainer>
         <Box>
-          {/* <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <Input
-              // w="100%"
-              minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search Plans"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => setFilter("searchPhrase", e.target.value)}
-            />
-
-            <Button
-              ml="0 !important"
-              leftIcon={<Icon type="add" />}
-              onClick={() => navigate(configs.paths.addPlan)}
-            >
-              Add
-            </Button>
-          </HStack> */}
           <Box
             borderRadius="8px"
             overflow="scroll"
@@ -115,6 +86,7 @@ export default function Orders() {
                             src={cus?.profilePhotoUrl}
                             title={join([cus?.first_name, cus?.last_name], " ")}
                             createdAt={cus?.createdAt}
+                            IsReturningCustomer={order?.isReturningCustomer}
                             subtitle={
                               !cus?.createdAt
                                 ? undefined
@@ -149,9 +121,7 @@ export default function Orders() {
                               size="sm"
                               variant="outline"
                               onClick={() =>
-                                navigate(
-                                  `${configs.paths.order}/${order?._id}`
-                                )
+                                navigate(`${configs.paths.order}/${order?._id}`)
                               }
                             >
                               View More

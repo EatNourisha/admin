@@ -39,13 +39,16 @@ interface AddMealModalProps extends Omit<ModalProps, "children" | "id"> {
 interface IMealFormState {
   name: string;
   file: File;
-  category:string;
-  isSwallow?:boolean;
+  category: string;
+  isSwallow?: boolean;
   orderType: "subscription" | "single order";
   country: string;
+  weight:string;
+  continent:string;
   isUploading?: boolean;
   is_available?: boolean;
   available_quantity: string | number;
+  spice_level: string;
 }
 
 export default function AddMealModal(props: AddMealModalProps) {
@@ -183,9 +186,12 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
 
   const { updateMeal, addNewMeal, isLoading } = useMealMutations(keys);
 
+
+
   const createMeal = async () => {
     if (!state?.file) return;
     let image_url: string | null = null;
+
 
     try {
       set({ isUploading: true });
@@ -201,8 +207,12 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       set({ isUploading: false });
     }
 
+  
+
     const res = addNewMeal({
       name: state?.name!,
+      weight:state?.weight,
+      continent:state?.continent,
       isSwallow: state?.isSwallow!,
       category: state?.category!,
       image_url: image_url as string,
@@ -211,6 +221,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       is_available: state?.is_available ?? true,
       available_quantity: state?.available_quantity ?? 0,
       meals: [],
+      spice_level: state?.spice_level!,
     });
 
     return res;

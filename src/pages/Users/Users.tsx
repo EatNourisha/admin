@@ -48,6 +48,7 @@ export default function Users() {
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
     [data]
   );
+  console.log(customers)
   const hasCustomers = useMemo(() => (customers ?? []).length > 0, [customers]);
 
   const delivery_day = useCallback((user: UserRo) => {
@@ -151,6 +152,7 @@ export default function Users() {
                     <Gravatar
                       src={value?.profilePhotoUrl}
                       title={join([value?.first_name, value?.last_name], " ")}
+                      IsReturningCustomer={value?.IsReturningCustomer}
                       createdAt={value?.createdAt}
                       subtitle={
                         !value?.createdAt

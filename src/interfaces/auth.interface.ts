@@ -77,6 +77,7 @@ export interface UserRo {
   phone: string;
   is_email_verified: boolean;
   delivery_day: string;
+  IsReturningCustomer?:boolean;
   delivery_info: {
     customer: string;
     next_delivery_date: string;

@@ -60,10 +60,18 @@ const pageLinks = [
     label: "Meals",
     to: "/meals",
   },
+
   {
     activeIcon: MealsIcon,
     icon: MealsIcon,
-    label: "Meal Extra",
+    label: "Bulk Meals",
+    to: "/bulkOrder",
+  },
+
+  {
+    activeIcon: MealsIcon,
+    icon: MealsIcon,
+    label: "Swallow Replacement",
     to: "/meal_extra",
   },
   {
@@ -148,7 +156,6 @@ const pageLinks = [
 const Sidebar: FC<SidebarProps> = (props) => {
   const { ...xprops } = props;
 
-
   const { logout } = useAuth();
 
   const isCurrent = useCallback(
@@ -166,104 +173,104 @@ const Sidebar: FC<SidebarProps> = (props) => {
   );
 
   return (
-     (
-      <Box
-        bg="brand.black"
-        minW="var(--sideNavWidth)"
-        maxW="var(--sideNavWidth)"
-        py="45px"
-        height="100vh"
-        pos="fixed"
-        top="0"
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        {...xprops}
-      >
-        <Box width={"100%"} height={"95%"} overflow="auto">
-          <VStack
-            color="white"
-            justifyContent="center"
-            alignItems="center"
-            w="100%"
+    <Box
+      bg="brand.black"
+      minW="var(--sideNavWidth)"
+      maxW="var(--sideNavWidth)"
+      py="45px"
+      height="100vh"
+      pos="fixed"
+      top="0"
+      display={"flex"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      {...xprops}
+    >
+      <Box width={"100%"} height={"95%"} overflow="auto">
+        <VStack
+          color="white"
+          justifyContent="center"
+          alignItems="center"
+          w="100%"
+        >
+          <Icon type="fullLogo" w="85px" h="90px" />
+          <Text
+            fontFamily="var(--manjari)"
+            position="relative"
+            top="-16px"
+            mt="0 !important"
           >
-            <Icon type="fullLogo" w="85px" h="90px" />
-            <Text
-              fontFamily="var(--manjari)"
-              position="relative"
-              top="-16px"
-              mt="0 !important"
-            >
-              Admin
-            </Text>
-          </VStack>
+            Admin
+          </Text>
+        </VStack>
 
-          <VStack
-            alignItems="flex-start"
+        <VStack
+          alignItems="flex-start"
+          w="100%"
+          h="calc(100% - 122px)"
+          py="40px"
+          overflowY="scroll"
+        >
+          {take(pageLinks, pageLinks.length - 2).map((link, i) => (
+            <SidebarLink
+              style={{ textTransform: "capitalize" }}
+              key={i}
+              {...link}
+              isCurrent={isCurrent(link.to)}
+              mb={
+                i === take(pageLinks, 9).length - 1
+                  ? "0 !important"
+                  : "8px !important"
+              }
+            />
+          ))}
+
+          <Center w="100%" my="12px !important" px="26px">
+            <Divider color="brand.primary" borderColor="brand.primary" />
+          </Center>
+
+          {takeRight(pageLinks, 2).map((link, i) => (
+            <SidebarLink
+              style={{ textTransform: "capitalize" }}
+              key={i}
+              {...link}
+              isCurrent={isCurrent(link.to)}
+              mb={
+                i === takeRight(pageLinks, 2).length - 1
+                  ? "0 !important"
+                  : "8px !important"
+              }
+            />
+          ))}
+
+          <Button
+            // pos="absolute"
+            // bottom="20px"
+            mt="5px !important"
+            leftIcon={<Icon type="logout" />}
+            variant="ghost"
+            p="16px 38px"
             w="100%"
-            h="calc(100% - 122px)"
-            py="40px"
-            overflowY="scroll"
+            // w="calc(100% - (16px * 4))"
+            minH="57px"
+            maxH="fit-content"
+            h="fit-content"
+            borderRadius="0px"
+            justifyContent="flex-start"
+            // bg="#C2C8D11f"
+            color="brand.greyText"
+            fontSize="sm"
+            onClick={() => logout()}
+            _hover={{
+              bg: "#EFF0F6",
+              color: "brand.lightBlue",
+            }}
           >
-            {take(pageLinks, pageLinks.length - 2).map((link, i) => (
-              <SidebarLink
-                key={i}
-                {...link}
-                isCurrent={isCurrent(link.to)}
-                mb={
-                  i === take(pageLinks, 9).length - 1
-                    ? "0 !important"
-                    : "8px !important"
-                }
-              />
-            ))}
-
-            <Center w="100%" my="12px !important" px="26px">
-              <Divider color="brand.primary" borderColor="brand.primary" />
-            </Center>
-
-            {takeRight(pageLinks, 2).map((link, i) => (
-              <SidebarLink
-                key={i}
-                {...link}
-                isCurrent={isCurrent(link.to)}
-                mb={
-                  i === takeRight(pageLinks, 2).length - 1
-                    ? "0 !important"
-                    : "8px !important"
-                }
-              />
-            ))}
-
-            <Button
-              // pos="absolute"
-              // bottom="20px"
-              mt="5px !important"
-              leftIcon={<Icon type="logout" />}
-              variant="ghost"
-              p="16px 38px"
-              w="100%"
-              // w="calc(100% - (16px * 4))"
-              minH="57px"
-              maxH="fit-content"
-              h="fit-content"
-              borderRadius="0px"
-              justifyContent="flex-start"
-              // bg="#C2C8D11f"
-              color="brand.greyText"
-              fontSize="sm"
-              onClick={() => logout()}
-              _hover={{
-                bg: "#EFF0F6",
-                color: "brand.lightBlue",
-              }}
-            >
-              Logout
-            </Button>
-          </VStack>
-        </Box>
+            Logout
+          </Button>
+        </VStack>
       </Box>
-    )
+    </Box>
   );
 };
 

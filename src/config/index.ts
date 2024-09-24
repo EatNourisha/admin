@@ -43,6 +43,9 @@ const configs = {
 
     lineUp: "/lineUp",
 
+    bulkOrder: "/bulkOrder",
+
+
 
     // faqs: "/faqs",
     // support: "/support",
