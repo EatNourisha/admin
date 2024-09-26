@@ -131,11 +131,12 @@ export default function Gravatar(props: GravatarProps) {
     return map[variant ?? "horizSingle"];
   }, [variant]);
 
-  const isNew = useMemo(() => {
-    if (!createdAt) return false;
-    const date = add(parseISO(createdAt), { days: 10 });
-    return !isPast(date);
-  }, [createdAt]);
+  // const isNew = useMemo(() => {
+  //   if (!createdAt) return false;
+  //   const date = add(parseISO(createdAt), { days: 10 });
+  //   return !isPast(date);
+  // }, [createdAt]);
+  const isNew =false;
 
   return (
     <Box

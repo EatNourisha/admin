@@ -134,6 +134,7 @@ export default function ListLineup() {
                 //@ts-ignore
                 (lineUpData.data?._orders?.data as OrderRo[])?.filter(o => !(o.status?.toLowerCase()?.includes("paid"))).map((order) => {
                   const cus = order?.customer;
+                  console.log(order)
 
                   return (
                     <GenericTableItem

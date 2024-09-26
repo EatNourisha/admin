@@ -44,7 +44,6 @@ export default function Orders() {
 
   const { fixPaidOrders, isLoading: isFixing } = useOrderMutations([key]);
 
-
   return (
     <PageMotion key="orders-root" pb="100px">
       <Topbar
@@ -76,6 +75,7 @@ export default function Orders() {
               {hasOrders
                 ? orders?.map((order) => {
                     const cus = order?.customer;
+                    console.log(order);
 
                     return (
                       <GenericTableItem
