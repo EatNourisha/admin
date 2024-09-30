@@ -233,6 +233,8 @@ export interface SettingsRo {
   _id: string;
   name: string;
   delivery_fee: string;
+  wed_sat?:string;
+  sun_tue?:string;
   createdAt: string;
   updatedAt: string;
   currency: string;

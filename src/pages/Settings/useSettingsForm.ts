@@ -87,17 +87,7 @@ export function useSettingsForm(settings?: SettingsRo) {
     }
   };
 
-  //   useEffect(() => {
-  //     if (!isEqual(initialChanges.current, state)) {
-  //       //   hasChanges.current = true;
-  //       initialChanges.current = transformSettingsToFormState(settings as any);
-  //     } else {
-  //       //   hasChanges.current = false;
-  //       initialChanges.current = transformSettingsToFormState(settings as any);
-  //     }
-  //   }, [initialChanges, state, hasChanges, settings]);
 
-  console.log("State", state);
 
   return {
     state,

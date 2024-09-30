@@ -45,7 +45,6 @@ export default function Settings() {
     setReward,
   } = useSettingsForm(settings);
 
-  console.log("Settings Changes", { hasChanges, state });
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -207,6 +206,34 @@ export default function Settings() {
                           : "%"}
                       </Text>
                     }
+                  />
+                </FormControl>
+              </HStack>
+
+              <HStack gridGap="24px">
+                <FormControl>
+                  <InputLabel>Wed_Sat</InputLabel>
+                  <Input
+                    isRequired={false}
+                    bg="white !important"
+                    borderWidth="2px"
+                    type="date"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    value={state?.wed_sat}
+                    onChange={(e) => set({ wed_sat: e.target.value })}
+                  />
+                </FormControl>
+                <FormControl>
+                  <InputLabel>Sun_Tue</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    type="date"
+                    value={state?.sun_tue ?? ""}
+                    onChange={(e) => set({ sun_tue: e.target.value })}
                   />
                 </FormControl>
               </HStack>
