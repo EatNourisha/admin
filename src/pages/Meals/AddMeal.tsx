@@ -316,61 +316,20 @@ export default function AddMeal() {
                   onChange={(e) => set({ category: e.target.value })}
                 />
               </FormControl>
-              <HStack display="flex">
-                <FormControl flex="1">
-                  <InputLabel>Ingredient</InputLabel>
-                  <Input
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder="Add a ingredients"
-                    value={state?.mealInfo?.ingredient ?? ""}
-                    type="text"
-                    onChange={(e) =>
-                      set({
-                        mealInfo: {
-                          ...state?.mealInfo,
-                          ingredient: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </FormControl>
 
-                <FormControl flex="1">
-                  <InputLabel>Heating</InputLabel>
-                  <Input
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder="Specify heating"
-                    value={state?.mealInfo?.heating ?? ""}
-                    type="text"
-                    onChange={(e) =>
-                      set({
-                        mealInfo: {
-                          ...state?.mealInfo,
-                          heating: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </FormControl>
-              </HStack>
+          
 
-              <FormControl flex="1">
-                <InputLabel>Allergy</InputLabel>
-                <Input
+              <FormControl>
+                <InputLabel>Description</InputLabel>
+                <Textarea
                   borderWidth="2px"
                   borderColor="brand.neutral200"
-                  placeholder="Enter allergies"
-                  value={state?.mealInfo?.allergy ?? ""}
-                  type="text"
-                  onChange={(e) =>
-                    set({
-                      mealInfo: { ...state?.mealInfo, allergy: e.target.value },
-                    })
-                  }
+                  placeholder="Add a description"
+                  value={state?.description ?? ""}
+                  onChange={(e) => set({ description: e.target.value })}
                 />
               </FormControl>
+
 
               <HStack display="flex">
                 <FormControl flex="1">
@@ -440,16 +399,63 @@ export default function AddMeal() {
                 </FormControl>
               </HStack>
 
-              <FormControl>
-                <InputLabel>Description</InputLabel>
+              <FormControl flex="1">
+                <InputLabel>Ingredient</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Add a ingredients"
+                  value={state?.mealInfo?.ingredient ?? ""}
+                  type="text"
+                  onChange={(e) =>
+                    set({
+                      mealInfo: {
+                        ...state?.mealInfo,
+                        ingredient: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </FormControl>
+
+
+              <FormControl flex="1">
+                <InputLabel>Allergy</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Enter allergies"
+                  value={state?.mealInfo?.allergy ?? ""}
+                  type="text"
+                  onChange={(e) =>
+                    set({
+                      mealInfo: { ...state?.mealInfo, allergy: e.target.value },
+                    })
+                  }
+                />
+              </FormControl>
+
+              <FormControl flex="1">
+                <InputLabel>Heating Instruction</InputLabel>
                 <Textarea
                   borderWidth="2px"
                   borderColor="brand.neutral200"
-                  placeholder="Add a description"
-                  value={state?.description ?? ""}
-                  onChange={(e) => set({ description: e.target.value })}
+                  placeholder="Specify heating"
+                  value={state?.mealInfo?.heating ?? ""}
+                  onChange={(e) =>
+                    set({
+                      mealInfo: {
+                        ...state?.mealInfo,
+                        heating: e.target.value,
+                      },
+                    })
+                  }
                 />
               </FormControl>
+
+            
+
+         
 
               <HStack justifyContent={"space-between"}>
                 <FormControl
@@ -551,7 +557,6 @@ export default function AddMeal() {
                   }
                 />
               </Stack>
-
 
               <HStack>
                 <Button
