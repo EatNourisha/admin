@@ -15,6 +15,7 @@ export interface PlanRo {
   perks: string[];
   five_day: boolean;
   weekend:boolean;
+  continent?:string;
 }
 
 export interface SubscriptionRo {
@@ -71,6 +72,16 @@ export interface MealRo {
     previousAmount: number;
     currency: string;
   };
+  mealInfo?:{
+    ingredient?:string;
+    heating?:string;
+    allergy?:string,
+    nutrition?:{
+      protein?:string;
+      fat?:string;
+      carbs?:string;
+    }
+  },
   calories?:string;
   images?: string[];
   description?: string;

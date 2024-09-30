@@ -324,6 +324,131 @@ export default function EditMeal() {
                 />
               </FormControl>
 
+
+              <HStack display="flex">
+                <FormControl flex="1">
+                  <InputLabel>Ingredient</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add a ingredients"
+                    value={state?.mealInfo?.ingredient ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          ingredient: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+
+                <FormControl flex="1">
+                  <InputLabel>Heating</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Specify heating"
+                    value={state?.mealInfo?.heating ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          heating: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+              </HStack>
+
+              <FormControl flex="1">
+                <InputLabel>Allergy</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Enter allergies"
+                  value={state?.mealInfo?.allergy ?? ""}
+                  type="text"
+                  onChange={(e) =>
+                    set({
+                      mealInfo: { ...state?.mealInfo, allergy: e.target.value },
+                    })
+                  }
+                />
+              </FormControl>
+
+              <HStack display="flex">
+                <FormControl flex="1">
+                  <InputLabel>Protein</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Enter protein"
+                    value={state?.mealInfo?.nutrition?.protein ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          nutrition: {
+                            ...state?.mealInfo?.nutrition,
+                            protein: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+
+                <FormControl flex="1">
+                  <InputLabel>Fat</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add fat"
+                    value={state?.mealInfo?.nutrition?.fat ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          nutrition: {
+                            ...state?.mealInfo?.nutrition,
+                            fat: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+
+                <FormControl flex="1">
+                  <InputLabel>Carbohydrate</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add a carbohydrate"
+                    value={state?.mealInfo?.nutrition?.carbs ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          nutrition: {
+                            ...state?.mealInfo?.nutrition,
+                            carbs: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+              </HStack>
+
               <FormControl>
                 <InputLabel>Description</InputLabel>
                 <Textarea

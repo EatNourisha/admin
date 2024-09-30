@@ -283,6 +283,30 @@ export default function AddPlan() {
                 </FormControl>
               </HStack>
 
+              <FormControl>
+                <InputLabel>Continent</InputLabel>
+                <Select
+                  placeholder="Select continent"
+                  borderRadius="4px"
+                  value={state?.continent ?? "subscription"}
+                  onChange={(e) => set({ continent: e.target.value })}
+                >
+                  {[
+                    "Asia",
+                    "Africa",
+                    "North America",
+                    "South America",
+                    "Antarctica",
+                    "Europe",
+                    "Australia",
+                  ].map((value, index) => (
+                    <option key={`continent_${index}`} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
               <Divider />
 
               <Stack>

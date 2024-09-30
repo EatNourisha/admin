@@ -316,6 +316,129 @@ export default function AddMeal() {
                   onChange={(e) => set({ category: e.target.value })}
                 />
               </FormControl>
+              <HStack display="flex">
+                <FormControl flex="1">
+                  <InputLabel>Ingredient</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add a ingredients"
+                    value={state?.mealInfo?.ingredient ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          ingredient: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+
+                <FormControl flex="1">
+                  <InputLabel>Heating</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Specify heating"
+                    value={state?.mealInfo?.heating ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          heating: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+              </HStack>
+
+              <FormControl flex="1">
+                <InputLabel>Allergy</InputLabel>
+                <Input
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder="Enter allergies"
+                  value={state?.mealInfo?.allergy ?? ""}
+                  type="text"
+                  onChange={(e) =>
+                    set({
+                      mealInfo: { ...state?.mealInfo, allergy: e.target.value },
+                    })
+                  }
+                />
+              </FormControl>
+
+              <HStack display="flex">
+                <FormControl flex="1">
+                  <InputLabel>Protein</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Enter protein"
+                    value={state?.mealInfo?.nutrition?.protein ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          nutrition: {
+                            ...state?.mealInfo?.nutrition,
+                            protein: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+
+                <FormControl flex="1">
+                  <InputLabel>Fat</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add fat"
+                    value={state?.mealInfo?.nutrition?.fat ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          nutrition: {
+                            ...state?.mealInfo?.nutrition,
+                            fat: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+
+                <FormControl flex="1">
+                  <InputLabel>Carbohydrate</InputLabel>
+                  <Input
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add a carbohydrate"
+                    value={state?.mealInfo?.nutrition?.carbs ?? ""}
+                    type="text"
+                    onChange={(e) =>
+                      set({
+                        mealInfo: {
+                          ...state?.mealInfo,
+                          nutrition: {
+                            ...state?.mealInfo?.nutrition,
+                            carbs: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </FormControl>
+              </HStack>
 
               <FormControl>
                 <InputLabel>Description</InputLabel>
@@ -429,63 +552,6 @@ export default function AddMeal() {
                 />
               </Stack>
 
-              {/* <Stack>
-                <HStack justifyContent="space-between">
-                  <Text fontWeight="600">Features / Perks</Text>
-                  <Button
-                    size="xs"
-                    color="brand.black"
-                    variant="transparent"
-                    fontSize="sm"
-                    fontWeight="600"
-                    leftIcon={<Icon type="add" />}
-                    onClick={addPerkDraft}
-                  >
-                    Add Perk
-                  </Button>
-                </HStack>
-
-                {!!perkDraft && (
-                  <PerkItem
-                    my="16px"
-                    mode="edit"
-                    {...perkDraft}
-                    onSaveDraft={(e) => savePerkDraft(e)}
-                  />
-                )}
-
-                {!isLoading && hasPerks && (
-                  <Stack my="24px !important">
-                    {(state?.perks ?? []).map((perk, i) => (
-                      <PerkItem
-                        key={`perk-${i}`}
-                        // my="16px"
-                        mode="read"
-                        {...perk}
-                        onRemove={(e) => removePerk(e)}
-                        toggleEditMode={(index) => togglePerkEditMode(index)}
-                        onSaveDraft={(e) => savePerkDraft(e)}
-                      />
-                    ))}
-                  </Stack>
-                )}
-
-                {isLoading &&
-                  !hasPerks &&
-                  !perkDraft &&
-                  Array(3)
-                    .fill(0)
-                    .map((_, i) => <PerkItem isLoading={isLoading} />)}
-
-                {!hasPerks && !perkDraft && (
-                  <Box>
-                    <EmptyCrate
-                      my="80px"
-                      description="You need to add at least one feature/perk to add this plan"
-                    />
-                  </Box>
-                )}
-              </Stack> */}
 
               <HStack>
                 <Button
