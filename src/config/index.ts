@@ -90,4 +90,9 @@ export const daysOfWeek = [
 ];
 
 
+export const CONTINENTS =[
+  "Africa",
+  "Asian & European",
+]
+
 export default configs;

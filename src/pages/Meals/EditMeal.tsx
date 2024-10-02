@@ -36,6 +36,7 @@ import useMeal from "hooks/useMeal";
 import { when } from "utils";
 import Uploader, { FilePreviewType } from "components/Uploader/Uploader";
 import { RepeatIcon } from "@chakra-ui/icons";
+import { CONTINENTS } from "config";
 
 export default function EditMeal() {
   //   const toast = useToast();
@@ -278,15 +279,7 @@ export default function EditMeal() {
                   value={state?.continent ?? "subscription"}
                   onChange={(e) => set({ continent: e.target.value })}
                 >
-                  {[
-                    "Asia",
-                    "Africa",
-                    "North America",
-                    "South America",
-                    "Antarctica",
-                    "Europe",
-                    "Australia",
-                  ].map((value, index) => (
+                  {CONTINENTS.map((value, index) => (
                     <option key={`continent_${index}`} value={value}>
                       {value}
                     </option>

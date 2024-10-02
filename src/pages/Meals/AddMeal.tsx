@@ -29,7 +29,7 @@ import {
 } from "components";
 // import { EmptyCrate } from "components/Crate/Empty";
 
-import configs from "config";
+import configs, { CONTINENTS } from "config";
 
 import { useMemo } from "react";
 import { useMealForm } from "./useMealForm";
@@ -249,10 +249,10 @@ export default function AddMeal() {
                 <InputLabel>Calories</InputLabel>
                 <Input
                   borderWidth="2px"
+                  type="number"
                   borderColor="brand.neutral200"
                   placeholder="Add a calorie count"
                   value={state?.calories ?? ""}
-                  type="text"
                   onChange={(e) => set({ calories: e.target.value })}
                 />
               </FormControl>
@@ -265,15 +265,7 @@ export default function AddMeal() {
                   value={state?.continent ?? "subscription"}
                   onChange={(e) => set({ continent: e.target.value })}
                 >
-                  {[
-                    "Asia",
-                    "Africa",
-                    "North America",
-                    "South America",
-                    "Antarctica",
-                    "Europe",
-                    "Australia",
-                  ].map((value, index) => (
+                  {CONTINENTS.map((value, index) => (
                     <option key={`continent_${index}`} value={value}>
                       {value}
                     </option>

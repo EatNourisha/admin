@@ -13,13 +13,15 @@ import {
   Stack,
   FormControl,
   useToast,
+  Select,
 } from "@chakra-ui/react";
-import { post,put } from "utils/makeRequest";
+import { post, put } from "utils/makeRequest";
 import Input from "components/Input/Input";
-import { ApiResponse,  } from "interfaces";
+import { ApiResponse } from "interfaces";
 import { FormEvent, useState } from "react";
 import { when } from "utils";
 import { IMealExtra } from "pages/MealExtra/ListMealExtra";
+import { InputLabel } from "@mui/material";
 
 interface AddMealModalProps extends Omit<ModalProps, "children" | "id"> {
   // Mutation keys
@@ -44,6 +46,7 @@ export default function AddMealExtra(props: AddMealModalProps) {
     ...xprops
   } = props;
   const [name, setName] = useState(mealExtra?._id ? mealExtra.name : "");
+  const [type, setType] = useState(mealExtra?._id?mealExtra?.type:"");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -51,11 +54,12 @@ export default function AddMealExtra(props: AddMealModalProps) {
     e.preventDefault();
     setLoading(true);
     const res = (
-      await  (mealExtra?._id?put:post)<ApiResponse<any>, {}>(
+      await (mealExtra?._id ? put : post)<ApiResponse<any>, {}>(
         mealExtra?._id ? `/meals/extras/${mealExtra?._id}` : `/meals/extras`,
-        { name }
+        { name, type }
       )
     ).data as any;
+
 
     if (res?._id) {
       setMealExtras(
@@ -64,7 +68,7 @@ export default function AddMealExtra(props: AddMealModalProps) {
               if (extra?._id === res?._id) {
                 extra = {
                   ...extra,
-                  name
+                  name,
                 };
               }
               return extra;
@@ -75,7 +79,7 @@ export default function AddMealExtra(props: AddMealModalProps) {
       toast({
         position: "bottom-right",
         title: "Success",
-        description: "Meal extra created successfully",
+        description: `Meal extra ${mealExtra?._id?"updated":"created"} successfully`,
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -124,6 +128,20 @@ export default function AddMealExtra(props: AddMealModalProps) {
                 onChange={(e) => setName(e.target.value)}
               />
             </FormControl>
+
+            <FormControl>
+              <InputLabel>Type</InputLabel>
+              <Select
+                placeholder="Select type"
+                borderRadius="4px"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option value={"protein"}>Protein</option>
+                <option value={"swallow"}>Swallow</option>
+              </Select>
+            </FormControl>
+
             <Button
               disabled={!name?.length}
               isLoading={loading}

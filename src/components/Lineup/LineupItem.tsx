@@ -1,8 +1,6 @@
 import { Box, BoxProps, Grid, HStack, Text, VStack } from "@chakra-ui/react";
 import { MealPackRo, MealRo } from "interfaces";
-import { useMemo, useState } from "react";
 import { ILineUpFoodItem } from "types";
-import { omit } from "lodash";
 import { daysOfWeek } from "config";
 
 interface LineupItemProps extends BoxProps {

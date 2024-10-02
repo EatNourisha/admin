@@ -24,6 +24,7 @@ export interface IMealExtra {
   _id?: string;
   createdAt?: string;
   name?: string;
+  type?: string;
 }
 
 const MealExtraItem = ({
@@ -129,6 +130,7 @@ const MealExtraItem = ({
 };
 function ListMealExtra() {
   const [mealExtras, setMealExtras] = useState<IMealExtra[]>([]);
+  const [loading, setLoading] = useState(true);
   const [openAddMealExtraModal, setOpenAddMealExtraModal] = useState(false);
 
   useEffect(() => {
@@ -137,7 +139,8 @@ function ListMealExtra() {
     };
     getExtras().then((data) => {
       //@ts-ignore
-      setMealExtras(data?.data?.data);
+      setMealExtras([...data?.data?.swallow?.data, ...data?.data?.protein?.data]);
+      setLoading(false);
     });
   }, []);
   return (
@@ -156,9 +159,11 @@ function ListMealExtra() {
           </HStack>
 
           <VStack>
-            {true && (
+            {loading ? (
+              <div className="text-center text-sm">Loading...</div>
+            ) : (
               <Grid w="100%" templateColumns="repeat(3, 1fr)" gap="16px">
-                {mealExtras.map((mealExtra, i) => (
+                {mealExtras?.map((mealExtra, i) => (
                   <MealExtraItem
                     setMealExtras={setMealExtras}
                     mealExtras={mealExtras}
