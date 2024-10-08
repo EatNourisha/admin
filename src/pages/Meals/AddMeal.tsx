@@ -562,7 +562,7 @@ export default function AddMeal() {
                     {(state?.isProtein
                       ? extras?.protein?.data
                       : extras?.swallow?.data
-                    ).map((extra, index) => (
+                    )?.map((extra, index) => (
                       <div
                         className="flex items-center"
                         key={`single_extra_${index}`}
