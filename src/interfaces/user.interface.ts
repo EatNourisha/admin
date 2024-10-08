@@ -62,6 +62,7 @@ export interface MealRo {
   name: string;
   category: string;
   slug: string;
+  isProtein:boolean;
   weight?:string;
   orderType: string;
   country: string;

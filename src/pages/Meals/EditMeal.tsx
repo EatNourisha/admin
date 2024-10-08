@@ -482,6 +482,39 @@ export default function EditMeal() {
                 </FormControl>
 
 
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml="8px"
+                    aria-label="Switch protein"
+                    disabled={isSubmiting}
+                    isChecked={state?.isProtein}
+                    onChange={() => set({ isProtein: !state?.isProtein })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    Protein
+                  </InputLabel>
+                </FormControl>
+
+
                 
 
                 <FormControl

@@ -309,8 +309,6 @@ export default function AddMeal() {
                 />
               </FormControl>
 
-          
-
               <FormControl>
                 <InputLabel>Description</InputLabel>
                 <Textarea
@@ -321,7 +319,6 @@ export default function AddMeal() {
                   onChange={(e) => set({ description: e.target.value })}
                 />
               </FormControl>
-
 
               <HStack display="flex">
                 <FormControl flex="1">
@@ -410,7 +407,6 @@ export default function AddMeal() {
                 />
               </FormControl>
 
-
               <FormControl flex="1">
                 <InputLabel>Allergy</InputLabel>
                 <Input
@@ -445,10 +441,6 @@ export default function AddMeal() {
                 />
               </FormControl>
 
-            
-
-         
-
               <HStack justifyContent={"space-between"}>
                 <FormControl
                   display="flex"
@@ -479,6 +471,38 @@ export default function AddMeal() {
                   />
                   <InputLabel ml="8px" htmlFor="isChecked">
                     {when(!!state?.is_available, "Available", "Unavailable")}
+                  </InputLabel>
+                </FormControl>
+
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml="8px"
+                    aria-label="Switch protein"
+                    disabled={isSubmiting}
+                    isChecked={state?.isProtein}
+                    onChange={() => set({ isProtein: !state?.isProtein })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    Protein
                   </InputLabel>
                 </FormControl>
 

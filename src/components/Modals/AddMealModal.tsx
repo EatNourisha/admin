@@ -41,6 +41,7 @@ interface IMealFormState {
   file: File;
   category: string;
   isSwallow?: boolean;
+  isProtein:boolean;
   orderType: "subscription" | "single order";
   country: string;
   weight:string;
@@ -211,6 +212,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
 
     const res = addNewMeal({
       name: state?.name!,
+      isProtein:state.isProtein!,
       weight:state?.weight,
       continent:state?.continent,
       isSwallow: state?.isSwallow!,
