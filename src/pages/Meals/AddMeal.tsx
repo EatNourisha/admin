@@ -502,7 +502,7 @@ export default function AddMeal() {
                     }}
                   />
                   <InputLabel ml="8px" htmlFor="isChecked">
-                    Protein
+                    Is Protein
                   </InputLabel>
                 </FormControl>
 
