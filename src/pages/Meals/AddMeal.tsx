@@ -43,8 +43,9 @@ import { IMealExtra } from "pages/MealExtra/ListMealExtra";
 
 export default function AddMeal() {
   const [extras, setExtras] = useState<{
-    swallow: { totalCount: number; data: IMealExtra[] };
-    protein: { totalCount: number; data: IMealExtra[] };
+    // swallow: { totalCount: number; data: IMealExtra[] };
+    // protein: { totalCount: number; data: IMealExtra[] };
+    totalCount: number, data: IMealExtra[]
   }>();
   const {
     set,
@@ -560,8 +561,11 @@ export default function AddMeal() {
                 {extras && (
                   <div>
                     {(state?.isProtein
-                      ? extras?.protein?.data
-                      : extras?.swallow?.data
+                      // ? extras?.protein?.data
+                      // : extras?.swallow?.data
+                      ?
+                      extras.data
+                      :extras?.data
                     )?.map((extra, index) => (
                       <div
                         className="flex items-center"

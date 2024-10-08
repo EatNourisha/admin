@@ -48,8 +48,10 @@ export default function EditMeal() {
   const { data: meal, isLoading } = useMeal(id);
 
   const [extras, setExtras] = useState<{
-    swallow: { totalCount: number; data: IMealExtra[] };
-    protein: { totalCount: number; data: IMealExtra[] };
+    // swallow: { totalCount: number; data: IMealExtra[] };
+    // protein: { totalCount: number; data: IMealExtra[] };
+    totalCount: number;
+    data: IMealExtra[];
   }>();
   const {
     set,
@@ -562,8 +564,10 @@ export default function EditMeal() {
                 {extras && (
                   <div>
                     {(state?.isProtein
-                      ? extras?.protein?.data
-                      : extras?.swallow?.data
+                      ? // ? extras?.protein?.data
+                        // : extras?.swallow?.data
+                        extras.data
+                      : extras?.data
                     ).map((extra, index) => (
                       <div
                         className="flex items-center"
