@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Container,
   Divider,
   FormControl,
@@ -16,6 +17,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
+import { get } from "utils/makeRequest";
 import {
   Gravatar,
   Icon,
@@ -31,15 +33,19 @@ import {
 
 import configs, { CONTINENTS } from "config";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMealForm } from "./useMealForm";
 import { when } from "utils";
 import Uploader, { FilePreviewType } from "components/Uploader/Uploader";
 import { RepeatIcon } from "@chakra-ui/icons";
+import { ApiResponse } from "interfaces";
+import { IMealExtra } from "pages/MealExtra/ListMealExtra";
 
 export default function AddMeal() {
-  //   const toast = useToast();
-
+  const [extras, setExtras] = useState<{
+    swallow: { totalCount: number; data: IMealExtra[] };
+    protein: { totalCount: number; data: IMealExtra[] };
+  }>();
   const {
     set,
     state,
@@ -75,6 +81,16 @@ export default function AddMeal() {
       !hasChanges,
     [state, isSubmiting, hasChanges]
   );
+
+  const getExtras = async () => {
+    const res = await get("meals/extras");
+    //@ts-ignore
+    setExtras(res?.data);
+  };
+
+  useEffect(() => {
+    getExtras();
+  }, []);
 
   return (
     <PageMotion key="meal-add">
@@ -539,6 +555,48 @@ export default function AddMeal() {
                 </FormControl>
               </HStack>
 
+              <div>
+                <label>Expected {state?.isProtein?"Protein":"Swallow"}</label>
+                {extras && (
+                  <div>
+                    {(state?.isProtein
+                      ? extras?.protein?.data
+                      : extras?.swallow?.data
+                    ).map((extra, index) => (
+                      <div
+                        className="flex items-center"
+                        key={`single_extra_${index}`}
+                      >
+                        <Checkbox
+                          size="lg"
+                          colorScheme="red"
+                          className="capitalize"
+                          isChecked={
+                            state?.expected_proteins?.some(
+                              (value) => value === extra?._id
+                            )
+                          }
+                          onChange={(e) => {
+                            const ep = state?.expected_proteins?.includes(
+                              extra?._id!
+                            )
+                              ? state?.expected_proteins?.filter(
+                                  (e) => e !== extra?._id
+                                )
+                              : [...(state?.expected_proteins??[])!, extra?._id];
+                            set({
+                              expected_proteins: ep as string[],
+                            });
+                          }}
+                        >
+                          {extra?.name}
+                        </Checkbox>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <Divider />
 
               <Stack>
@@ -665,8 +723,6 @@ function ImagePreview(props: ImagePreviewProps) {
             }}
             _loading={{ color: "brand.primary" }}
             onClick={onDelete}
-            //   disabled={isLoading}
-            //   isLoading={isLoading}
           />
         )}
       </Box>

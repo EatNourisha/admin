@@ -67,6 +67,7 @@ export interface MealRo {
   orderType: string;
   country: string;
   updatedAt: string;
+  expected_proteins?:string[];
   price?: {
     amount: string;
     deliveryFee: string;
