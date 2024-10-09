@@ -25,6 +25,7 @@ export interface IMealExtra {
   createdAt?: string;
   name?: string;
   type?: string;
+  available_quantity:number;
 }
 
 const MealExtraItem = ({

@@ -293,12 +293,12 @@ export default function EditMeal() {
                 <Select
                   placeholder="Select continent"
                   borderRadius="4px"
-                  value={state?.continent ?? "subscription"}
+                  value={state?.continent}
                   onChange={(e) => set({ continent: e.target.value })}
                 >
                   {CONTINENTS.map((value, index) => (
-                    <option key={`continent_${index}`} value={value}>
-                      {value}
+                    <option key={`continent_${index}`} value={value?.search}>
+                      {value?.noun}
                     </option>
                   ))}
                 </Select>
@@ -568,35 +568,37 @@ export default function EditMeal() {
                         // : extras?.swallow?.data
                         extras.data
                       : extras?.data
-                    )?.sort()?.map((extra, index) => (
-                      <div
-                        className="flex items-center"
-                        key={`single_extra_${index}`}
-                      >
-                        <Checkbox
-                          size="lg"
-                          colorScheme="red"
-                          className="capitalize"
-                          isChecked={state?.expected_proteins?.some(
-                            (value) => value === extra?._id
-                          )}
-                          onChange={(e) => {
-                            const ep = state?.expected_proteins?.includes(
-                              extra?._id!
-                            )
-                              ? state?.expected_proteins?.filter(
-                                  (e) => e !== extra?._id
-                                )
-                              : [...state?.expected_proteins!, extra?._id];
-                            set({
-                              expected_proteins: ep as string[],
-                            });
-                          }}
+                    )
+                      ?.sort()
+                      ?.map((extra, index) => (
+                        <div
+                          className="flex items-center"
+                          key={`single_extra_${index}`}
                         >
-                          {extra?.name}
-                        </Checkbox>
-                      </div>
-                    ))}
+                          <Checkbox
+                            size="lg"
+                            colorScheme="red"
+                            className="capitalize"
+                            isChecked={state?.expected_proteins?.some(
+                              (value) => value === extra?._id
+                            )}
+                            onChange={(e) => {
+                              const ep = state?.expected_proteins?.includes(
+                                extra?._id!
+                              )
+                                ? state?.expected_proteins?.filter(
+                                    (e) => e !== extra?._id
+                                  )
+                                : [...state?.expected_proteins!, extra?._id];
+                              set({
+                                expected_proteins: ep as string[],
+                              });
+                            }}
+                          >
+                            {extra?.name}
+                          </Checkbox>
+                        </div>
+                      ))}
                   </div>
                 )}
               </div>

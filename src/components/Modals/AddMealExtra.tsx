@@ -46,7 +46,10 @@ export default function AddMealExtra(props: AddMealModalProps) {
     ...xprops
   } = props;
   const [name, setName] = useState(mealExtra?._id ? mealExtra.name : "");
-  const [type, setType] = useState(mealExtra?._id?mealExtra?.type:"");
+  const [type, setType] = useState(mealExtra?._id ? mealExtra?.type : "");
+  const [available_quantity, set_available_quantity] = useState(
+    mealExtra?._id ? mealExtra?.available_quantity : ""
+  );
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -59,7 +62,6 @@ export default function AddMealExtra(props: AddMealModalProps) {
         { name, type }
       )
     ).data as any;
-
 
     if (res?._id) {
       setMealExtras(
@@ -79,7 +81,9 @@ export default function AddMealExtra(props: AddMealModalProps) {
       toast({
         position: "bottom-right",
         title: "Success",
-        description: `Meal extra ${mealExtra?._id?"updated":"created"} successfully`,
+        description: `Meal extra ${
+          mealExtra?._id ? "updated" : "created"
+        } successfully`,
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -140,6 +144,16 @@ export default function AddMealExtra(props: AddMealModalProps) {
                 <option value={"protein"}>Protein</option>
                 <option value={"swallow"}>Swallow</option>
               </Select>
+            </FormControl>
+
+            <FormControl>
+              <InputLabel>Available Quantity</InputLabel>
+              <Input
+                placeholder="Enter meal extra available quantity"
+                value={available_quantity}
+                type="number"
+                onChange={(e) => set_available_quantity(e.target.value)}
+              />
             </FormControl>
 
             <Button

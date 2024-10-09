@@ -50,6 +50,8 @@ interface IMealFormState {
   is_available?: boolean;
   available_quantity: string | number;
   spice_level: string;
+  expected_proteins?:string[];
+  expected_swallow:string[];
 }
 
 export default function AddMealModal(props: AddMealModalProps) {
@@ -213,6 +215,8 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
     const res = addNewMeal({
       name: state?.name!,
       isProtein:state.isProtein!,
+      expected_swallow:state?.expected_swallow??[],
+      expected_proteins:state?.expected_proteins??[],
       weight:state?.weight,
       continent:state?.continent,
       isSwallow: state?.isSwallow!,

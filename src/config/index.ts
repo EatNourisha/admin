@@ -91,8 +91,8 @@ export const daysOfWeek = [
 
 
 export const CONTINENTS =[
-  "Africa",
-  "Asian & European",
+ { noun: "Africa", search: "Africa",},
+  { noun:"Asian & European", search:"Asian"},
 ]
 
 export default configs;

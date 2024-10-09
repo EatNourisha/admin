@@ -43,9 +43,9 @@ import { IMealExtra } from "pages/MealExtra/ListMealExtra";
 
 export default function AddMeal() {
   const [extras, setExtras] = useState<{
-    // swallow: { totalCount: number; data: IMealExtra[] };
-    // protein: { totalCount: number; data: IMealExtra[] };
-    totalCount: number, data: IMealExtra[]
+    swallow: { totalCount: number; data: IMealExtra[] };
+    protein: { totalCount: number; data: IMealExtra[] };
+    // totalCount: number, data: IMealExtra[]
   }>();
   const {
     set,
@@ -283,8 +283,8 @@ export default function AddMeal() {
                   onChange={(e) => set({ continent: e.target.value })}
                 >
                   {CONTINENTS.map((value, index) => (
-                    <option key={`continent_${index}`} value={value}>
-                      {value}
+                    <option key={`continent_${index}`} value={value.search}>
+                      {value.noun}
                     </option>
                   ))}
                 </Select>
@@ -556,51 +556,95 @@ export default function AddMeal() {
                 </FormControl>
               </HStack>
 
-              <div>
-                <label>{state?.isProtein?"Protein":"Swallow"}</label>
-                {extras && (
+              <HStack gap="3rem">
+                {state?.isProtein && (
                   <div>
-                    {(state?.isProtein
-                      // ? extras?.protein?.data
-                      // : extras?.swallow?.data
-                      ?
-                      extras.data
-                      :extras?.data
-                    )?.sort()?.map((extra, index) => (
-                      <div
-                        className="flex items-center"
-                        key={`single_extra_${index}`}
-                      >
-                        <Checkbox
-                          size="lg"
-                          colorScheme="red"
-                          className="capitalize"
-                          isChecked={
-                            state?.expected_proteins?.some(
-                              (value) => value === extra?._id
-                            )
-                          }
-                          onChange={(e) => {
-                            alert(extra?._id)
-                            const ep = state?.expected_proteins?.includes(
-                              extra?._id!
-                            )
-                              ? state?.expected_proteins?.filter(
-                                  (e) => e !== extra?._id
+                    <label>Protein </label>
+                    {extras && (
+                      <div>
+                        {extras?.protein?.data?.sort()?.map((extra, index) => (
+                          <div
+                            className="flex items-center"
+                            key={`single_extra_${index}`}
+                          >
+                            <Checkbox
+                              size="lg"
+                              colorScheme="red"
+                              className="capitalize"
+                              isChecked={state?.expected_proteins?.some(
+                                (value) => value === extra?._id
+                              )}
+                              onChange={(e) => {
+                                alert(extra?._id);
+                                const ep = state?.expected_proteins?.includes(
+                                  extra?._id!
                                 )
-                              : [...(state?.expected_proteins??[])!, extra?._id];
-                            set({
-                              expected_proteins: ep as string[],
-                            });
-                          }}
-                        >
-                          {extra?.name}
-                        </Checkbox>
+                                  ? state?.expected_proteins?.filter(
+                                      (e) => e !== extra?._id
+                                    )
+                                  : [
+                                      ...(state?.expected_proteins ?? [])!,
+                                      extra?._id,
+                                    ];
+                                set({
+                                  expected_proteins: ep as string[],
+                                });
+                              }}
+                            >
+                              {extra?.name}
+                            </Checkbox>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 )}
-              </div>
+
+                {state?.isSwallow && (
+                  <div>
+                    <label>Swallow</label>
+                    {extras && (
+                      <div>
+                        {extras?.swallow?.data
+                          ?.sort()
+                          ?.map((extra, index) => (
+                            <div
+                              className="flex items-center"
+                              key={`single_extra_${index}`}
+                            >
+                              <Checkbox
+                                size="lg"
+                                colorScheme="red"
+                                className="capitalize"
+                                isChecked={state?.expected_swallow?.some(
+                                  (value) => value === extra?._id
+                                )}
+                                onChange={(e) => {
+                                  alert(extra?._id);
+                                  const ep = state?.expected_swallow?.includes(
+                                    extra?._id!
+                                  )
+                                    ? state?.expected_swallow?.filter(
+                                        (e) => e !== extra?._id
+                                      )
+                                    : [
+                                        ...(state?.expected_swallow ?? [])!,
+                                        extra?._id,
+                                      ];
+                                  set({
+                                    expected_swallow: ep as string[],
+                                  });
+                                }}
+                              >
+                                {extra?.name}
+                              </Checkbox>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </HStack>
 
               <Divider />
 
