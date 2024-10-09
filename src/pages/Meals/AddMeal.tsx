@@ -575,7 +575,7 @@ export default function AddMeal() {
                                 (value) => value === extra?._id
                               )}
                               onChange={(e) => {
-                                alert(extra?._id);
+                                
                                 const ep = state?.expected_proteins?.includes(
                                   extra?._id!
                                 )
