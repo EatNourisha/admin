@@ -59,7 +59,7 @@ export default function AddMealExtra(props: AddMealModalProps) {
     const res = (
       await (mealExtra?._id ? put : post)<ApiResponse<any>, {}>(
         mealExtra?._id ? `/meals/extras/${mealExtra?._id}` : `/meals/extras`,
-        { name, type }
+        { name, type, available_quantity }
       )
     ).data as any;
 

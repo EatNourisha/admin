@@ -71,7 +71,7 @@ const pageLinks = [
   {
     activeIcon: MealsIcon,
     icon: MealsIcon,
-    label: "Swallow Replacement",
+    label: "Protein and Swallow",
     to: "/meal_extra",
   },
   {

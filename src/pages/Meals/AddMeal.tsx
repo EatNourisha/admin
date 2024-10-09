@@ -556,7 +556,7 @@ export default function AddMeal() {
                 </FormControl>
               </HStack>
 
-              <HStack gap="3rem">
+              <HStack alignItems="flex-start" gap="3rem">
                 {state?.isProtein && (
                   <div>
                     <label>Protein </label>
@@ -575,6 +575,7 @@ export default function AddMeal() {
                                 (value) => value === extra?._id
                               )}
                               onChange={(e) => {
+                                alert(extra?._id);
                                 
                                 const ep = state?.expected_proteins?.includes(
                                   extra?._id!
