@@ -557,7 +557,7 @@ export default function AddMeal() {
               </HStack>
 
               <div>
-                <label>Expected {state?.isProtein?"Protein":"Swallow"}</label>
+                <label>{state?.isProtein?"Protein":"Swallow"}</label>
                 {extras && (
                   <div>
                     {(state?.isProtein
@@ -566,7 +566,7 @@ export default function AddMeal() {
                       ?
                       extras.data
                       :extras?.data
-                    )?.map((extra, index) => (
+                    )?.sort()?.map((extra, index) => (
                       <div
                         className="flex items-center"
                         key={`single_extra_${index}`}
@@ -581,6 +581,7 @@ export default function AddMeal() {
                             )
                           }
                           onChange={(e) => {
+                            alert(extra?._id)
                             const ep = state?.expected_proteins?.includes(
                               extra?._id!
                             )

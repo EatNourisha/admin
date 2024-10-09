@@ -568,7 +568,7 @@ export default function EditMeal() {
                         // : extras?.swallow?.data
                         extras.data
                       : extras?.data
-                    ).map((extra, index) => (
+                    )?.sort()?.map((extra, index) => (
                       <div
                         className="flex items-center"
                         key={`single_extra_${index}`}
