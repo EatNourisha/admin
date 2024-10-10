@@ -97,6 +97,8 @@ export default function EditMeal() {
     getExtras();
   }, []);
 
+  // alert(state?.image_url)
+
   return (
     <PageMotion key="meal-edit">
       <Topbar pageTitle="Meals" />

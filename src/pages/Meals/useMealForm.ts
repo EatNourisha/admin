@@ -35,9 +35,9 @@ export interface IMealFormState
 const transformMealToFormState = (meal: MealRo): IMealFormState => {
   return {
     name: meal?.name,
-    expected_proteins:meal?.expected_proteins ?? [],
-    expected_swallow:meal?.expected_swallow ?? [],
-    isProtein:meal?.isProtein,
+    expected_proteins: meal?.expected_proteins ?? [],
+    expected_swallow: meal?.expected_swallow ?? [],
+    isProtein: meal?.isProtein,
     weight: meal?.weight,
     continent: meal?.continent,
     spice_level: meal?.spice_level,
@@ -57,7 +57,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
       editMode: false,
       removed: false,
     })),
-    mealInfo:meal?.mealInfo,
+    mealInfo: meal?.mealInfo,
     available_quantity: meal?.available_quantity,
     files: [],
   };
@@ -155,14 +155,12 @@ export function useMealForm(meal?: MealRo) {
 
   const createMeal = async () => {
     const uploaded_images = await uploadFiles();
-   
+
     const saved_images = (state?.images ?? [])
       .filter((i) => !i.removed)
       .map((pk) => pk?.url);
 
     const images = [...saved_images, ...uploaded_images];
-
-
 
     const result = await addNewMeal({
       ...(state as any),
@@ -192,6 +190,7 @@ export function useMealForm(meal?: MealRo) {
           deliveryFee: +(state?.price?.deliveryFee ?? 0) as any,
         } ?? {},
       images: [...saved_images, ...uploaded_images],
+      image_url: uploaded_images,
     });
 
     return result;
@@ -227,7 +226,6 @@ export function useMealForm(meal?: MealRo) {
       initialChanges.current = transformMealToFormState(meal as any);
     }
   }, [initialChanges, state, hasChanges, meal]);
-
 
   return {
     state,
