@@ -189,8 +189,7 @@ export function useMealForm(meal?: MealRo) {
           ...state?.price,
           deliveryFee: +(state?.price?.deliveryFee ?? 0) as any,
         } ?? {},
-      images: [...saved_images, ...uploaded_images],
-      image_url: uploaded_images,
+      image_url: uploaded_images[0],
     });
 
     return result;
