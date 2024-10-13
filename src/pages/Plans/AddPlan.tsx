@@ -25,7 +25,7 @@ import {
 } from "components";
 import { EmptyCrate } from "components/Crate/Empty";
 
-import configs from "config";
+import configs, { CONTINENTS } from "config";
 import { PlanInterval } from "interfaces";
 import { capitalize } from "lodash";
 import { useMemo } from "react";
@@ -291,17 +291,9 @@ export default function AddPlan() {
                   value={state?.continent ?? "subscription"}
                   onChange={(e) => set({ continent: e.target.value })}
                 >
-                  {[
-                    "Asia",
-                    "Africa",
-                    "North America",
-                    "South America",
-                    "Antarctica",
-                    "Europe",
-                    "Australia",
-                  ].map((value, index) => (
-                    <option key={`continent_${index}`} value={value}>
-                      {value}
+                  {CONTINENTS.map((value, index) => (
+                    <option key={`continent_${index}`} value={value.search}>
+                      {value.noun}
                     </option>
                   ))}
                 </Select>
