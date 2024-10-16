@@ -200,6 +200,7 @@ export default function Subscriptions() {
                     const user = sub?.customer as UserRo;
                     const plan = sub?.plan as PlanRo;
 
+
                     return (
                       <GenericTableItem
                         isClickable={false}
@@ -207,6 +208,7 @@ export default function Subscriptions() {
                         cols={[
                           <Gravatar
                             src={user?.profilePhotoUrl}
+                            IsReturningCustomer={sub?.returning_client}
                             title={join(
                               [user?.first_name, user?.last_name],
                               " "

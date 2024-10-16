@@ -194,12 +194,14 @@ export default function Gravatar(props: GravatarProps) {
                     New
                   </Badge>
                 )}
-                {IsReturningCustomer && (
-                  <Badge bg="brand.primary" color="white">
+               
+              </HStack>
+
+              {IsReturningCustomer && (
+                  <Badge display="block" bg="brand.primary" color="white">
                     Returning Client
                   </Badge>
                 )}
-              </HStack>
             </Skeleton>
           )}
           {subtitle && (

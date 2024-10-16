@@ -28,6 +28,7 @@ export interface SubscriptionRo {
   end_date: string;
   next_billing_date: string;
   status: string;
+  returning_client?:boolean;
 }
 
 export interface TransactionRo {
