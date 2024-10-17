@@ -617,7 +617,6 @@ export default function EditMeal() {
                                 (value) => value === extra?._id
                               )}
                               onChange={(e) => {
-                                alert(extra?._id);
                                 const ep = state?.expected_swallows?.includes(
                                   extra?._id!
                                 )
