@@ -36,6 +36,7 @@ export interface ILineUpItem {
     lunch: ILineUpFoodItem;
     dinner: ILineUpFoodItem;
   };
+  isReturningCustomer?:boolean;
   thursday: {
     lunch: ILineUpFoodItem;
     dinner: {

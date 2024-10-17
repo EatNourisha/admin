@@ -617,23 +617,23 @@ export default function AddMeal() {
                                 size="lg"
                                 colorScheme="red"
                                 className="capitalize"
-                                isChecked={state?.expected_swallow?.some(
+                                isChecked={state?.expected_swallows?.some(
                                   (value) => value === extra?._id
                                 )}
                                 onChange={(e) => {
                                   alert(extra?._id);
-                                  const ep = state?.expected_swallow?.includes(
+                                  const ep = state?.expected_swallows?.includes(
                                     extra?._id!
                                   )
-                                    ? state?.expected_swallow?.filter(
+                                    ? state?.expected_swallows?.filter(
                                         (e) => e !== extra?._id
                                       )
                                     : [
-                                        ...(state?.expected_swallow ?? [])!,
+                                        ...(state?.expected_swallows ?? [])!,
                                         extra?._id,
                                       ];
                                   set({
-                                    expected_swallow: ep as string[],
+                                    expected_swallows: ep as string[],
                                   });
                                 }}
                               >

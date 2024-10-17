@@ -36,7 +36,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
   return {
     name: meal?.name,
     expected_proteins: meal?.expected_proteins ?? [],
-    expected_swallow: meal?.expected_swallow ?? [],
+    expected_swallows: meal?.expected_swallows ?? [],
     isProtein: meal?.isProtein,
     weight: meal?.weight,
     continent: meal?.continent,

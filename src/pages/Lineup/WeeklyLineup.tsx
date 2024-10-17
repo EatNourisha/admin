@@ -62,7 +62,7 @@ function Item(props: ItemProps) {
     data: {} as UserRo,
     loading: true,
   });
-  const { customer, delivery_date, status, } = props;
+  const { customer, delivery_date, status,isReturningCustomer } = props;
 
 
 
@@ -78,12 +78,16 @@ function Item(props: ItemProps) {
     getUser();
   }, []);
 
+  console.log("LINE UPS");
+  console.log(props)
+
   return (
     <>
       <GenericTableItem
         cols={[
           <Gravatar
             title={join([user?.data?.first_name, user?.data?.last_name], " ")}
+            IsReturningCustomer={isReturningCustomer}
             onClick={() =>
               navigate(`${configs.paths.users}/${user?.data?._id ?? ""}`)
             }
