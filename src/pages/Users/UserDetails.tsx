@@ -763,13 +763,14 @@ const SelectAssignedCS = ({
   }, []);
   return (
     <div>
-      <p className="text-[#7E8494] text-[0.75rem] font-inter">ASSIGNED CX</p>
+      <p className="text-[#7E8494] text-[0.75rem] font-inter">ASSIGNED CS</p>
       {data?.loading ? (
         <Loader />
       ) : (
         <select
           onChange={(e) => setSelectedCSId(e.target.value)}
           className="border-[1px] border-[#7E8494] h-[3.75rem] w-full rounded-[0.5rem] px-3"
+          placeholder="Select CS"
         >
           {data?.data?.map((user, index) => (
             <option value={user?._id} key={`cs_user_${index}`}>
