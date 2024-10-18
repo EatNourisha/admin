@@ -186,7 +186,7 @@ export default function Uploader(props: UploaderProps) {
   const { getRootProps, getInputProps, isDragActive, isDragReject, open } =
     useDropzone({
       minSize: 0,
-      maxSize: ONE_MB * 5,
+      maxSize: ONE_MB * 1.5,
       maxFiles: maxFiles ?? 10,
       accept: {
         "image/*": [".png", ".jpg", ".jpeg"],
