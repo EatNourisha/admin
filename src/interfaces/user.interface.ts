@@ -16,6 +16,8 @@ export interface PlanRo {
   five_day: boolean;
   weekend:boolean;
   continent?:string;
+  meal_number:string;
+  amount_permeal:string;
 }
 
 export interface SubscriptionRo {

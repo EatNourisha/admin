@@ -299,6 +299,32 @@ export default function AddPlan() {
                 </Select>
               </FormControl>
 
+              <HStack justifyContent="space-between">
+                <FormControl>
+                  <InputLabel>Amount per meal</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    value={state?.amount_permeal ?? ""}
+                    onChange={(e) => set({ amount_permeal: e.target.value })}
+                  />
+                </FormControl>
+
+                <FormControl>
+                  <InputLabel>Meal number</InputLabel>
+                  <Input
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder={""}
+                    value={state?.meal_number ?? ""}
+                    onChange={(e) => set({ meal_number: e.target.value })}
+                  />
+                </FormControl>
+              </HStack>
+
               <Divider />
 
               <Stack>

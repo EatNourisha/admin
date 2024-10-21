@@ -42,6 +42,8 @@ const transformPlanToFormState = (plan: PlanRo): IPlanFormState => {
     country: plan?.country,
     subscription_interval: plan?.subscription_interval,
     delivery_fee: plan?.delivery_fee,
+    amount_permeal:plan?.amount_permeal,
+    meal_number: plan?.meal_number,
     perks: (plan?.perks ?? []).map((perk, i) => ({
       index: i,
       content: perk,
