@@ -285,29 +285,29 @@ export default function UserDetails() {
 
             <Grid templateColumns="repeat(2, 1fr)" gap="20px">
               <Detail
-                isLoading={isLoading}
+                isLoading={!isLoading}
                 title="Email"
                 description={user?.email}
                 _desc={{ textTransform: "lowercase" }}
               />
               <Detail
-                isLoading={isLoading}
+                isLoading={!isLoading}
                 title="Phone Number"
                 description={user?.phone}
               />
               <Detail
-                isLoading={isLoading}
+                isLoading={!isLoading}
                 title="Delivery Day"
                 // description={user?.delivery_day}
                 description={delivery_day}
               />
               <Detail
-                isLoading={isLoading}
+                isLoading={!isLoading}
                 title="Allergies"
                 description={allergies}
               />
               <Detail
-                isLoading={isLoading}
+                isLoading={!isLoading}
                 title="Address"
                 description={join(
                   [
@@ -320,7 +320,7 @@ export default function UserDetails() {
                 )}
               />
               <Detail
-                isLoading={isLoading}
+                isLoading={!isLoading}
                 title="Subscription"
                 _desc={{
                   color: when(
@@ -372,7 +372,7 @@ export default function UserDetails() {
             <Box mt="58px">
               <Text mb="16px">Billing history</Text>
               <VStack gridGap="10px">
-                {!isLoadingBills &&
+                {isLoadingBills &&
                   history?.map((tx, i) => (
                     <BillItem
                       isLoading={false}
@@ -545,7 +545,7 @@ function BillItem(props: BillItemProps) {
       <HStack justifyContent="space-between">
         <Stack>
           <Skeleton
-            isLoaded={isLoading}
+            isLoaded={!isLoading}
             w="fit-content"
             h={isLoading ? "20px" : "fit-content"}
             borderRadius="12px"
@@ -557,7 +557,7 @@ function BillItem(props: BillItemProps) {
             </Text>
           </Skeleton>
           <Skeleton
-            isLoaded={isLoading}
+            isLoaded={!isLoading}
             w="fit-content"
             h={isLoading ? "8px" : "fit-content"}
             borderRadius="12px"
@@ -575,7 +575,7 @@ function BillItem(props: BillItemProps) {
           </Skeleton>
 
           <Skeleton
-            isLoaded={isLoading}
+            isLoaded={!isLoading}
             w="fit-content"
             h={isLoading ? "12px" : "fit-content"}
             borderRadius="10px"
@@ -597,7 +597,7 @@ function BillItem(props: BillItemProps) {
         </Stack>
 
         <Skeleton
-          isLoaded={isLoading}
+          isLoaded={!isLoading}
           w="fit-content"
           h={isLoading ? "12px" : "fit-content"}
           borderRadius="12px"
@@ -689,7 +689,7 @@ function Note(props: NoteProps) {
       </HStack>
 
       <Skeleton
-        isLoaded={isLoading}
+        isLoaded={!isLoading}
         w="100%"
         h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"
