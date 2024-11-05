@@ -369,10 +369,10 @@ export default function UserDetails() {
               mutationKeys={[key]}
             />
 
-            <Box mt="58px">
+             <Box mt="58px">
               <Text mb="16px">Billing history</Text>
               <VStack gridGap="10px">
-                {isLoadingBills &&
+                {!isLoadingBills &&
                   history?.map((tx, i) => (
                     <BillItem
                       isLoading={false}
@@ -405,6 +405,9 @@ export default function UserDetails() {
                 />
               )}
             </Box>
+
+
+            
           </Box>
 
           <Box className="hidden md:block" position="sticky" top="100px">
