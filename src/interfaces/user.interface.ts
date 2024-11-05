@@ -63,6 +63,7 @@ export interface MealRo {
   isSwallow: boolean;
   meals: string[];
   lastEdited?:string;
+  lastEditedBy?:UserRo,
   name: string;
   category: string;
   slug: string;

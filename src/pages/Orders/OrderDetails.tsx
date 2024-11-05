@@ -16,6 +16,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import { get } from "utils/makeRequest";
 import {
   MainLayoutContainer,
   Topbar,
@@ -29,7 +30,7 @@ import {
 import { navigate, useParams } from "@reach/router";
 import { format, parseISO } from "date-fns";
 import join from "lodash/join";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { currencyFormat, when } from "utils";
 import { ExtraRo, MealRo, OrderItemRo, OrderStatus } from "interfaces";
 import usePageFilters from "hooks/usePageFilters";
@@ -259,7 +260,7 @@ export default function OrderDetails() {
                 }
               />
 
-              {order?.orderExtras && <Extras extras={order?.orderExtras} />}
+             
             </Grid>
           </Box>
 
@@ -289,7 +290,14 @@ export default function OrderDetails() {
               gridGap="16px"
             >
               {!isLoading &&
-                order_items.map((item, i) => <OrderItem key={i} {...item} />)}
+                order_items.map((item, i) => (
+                  <OrderItem
+                    key={i}
+                    //@ts-ignore
+                    extras={order?.orderExtras}
+                    {...item}
+                  />
+                ))}
 
               {isLoading && !data && <Loader my="80px" />}
 
@@ -328,6 +336,13 @@ interface DetailProps extends BoxProps {
 
 interface OrderItemProps extends Partial<Omit<OrderItemRo, "order">>, BoxProps {
   isLoading?: boolean;
+  extras: [
+    {
+      item: MealRo;
+      protein: ExtraRo;
+      swallow: ExtraRo;
+    }
+  ];
 }
 
 function Detail(props: DetailProps) {
@@ -366,7 +381,13 @@ function Detail(props: DetailProps) {
 }
 
 function OrderItem(props: OrderItemProps) {
-  const { item, quantity, cart_session_id, isLoading, ...xprops } = props;
+  //@ts-ignore
+  const { item, quantity, cart_session_id, isLoading, extras, ...xprops } =
+    props;
+  console.log("\n\n\n\n\n\n");
+  console.log(extras);
+  console.log(item);
+  console.log("\n\n\n\n\n\n");
 
   const meal = item as MealRo;
 
@@ -402,6 +423,14 @@ function OrderItem(props: OrderItemProps) {
             {quantity}
           </Badge>
         </HStack>
+
+        {
+          //@ts-ignore
+          extras?.item === item?._id && (
+            //@ts-ignore
+            <Extras extras={extras} />
+          )
+        }
         <Button
           mt="6px !important"
           maxW="100px"
@@ -425,49 +454,65 @@ function OrderItem(props: OrderItemProps) {
 const Extras = ({
   extras,
 }: {
-  extras: [
-    {
-      item: MealRo;
-      protein: ExtraRo;
-      swallow: ExtraRo;
-    }
-  ];
+  extras: {
+    item: MealRo;
+    protein: ExtraRo;
+    swallow: ExtraRo;
+  };
 }) => {
-  return (
-    <HStack
-      p="12px 16px"
-      borderRadius="8px"
-      pos="relative"
-      border="1px solid transparent"
-      borderColor="brand.neutral100"
-      display="block"
-    >
-      <Text fontSize="md" fontWeight="400" color="brand.greyText">
-        Extras
-      </Text>
-      <div className="flex flex-col gap-1 mt-4">
-        <Text fontSize="md" fontWeight="400" color="brand.greyText">
-          Protein
-        </Text>
-        {extras?.map((extra) => (
-          <div>
-            <div>Type: {extra?.protein?.type}</div>
-            <div>Extra: {extra?.protein?.name}</div>
-          </div>
-        ))}
-      </div>
+  const [mealExtras, setMealextras] = useState<{
+    protein: { data: ExtraRo[] };
+    swallow: { data: ExtraRo[] };
+  } | null>(null);
+  const [proteinExtra, setProteinExtra] = useState<ExtraRo | null>(null);
+  const [swallowExtra, setSwallowExtra] = useState<ExtraRo | null>(null);
+  const getExtras = async () => {
+    const res = await get(`/meals/extras`);
+    //@ts-ignore
+    setMealextras(res?.data);
+  };
 
-      <div className="flex flex-col gap-1 mt-4">
-        <Text fontSize="md" fontWeight="400" color="brand.greyText">
-          Swallow
-        </Text>
-        {extras?.map((extra) => (
+  useEffect(() => {
+    getExtras();
+  }, []);
+
+  useEffect(() => {
+    if (!!mealExtras?.protein?.data?.length) {
+      setProteinExtra(
+        mealExtras?.protein?.data?.find((e) => e?._id === extras?.protein)!
+      );
+    }
+
+    if (!!mealExtras?.swallow?.data?.length) {
+      setSwallowExtra(
+        mealExtras?.swallow?.data?.find((e) => e?._id === extras?.swallow)!
+      );
+    }
+  }, [mealExtras]);
+
+  return (
+    <HStack borderRadius="8px" border="1px solid transparent" display="block">
+    
+      {extras?.protein && (
+        <div className="flex flex-col gap-1 mt-4">
+          <Text fontSize="md" fontWeight="400" color="brand.greyText">
+            Protein
+          </Text>
           <div>
-            <div>Type: {extra?.swallow?.type}</div>
-            <div>Extra: {extra?.swallow?.name}</div>
+            <div>Extra: {proteinExtra?.name}</div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
+
+      {extras?.swallow && (
+        <div className="flex flex-col gap-1 mt-4">
+          <Text fontSize="md" fontWeight="400" color="brand.greyText">
+            Swallow
+          </Text>
+
+          <div>Extra: {swallowExtra?.name}</div>
+        </div>
+      )}
     </HStack>
   );
 };
