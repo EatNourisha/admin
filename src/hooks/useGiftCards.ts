@@ -21,7 +21,6 @@ export default function useGiftCard(filter: IUseUsersFilter) {
   const key = `gift?${queries}`;
   const { data, error,  } = useSWR<ApiResponse<GetGiftCardRo>>(key, get);
 
-  // console.log("USERS", data);
 
   return {
     key,

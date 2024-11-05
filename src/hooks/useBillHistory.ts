@@ -17,7 +17,6 @@ export default function useBillHistory(
   const key = `transactions/customer/${id}?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetBillHistory>>(key, get);
 
-  console.log("Transac", data);
 
   return {
     key,

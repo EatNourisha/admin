@@ -12,8 +12,6 @@ export function LineupItem(props: LineupItemProps) {
   const { day, pack, ...xprops } = props;
   const keys = Object.keys(pack);
 
-
-
   return daysOfWeek.map((d) => d.toUpperCase()).includes(day.toUpperCase()) ? (
     <Box {...xprops}>
       <Text
@@ -77,9 +75,12 @@ function Meal(props: MealProps) {
         )}
       </Box>
       {foodItem?.extraId?.name && (
-        <HStack width="100%" fontSize={14} color="#303237">
+        <VStack width="100%" fontSize={14} color="#303237">
           <Text color="#303237">Extra: {foodItem?.extraId?.name}</Text>
-        </HStack>
+          {foodItem?.extraId?.type && (
+            <Text>Type:{foodItem?.extraId?.type}</Text>
+          )}
+        </VStack>
       )}
     </VStack>
   ) : (

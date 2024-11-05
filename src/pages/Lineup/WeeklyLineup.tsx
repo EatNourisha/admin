@@ -62,9 +62,7 @@ function Item(props: ItemProps) {
     data: {} as UserRo,
     loading: true,
   });
-  const { customer, delivery_date, status,isReturningCustomer } = props;
-
-
+  const { customer, delivery_date, status, isReturningCustomer } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -77,9 +75,6 @@ function Item(props: ItemProps) {
   useEffect(() => {
     getUser();
   }, []);
-
-  console.log("LINE UPS");
-  console.log(props)
 
   return (
     <>
@@ -96,8 +91,10 @@ function Item(props: ItemProps) {
           <Text textTransform="capitalize">
             {user?.data?.address?.city ?? "------------"}
           </Text>,
-          <Text textTransform="capitalize">{moment(delivery_date).format("DD/MM/YYYY")}</Text>,
-         
+          <Text textTransform="capitalize">
+            {moment(delivery_date).format("DD/MM/YYYY")}
+          </Text>,
+
           <Button
             size="sm"
             variant="outline"
@@ -111,8 +108,8 @@ function Item(props: ItemProps) {
 
       {!!user?.data && (
         <LineupDetailModal
-          lineupData={props}
           {...props}
+          lineupData={props}
           user={user.data}
           isOpen={isOpen}
           onClose={onClose}
@@ -191,7 +188,7 @@ const LineupDetailModal = (props: LineupDetailModalProps) => {
           overflowY="scroll"
         >
           <HStack justifyContent={"center"} mt={10} alignItems="center">
-            <Logo width={100} height={100}  />
+            <Logo width={100} height={100} />
           </HStack>
           <Heading mt="5px" fontSize="24px" fontWeight="600">
             Weekly Lineup
@@ -239,10 +236,10 @@ const LineupDetailModal = (props: LineupDetailModalProps) => {
             borderStyle="dashed"
             borderColor="black"
           />
-         
-         <Text fontSize={16} color="#000" fontWeight={700}>
-         Week {lineupData?.week}
-         </Text>
+
+          <Text fontSize={16} color="#000" fontWeight={700}>
+            Week {lineupData?.week}
+          </Text>
 
           <Stack
             mt="16px"

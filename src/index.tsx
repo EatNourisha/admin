@@ -13,9 +13,7 @@ import { Buffer } from "buffer";
 
 // const root = ReactDOM.createRoot($element);
 
-(window as any).log = console.log;
 // Disable console logs in production.
-isProd && (console.log = () => {});
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
@@ -23,11 +21,9 @@ if ("serviceWorker" in navigator) {
       scope: "/",
     })
     .then((reg) => {
-      console.log("Service worker ready", reg);
     });
 
   navigator.serviceWorker.ready.then((reg) => {
-    console.log("Service worker ready", reg);
   });
 }
 

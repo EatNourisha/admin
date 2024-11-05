@@ -206,7 +206,6 @@ export default function Uploader(props: UploaderProps) {
       },
     });
 
-  // console.log("REJECTED FILES", _files);
 
   useEffect(
     () => () => {
@@ -235,7 +234,6 @@ export default function Uploader(props: UploaderProps) {
     // const { onClick } = getInputProps();
     // if (!isDisabled) !!onClick && onClick(e);
     // else openModal("featureUnavailable")();
-    console.log("Uploader Click!!");
   };
 
   const renderDropZone = () => {

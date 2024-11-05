@@ -8,7 +8,6 @@ export default function useAppointment(id: string) {
     get
   );
 
-  // console.log("PROFILE", data);
 
   return {
     data: data?.data,

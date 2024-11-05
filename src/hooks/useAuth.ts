@@ -52,7 +52,6 @@ export default function useAuth() {
             token: res.token,
           });
       } catch (error: any) {
-        console.log("Login Error", error);
         actions?.setError({
           action: { type: "auth/login", payload: data },
           message: error?.message,

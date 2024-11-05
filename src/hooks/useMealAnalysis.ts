@@ -19,7 +19,6 @@ export default function useMealAnalysis(
   const key = `/meals/pack/analysis/${id}?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetMealAnalysis>>(key, get);
 
-  // console.log("USERS", data);
 
   return {
     key,

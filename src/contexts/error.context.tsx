@@ -29,9 +29,7 @@ const ErrorContextProvider = (props: any) => {
   }, [next, logout]);
 
   useEffect(() => {
-    console.log("NEXT ERROR", next);
     if (next.id !== null && next.message !== null && next.showUser && true) {
-      console.log("NEXT ERROR", next);
       autoLogOut();
 
       toast({

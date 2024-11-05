@@ -20,7 +20,6 @@ const makeRequest = <D extends any = any, R extends any = any>(
 ) => {
   const auth = ls.get(configs.authKey);
 
-  console.log("Auth", auth);
 
   const getHeaders = () => {
     if (auth?.isSignedIn && auth?.token)

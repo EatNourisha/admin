@@ -18,7 +18,6 @@ const SuccessContextProvider = (props: any) => {
 
   // useEffect(() => {
   //   if (next.id !== null && next.message !== null && next.showUser) {
-  //     console.log("NEXT Success", next);
 
   //     toast({
   //       position: "bottom-right",

@@ -75,12 +75,7 @@ export function PaginatorContainer(
     const list = state;
     // const previous = currentNode?.prev;
     const previous = list.pop();
-    console.log(
-      "PREVIOUS NODE ",
-      list,
-      previous,
-      previous?.value === currentNode?.value
-    );
+    
     if (currentNode && previous) setCurrentNode(previous);
     set(list);
     return previous?.value;
@@ -117,13 +112,7 @@ export function PaginatorContainer(
     // return nextHash;
   };
 
-  console.log("state", state, {
-    prev: currentNode?.prev?.value,
-    next: currentNode?.next?.value,
-    current: currentNode?.value,
-    isPrevEQNext: currentNode?.prev?.value === currentNode?.next?.value,
-    isPrevEqCurrent: currentNode?.prev?.value === currentNode?.value,
-  });
+
 
   return (
     <Context.Provider
@@ -160,7 +149,6 @@ export function Paginator(props: PaginatorProps) {
   const goBack = () => {
     const value = onPrev();
     prevClick && value && prevClick(value);
-    console.log("Prev Value", value);
   };
 
   const goForward = () => {
@@ -168,7 +156,6 @@ export function Paginator(props: PaginatorProps) {
     !!next && nextClick && nextClick(next);
   };
 
-  console.log("Paginator History", history);
   return (
     <HStack py="30px" justifyContent="flex-end">
       <IconButton

@@ -125,71 +125,79 @@ export default function ListLineup() {
                 "Subtotal",
                 "Delivery Fee",
                 "Total",
+                "Coupon Code",
                 "Status",
                 "Action",
               ]}
             >
               {/* @ts-ignore */}
-              {!!(lineUpData.data?._orders?.data as OrderRo[])?.filter(o => !(o.status?.toLowerCase()?.includes("un"))).length &&
+              {!!(lineUpData.data?._orders?.data as OrderRo[])?.filter(
+                (o) => !o.status?.toLowerCase()?.includes("un")
+              ).length &&
                 //@ts-ignore
-                (lineUpData.data?._orders?.data as OrderRo[])?.filter(o => !(o.status?.toLowerCase()?.includes("paid"))).map((order) => {
-                  const cus = order?.customer;
-                  console.log(order)
+                (lineUpData.data?._orders?.data as OrderRo[])
+                  ?.filter((o) => !o.status?.toLowerCase()?.includes("paid"))
+                  .map((order) => {
+                    const cus = order?.customer;
+                    console.log(order);
 
-                  return (
-                    <GenericTableItem
-                      isClickable={false}
-                      key={`order-table-item:${order?._id}`}
-                      cols={[
-                        <Gravatar
-                          src={cus?.profilePhotoUrl}
-                          title={join([cus?.first_name, cus?.last_name], " ")}
-                          createdAt={cus?.createdAt}
-                          IsReturningCustomer={order?.isReturningCustomer}
-                          subtitle={
-                            !cus?.createdAt
-                              ? undefined
-                              : `${formatDistanceToNow(
-                                  parseISO(cus?.createdAt!)
-                                )} ago`
-                          }
-                        />,
-                        <Text fontSize="14px" textTransform="capitalize">
-                          {order?.ref ?? "--------"}
-                        </Text>,
-                        //  <Text fontSize="14px" textTransform="capitalize">
-                        //   {order?.ref ?? "--------"}
-                        // </Text>,
-                        <Text fontSize="14px">{order?.phone_number}</Text>,
-                        <Text fontSize="14px" textTransform="uppercase">
-                          {currencyFormat("gbp").format(order?.subtotal ?? 0)}
-                        </Text>,
-                        <Text fontSize="14px">
-                          {currencyFormat("gbp").format(
-                            order?.delivery_fee ?? 0
-                          )}
-                        </Text>,
-                        <Text fontSize="14px" textTransform="capitalize">
-                          {currencyFormat("gbp").format(order?.total ?? 0)}
-                        </Text>,
-                        <Text fontSize="14px" textTransform="capitalize">
-                          <OrderStatusBadge type={order?.status} />
-                        </Text>,
-                        <HStack>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              navigate(`${configs.paths.order}/${order?._id}`)
+                    return (
+                      <GenericTableItem
+                        isClickable={false}
+                        key={`order-table-item:${order?._id}`}
+                        cols={[
+                          <Gravatar
+                            src={cus?.profilePhotoUrl}
+                            title={join([cus?.first_name, cus?.last_name], " ")}
+                            createdAt={cus?.createdAt}
+                            IsReturningCustomer={order?.isReturningCustomer}
+                            subtitle={
+                              !cus?.createdAt
+                                ? undefined
+                                : `${formatDistanceToNow(
+                                    parseISO(cus?.createdAt!)
+                                  )} ago`
                             }
-                          >
-                            View More
-                          </Button>
-                        </HStack>,
-                      ]}
-                    />
-                  );
-                })}
+                          />,
+                          <Text fontSize="14px" textTransform="capitalize">
+                            {order?.ref ?? "--------"}
+                          </Text>,
+                          //  <Text fontSize="14px" textTransform="capitalize">
+                          //   {order?.ref ?? "--------"}
+                          // </Text>,
+                          <Text fontSize="14px">{order?.phone_number}</Text>,
+                          <Text fontSize="14px" textTransform="uppercase">
+                            {currencyFormat("gbp").format(order?.subtotal ?? 0)}
+                          </Text>,
+                          <Text fontSize="14px">
+                            {currencyFormat("gbp").format(
+                              order?.delivery_fee ?? 0
+                            )}
+                          </Text>,
+                          <Text fontSize="14px" textTransform="capitalize">
+                            {currencyFormat("gbp").format(order?.total ?? 0)}
+                          </Text>,
+                          <Text fontSize="14px" textTransform="capitalize">
+                            {order?.coupon ??"---"}
+                          </Text>,
+                          <Text fontSize="14px" textTransform="capitalize">
+                            <OrderStatusBadge type={order?.status} />
+                          </Text>,
+                          <HStack>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                navigate(`${configs.paths.order}/${order?._id}`)
+                              }
+                            >
+                              View More
+                            </Button>
+                          </HStack>,
+                        ]}
+                      />
+                    );
+                  })}
             </GenericTable>
           </div>
           {/* @ts-ignore */}

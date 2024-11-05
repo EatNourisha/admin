@@ -12,7 +12,7 @@ export default function useBroadcasts(filter: IUseBroadcastsFilter) {
   const key = `notifications/broadcasts?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetBroadcasts>>(key, get);
 
-  // console.log("USERS", data);
+  // ("USERS", data);
 
   return {
     key,

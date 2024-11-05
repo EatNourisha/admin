@@ -75,7 +75,6 @@ export default function AddMealModal(props: AddMealModalProps) {
     [state?.is_available]
   );
 
-  console.log("is_available", is_available);
 
   const isDisabled = useMemo(() => {
     if (!!meal) return !hasChanges || !!state?.file || isLoading;
@@ -203,10 +202,8 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       const res = await uploadFile(file, filename);
       image_url = res.location;
 
-      // console.log("Upload Result", res);
       set({ isUploading: false });
     } catch (error) {
-      console.log("Upload Error", error);
       set({ isUploading: false });
     }
 
@@ -246,7 +243,6 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
         image_url = res.location;
         set({ isUploading: false });
       } catch (error) {
-        console.log("Upload Error", error);
         set({ isUploading: false });
       }
     }
@@ -275,7 +271,6 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
     }
   }, [state, hasChanges, meal]);
 
-  console.log("Changes", state, hasChanges);
 
   return {
     state,

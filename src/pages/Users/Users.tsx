@@ -48,7 +48,6 @@ export default function Users() {
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
     [data]
   );
-  console.log(customers)
   const hasCustomers = useMemo(() => (customers ?? []).length > 0, [customers]);
 
   const delivery_day = useCallback((user: UserRo) => {

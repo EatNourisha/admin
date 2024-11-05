@@ -14,7 +14,6 @@ export default function usePromo(id: string, filters?: IUsePromoFilters) {
   const key = `discounts/promos/${id}?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetPromoByID>>(key, get);
 
-  // console.log("PROFILE", data);
 
   return {
     key,

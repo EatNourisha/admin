@@ -9,7 +9,6 @@ export default function useDashboard() {
     get
   );
 
-  // console.log("PROFILE", data);
 
   return {
     data: data?.data,

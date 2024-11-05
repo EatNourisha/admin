@@ -45,7 +45,6 @@ export const useErrorStore = create<ErrorState>((set) => ({
     setError: (error: Partial<ErrorType>) =>
       set(
         produce((state: ErrorState) => {
-          //   console.log("error", error);
           const id = `${error.action?.type ?? "error"}-${nanoid(7)}`;
           if (state?.previous?.id === null && state?.next?.id === null) {
             state.previous = { ...error, id };

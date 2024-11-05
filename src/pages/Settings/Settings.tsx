@@ -31,7 +31,6 @@ import { when } from "utils";
 export default function Settings() {
   const { data: settings, isLoading } = useSettings();
 
-  console.log("Settings Data", settings);
 
   const {
     set,

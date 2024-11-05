@@ -26,7 +26,6 @@ export default function useGetAppointments(
     get
   );
 
-  // console.log("PROFILE", data);
 
   return {
     data: data?.data,

@@ -60,7 +60,6 @@ export function useExport() {
         return blob;
       });
 
-      console.log("Download Progress", "-> Done", result);
       set({ isLoading: false, isSuccess: true, isDownloading: false });
     } catch (error: any) {
       set({ isError: true, isDownloading: false, isLoading: false });

@@ -52,6 +52,8 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
     [lineupData]
   );
 
+  
+
   return (
     <Modal
       isOpen={isOpen}

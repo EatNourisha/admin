@@ -18,6 +18,7 @@ export interface ILineUpFoodItem {
     createdAt: string;
     updatedAt: string;
     __v: number;
+    type?:string;
   };
 }
 

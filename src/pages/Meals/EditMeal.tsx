@@ -47,6 +47,8 @@ export default function EditMeal() {
   const { pathname } = useLocation();
   const { data: meal, isLoading } = useMeal(id);
 
+ 
+
   const [extras, setExtras] = useState<{
     swallow: { totalCount: number; data: IMealExtra[] };
     protein: { totalCount: number; data: IMealExtra[] };
@@ -134,6 +136,10 @@ export default function EditMeal() {
               gridGap="24px"
               onSubmit={handleSubmit}
             >
+              {
+                !!meal?.lastEdited && 
+                <p><span className="font-bold">Last editted by: </span>{meal?.lastEdited}</p>
+              }
               <HStack gridGap="24px">
                 <FormControl>
                   <InputLabel>Name</InputLabel>

@@ -546,7 +546,6 @@ function NotificationItem(props: NotificationItemProps) {
 function useNotificationItemViewMore(note: NotificationRo) {
   const { tag, metadata } = note;
 
-  console.log("Metadata", metadata);
 
   const viewMore_link = useMemo(() => {
     if (["lineup", "subscription"].includes(tag)) {

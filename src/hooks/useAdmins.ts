@@ -15,7 +15,6 @@ export default function useAdmins(filter: IUseAdminsFilter) {
   const key = `customers/admins?${queries}`;
   const { data, error } = useSWR<ApiResponse<GetUsersRo>>(key, get);
 
-  // console.log("USERS", data);
 
   return {
     key,

@@ -17,7 +17,6 @@ export default function useGetAppointmentStats(
     get
   );
 
-  console.log("STATS", data);
 
   return {
     data: data?.data,

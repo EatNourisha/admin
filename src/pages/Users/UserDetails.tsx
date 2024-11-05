@@ -506,7 +506,7 @@ function Detail(props: DetailProps) {
       </HStack>
 
       <Skeleton
-        isLoaded={!isLoading ?? true}
+        isLoaded={isLoading }
         w="fit-content"
         h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"
@@ -545,7 +545,7 @@ function BillItem(props: BillItemProps) {
       <HStack justifyContent="space-between">
         <Stack>
           <Skeleton
-            isLoaded={!isLoading ?? true}
+            isLoaded={isLoading}
             w="fit-content"
             h={isLoading ? "20px" : "fit-content"}
             borderRadius="12px"
@@ -557,7 +557,7 @@ function BillItem(props: BillItemProps) {
             </Text>
           </Skeleton>
           <Skeleton
-            isLoaded={!isLoading ?? true}
+            isLoaded={isLoading}
             w="fit-content"
             h={isLoading ? "8px" : "fit-content"}
             borderRadius="12px"
@@ -575,7 +575,7 @@ function BillItem(props: BillItemProps) {
           </Skeleton>
 
           <Skeleton
-            isLoaded={!isLoading ?? true}
+            isLoaded={isLoading}
             w="fit-content"
             h={isLoading ? "12px" : "fit-content"}
             borderRadius="10px"
@@ -597,7 +597,7 @@ function BillItem(props: BillItemProps) {
         </Stack>
 
         <Skeleton
-          isLoaded={!isLoading ?? true}
+          isLoaded={isLoading}
           w="fit-content"
           h={isLoading ? "12px" : "fit-content"}
           borderRadius="12px"
@@ -689,7 +689,7 @@ function Note(props: NoteProps) {
       </HStack>
 
       <Skeleton
-        isLoaded={!isLoading ?? true}
+        isLoaded={isLoading}
         w="100%"
         h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"

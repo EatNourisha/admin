@@ -31,7 +31,7 @@ import { format, parseISO } from "date-fns";
 import join from "lodash/join";
 import { ReactNode, useMemo, useState } from "react";
 import { currencyFormat, when } from "utils";
-import { MealRo, OrderItemRo, OrderStatus } from "interfaces";
+import { ExtraRo, MealRo, OrderItemRo, OrderStatus } from "interfaces";
 import usePageFilters from "hooks/usePageFilters";
 import useOrderDetails from "hooks/useOrderDetails";
 import { useOrderStatus } from "./OrderStatusBadge";
@@ -85,7 +85,9 @@ export default function OrderDetails() {
       });
     }
   };
-
+  console.log("\n\n\\n\n\n\n\n");
+  console.log("ORDER");
+  console.log("\n\n\\n\n\n\n\n");
   return (
     <PageMotion key="order-details">
       <Topbar pageTitle="Orders" />
@@ -256,6 +258,8 @@ export default function OrderDetails() {
                   </HStack>
                 }
               />
+
+              {order?.orderExtras && <Extras extras={order?.orderExtras} />}
             </Grid>
           </Box>
 
@@ -346,7 +350,7 @@ function Detail(props: DetailProps) {
       </HStack>
 
       <Skeleton
-        isLoaded={!isLoading ?? true}
+        isLoaded={isLoading}
         w="fit-content"
         h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"
@@ -417,3 +421,53 @@ function OrderItem(props: OrderItemProps) {
     </HStack>
   );
 }
+
+const Extras = ({
+  extras,
+}: {
+  extras: [
+    {
+      item: MealRo;
+      protein: ExtraRo;
+      swallow: ExtraRo;
+    }
+  ];
+}) => {
+  return (
+    <HStack
+      p="12px 16px"
+      borderRadius="8px"
+      pos="relative"
+      border="1px solid transparent"
+      borderColor="brand.neutral100"
+      display="block"
+    >
+      <Text fontSize="md" fontWeight="400" color="brand.greyText">
+        Extras
+      </Text>
+      <div className="flex flex-col gap-1 mt-4">
+        <Text fontSize="md" fontWeight="400" color="brand.greyText">
+          Protein
+        </Text>
+        {extras?.map((extra) => (
+          <div>
+            <div>Type: {extra?.protein?.type}</div>
+            <div>Extra: {extra?.protein?.name}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-col gap-1 mt-4">
+        <Text fontSize="md" fontWeight="400" color="brand.greyText">
+          Swallow
+        </Text>
+        {extras?.map((extra) => (
+          <div>
+            <div>Type: {extra?.swallow?.type}</div>
+            <div>Extra: {extra?.swallow?.name}</div>
+          </div>
+        ))}
+      </div>
+    </HStack>
+  );
+};

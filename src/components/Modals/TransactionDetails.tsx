@@ -53,7 +53,6 @@ export default function TransactionDetailModal(
   const { data: tx, isLoading } = useTransaction(_id);
   const plan = useMemo(() => tx?.plan as PlanRo, [tx]);
 
-  console.log("Transaction Details", _id, tx);
 
   return (
     <Modal

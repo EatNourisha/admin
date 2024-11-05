@@ -62,6 +62,7 @@ export interface MealRo {
   continent?:string;
   isSwallow: boolean;
   meals: string[];
+  lastEdited?:string;
   name: string;
   category: string;
   slug: string;
@@ -156,10 +157,22 @@ export interface OrderItemRo {
   quantity: number;
   cart_session_id: string;
 }
+export interface ExtraRo {
+  name?:string;
+  _id?:string;
+  type?:string;
+}
 
 export interface OrderRo {
   _id: string;
   createdAt: string;
+  orderExtras:[
+    {
+      item:MealRo;
+      protein:ExtraRo;
+      swallow:ExtraRo;
+    }
+  ];
   updatedAt: string;
   isReturningCustomer?:boolean;
   customer: UserRo;
@@ -167,6 +180,7 @@ export interface OrderRo {
   subtotal: number;
   delivery_fee: number;
   total: number;
+  coupon?:string;
   status: OrderStatus;
   delivery_date: string;
   ref: string;

@@ -28,7 +28,6 @@ export default async function uploadFile(
   file: File,
   filename: string | null = null
 ) {
-  // console.log("config", config);
   return await client.uploadFile(file, filename ?? file.name);
 }
 
