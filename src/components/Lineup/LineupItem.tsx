@@ -68,7 +68,7 @@ function Meal(props: MealProps) {
         </Text>
         {foodItem?.mealId?.name ? (
           <Text fontSize="14px" textTransform="capitalize">
-            {foodItem?.mealId?.name}
+            {/* {foodItem?.mealId?.name} */}
           </Text>
         ) : (
           "---"
