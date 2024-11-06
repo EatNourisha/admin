@@ -33,6 +33,12 @@ export default function ListLineup() {
   const getLineUps = async () => {
     setLineUpData({ ...lineUpData, loading: true });
     const data = await get(`/orders/lineup/one-section?page=${page}&limit=10`);
+    console.log("\n\n\n\n\n\n\n\n")
+    //@ts-ignore
+    console.log(data?.data)
+    console.log("Lineup data")
+    console.log("\n\n\n\n\n\n\n\n")
+
 
     //@ts-ignore
     setLineUpData({ loading: false, data: data?.data });
@@ -108,6 +114,17 @@ export default function ListLineup() {
               ) : null}
             </GenericTable>
 
+            <APaginator
+              flexDir={"row"}
+              isLoading={!lineUpData.loading}
+              /* @ts-ignore */
+              totalCount={lineUpData.data?._lineups?.totalCount}
+              limit={10}
+              page={page}
+              /* @ts-ignore */
+              onPageChange={(p) => setPage(p)}
+            />
+
             {/* ORDERS?\ */}
 
             <HStack mt="10" justifyContent="space-between">
@@ -139,7 +156,6 @@ export default function ListLineup() {
                   ?.filter((o) => !o.status?.toLowerCase()?.includes("paid"))
                   .map((order) => {
                     const cus = order?.customer;
-                    console.log(order);
 
                     return (
                       <GenericTableItem
@@ -197,12 +213,11 @@ export default function ListLineup() {
                   })}
             </GenericTable>
           </div>
-          {/* @ts-ignore */}
             <APaginator
               flexDir={"row"}
               isLoading={!lineUpData.loading}
               /* @ts-ignore */
-              totalCount={lineUpData.data?.totalCount}
+              totalCount={lineUpData.data?._orders?.totalCount}
               limit={10}
               page={page}
               /* @ts-ignore */

@@ -159,9 +159,11 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
           >
             {!!lineupData &&
               !isLoading &&
-              Object.keys(lineup ?? {}).map((key, i) => (
-                <LineupItem key={key} day={key} pack={(lineup! as any)[key]} />
-              ))}
+              Object.keys(lineup ?? {}).map((key, i) =>{
+                return  (
+                  <LineupItem key={key} day={key} pack={(lineup! as any)[key]} />
+                )
+              })}
 
             {!isLoading && !lineupData && <EmptyCrate />}
           </Stack>

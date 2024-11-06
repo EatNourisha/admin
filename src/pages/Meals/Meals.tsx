@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
   Box,
@@ -13,11 +13,13 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useDebounce } from "use-debounce";
 import {
   APaginator,
   AddMealModal,
   ConfirmationModal,
   Icon,
+  Input,
   Loader,
   MainLayoutContainer,
   PageMotion,
@@ -33,12 +35,23 @@ import useMeals from "hooks/useMeals";
 import useMealMutations from "hooks/useMealMutations";
 import { navigate, useLocation } from "@reach/router";
 import { currencyFormat } from "utils";
+import { post, put } from "utils/makeRequest";
 
 export default function Meals() {
   // const [isLoading, setIsLoading] = useState(true);
 
   const { search } = useLocation();
   const params = useMemo(() => new URLSearchParams(search), [search]);
+  const [searchingMeals, setSearchingMeals] = useState(false);
+  const [searchMealsText, setSearchMealsText] = useState("");
+  const [value] = useDebounce(searchMealsText, 1000);
+  const [searchResult, setSearchResult] = useState<
+    | {
+        totalcount: number;
+        meals: MealRo[];
+      }
+    | undefined
+  >(undefined);
 
   const { isOpen, onClose /*, onOpen */ } = useDisclosure();
 
@@ -58,6 +71,22 @@ export default function Meals() {
   );
   const hasMeals = useMemo(() => (meals ?? []).length > 0, [meals]);
   const totalCount = useMemo(() => data?.totalCount ?? 0, [data]);
+
+  const searchMeals = async () => {
+    setSearchingMeals(true);
+    const response = await post(`/meals/pack/search/phrase`, {
+      searchPhrase: value,
+    });
+    //@ts-ignore
+    setSearchResult(response?.data);
+    setSearchingMeals(false);
+  };
+
+  useEffect(() => {
+    if (value) {
+      searchMeals();
+    }
+  }, [value]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -81,8 +110,16 @@ export default function Meals() {
               Add Meal
             </Button>
           </HStack>
+          <div className="my-4">
+            <Input
+              value={searchMealsText}
+              onChange={(e) => setSearchMealsText(e.target.value)}
+              placeholder="Search meals"
+            />
+          </div>
 
           <VStack>
+            {searchingMeals && <Loader mx="auto" my="160px" />}
             {hasMeals && (
               <Grid w="100%" templateColumns="repeat(3, 1fr)" gap="16px">
                 {/* {Array(12)
@@ -91,9 +128,11 @@ export default function Meals() {
                 <MealItem />
               ))} */}
 
-                {meals.map((meal, i) => (
-                  <MealItem key={`meal-${i}`} keys={[key]} {...meal} />
-                ))}
+                {(!!searchMealsText ? searchResult?.meals ?? [] : meals).map(
+                  (meal, i) => (
+                    <MealItem key={`meal-${i}`} keys={[key]} {...meal} />
+                  )
+                )}
               </Grid>
             )}
             {!hasMeals && isLoading && <Loader mx="auto" my="160px" />}
@@ -107,7 +146,10 @@ export default function Meals() {
                 totalCount={data?.totalCount}
                 limit={state?.limit}
                 page={state?.page}
-                onPageChange={onPageChange}
+                onPageChange={(value: number) => {
+                  setSearchMealsText("");
+                  onPageChange(value);
+                }}
               />
             )}
           </Box>
@@ -136,8 +178,6 @@ function MealItem(props: MealItemProps) {
     spice_level,
     ...xprops
   } = props;
-
-
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {

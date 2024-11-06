@@ -76,10 +76,19 @@ function Meal(props: MealProps) {
       </Box>
       {foodItem?.extraId?.name && (
         <VStack width="100%" fontSize={14} color="#303237">
-          <Text color="#303237">Extra: {foodItem?.extraId?.name}</Text>
+          <Text color="#303237">{foodItem?.extraId?.name}</Text>
+
           {/* {foodItem?.extraId?.type && (
             <Text>Type:{foodItem?.extraId?.type}</Text>
           )} */}
+        </VStack>
+      )}
+      {/* @ts-ignore */}
+
+      {foodItem?.proteinId?.name && (
+        <VStack width="100%" fontSize={14} color="#303237">
+          {/* @ts-ignore */}
+          <Text color="#303237">{foodItem?.proteinId?.name}</Text>
         </VStack>
       )}
     </VStack>
