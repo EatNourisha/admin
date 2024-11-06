@@ -162,9 +162,6 @@ export default function ListLineup() {
                           <Text fontSize="14px" textTransform="capitalize">
                             {order?.ref ?? "--------"}
                           </Text>,
-                          //  <Text fontSize="14px" textTransform="capitalize">
-                          //   {order?.ref ?? "--------"}
-                          // </Text>,
                           <Text fontSize="14px">{order?.phone_number}</Text>,
                           <Text fontSize="14px" textTransform="uppercase">
                             {currencyFormat("gbp").format(order?.subtotal ?? 0)}
@@ -201,7 +198,6 @@ export default function ListLineup() {
             </GenericTable>
           </div>
           {/* @ts-ignore */}
-          {!!lineUpData.data?._lineups?.lineups?.length && (
             <APaginator
               flexDir={"row"}
               isLoading={!lineUpData.loading}
@@ -212,7 +208,6 @@ export default function ListLineup() {
               /* @ts-ignore */
               onPageChange={(p) => setPage(p)}
             />
-          )}
         </Stack>
       </MainLayoutContainer>
     </PageMotion>
