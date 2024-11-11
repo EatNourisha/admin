@@ -98,10 +98,9 @@ export default function OrderDetails() {
           gap="24px"
         >
           <Box
-            p="38px"
+            p={{ base: "0", md: "38px" }}
             borderRadius="8px"
-            border="2px solid transparent"
-            borderColor="brand.neutral100"
+            border={{ base: "none", md: "2px solid brand.neutral100" }}
             mb="20px"
           >
             <HStack w="100%" justifyContent="space-between">
@@ -116,17 +115,6 @@ export default function OrderDetails() {
               >
                 Back
               </Button>
-              {/* <Button
-              size="xs"
-              color="brand.black"
-              variant="transparent"
-              fontSize="md"
-              fontWeight="600"
-              leftIcon={<Icon type="edit" />}
-            >
-              Edit
-            </Button> */}
-              <HStack gridGap="10px"></HStack>
             </HStack>
 
             <VStack pt="44px" pb="74px">
@@ -142,7 +130,10 @@ export default function OrderDetails() {
               </Badge>
             </VStack>
 
-            <Grid templateColumns="repeat(2, 1fr)" gap="20px">
+            <Grid
+              templateColumns="repeat(2, 1fr)"
+              gap={{ base: "10px", md: "20px" }}
+            >
               <Detail
                 isLoading={isLoading}
                 title="Subtotal"
@@ -259,8 +250,6 @@ export default function OrderDetails() {
                   </HStack>
                 }
               />
-
-             
             </Grid>
           </Box>
 
@@ -282,18 +271,18 @@ export default function OrderDetails() {
             </HStack>
 
             <Stack
-              mt="16px"
+              mt={{ base: "0", md: "16px" }}
               borderRadius="8px"
               overflow="hidden"
               p="14px 0"
               shadow={when(!items, "0px 2px 12px rgba(0, 0, 0, 0.05)", "none")}
-              gridGap="16px"
+              gap={{ base: "10px", md: "16px" }}
             >
               {!isLoading &&
                 order_items.map((item, i) => (
                   <OrderItem
                     key={i}
-                    //@ts-ignore
+                    // @ts-ignore
                     extras={order?.orderExtras}
                     {...item}
                   />
@@ -351,10 +340,10 @@ function Detail(props: DetailProps) {
   return (
     <Box
       w="100%"
-      h="fit-content"
-      p="24px 22px"
+      p={{ base: "16px", md: "20px 24px" }}
       borderRadius="8px"
       shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
+      wordBreak="break-word"
       {...xprops}
     >
       <HStack color="brand.black">
@@ -364,15 +353,11 @@ function Detail(props: DetailProps) {
         </Text>
       </HStack>
 
-      <Skeleton
-        isLoaded={isLoading}
-        w="fit-content"
-        h={isLoading ? "20px" : "fit-content"}
-        borderRadius="12px"
-        mt="8px"
-        {..._desc}
-      >
-        <Text fontSize="18px" textTransform="capitalize">
+      <Skeleton isLoaded={!isLoading} borderRadius="8px" mt="8px" {..._desc}>
+        <Text
+          fontSize={{ base: "14px", md: "18px" }}
+          textTransform="capitalize"
+        >
           {description ?? "--------"}
         </Text>
       </Skeleton>
@@ -393,14 +378,16 @@ function OrderItem(props: OrderItemProps) {
 
   return (
     <HStack
-      p="12px 16px"
+      p={{ base: "8px", md: "16px" }}
       borderRadius="8px"
       pos="relative"
+      justifyContent="space-between"
       border="1px solid transparent"
       borderColor="brand.neutral100"
+      maxW={"400px"}
       {...xprops}
     >
-      <Box w="160px" h="100px" overflow="hidden" borderRadius="10px">
+      <Box w="100%" maxW="160px" h="100px" borderRadius="10px">
         <Image
           src={meal?.image_url}
           alt={meal?.slug}
@@ -410,14 +397,14 @@ function OrderItem(props: OrderItemProps) {
         />
       </Box>
 
-      <Stack ml="10px !important" gap="0">
+      <Stack ml="10px !important" gap={2}>
         <Heading as="h6" fontSize="sm">
           {meal?.name}
         </Heading>
         <Text color="grey" fontSize="xs" mt="0px !important">
           {cart_session_id}
         </Text>
-        <HStack mt="6px !important">
+        <HStack>
           <Text fontSize="sm">Quantity</Text>
           <Badge bg="red" w="fit-content" color="white">
             {quantity}
@@ -431,22 +418,22 @@ function OrderItem(props: OrderItemProps) {
             <Extras extras={extras} />
           )
         }
-        <Button
-          mt="6px !important"
-          maxW="100px"
-          size="xs"
-          variant="outline"
-          onClick={() => navigate(`/meals/edit/${meal?._id}`)}
-        >
-          View Meal
-        </Button>
+        <HStack>
+          <Button
+            maxW="100px"
+            variant="outline"
+            p={"10px 16px"}
+            onClick={() => navigate(`/meals/edit/${meal?._id}`)}
+          >
+            View Meal
+          </Button>
+          <Text fontWeight="500">
+            {currencyFormat("gbp").format(
+              +(meal?.price?.amount ?? 0) * (quantity ?? 1)
+            )}
+          </Text>
+        </HStack>
       </Stack>
-
-      <Text pos="absolute" bottom="16px" right="20px" fontWeight="500">
-        {currencyFormat("gbp").format(
-          +(meal?.price?.amount ?? 0) * (quantity ?? 1)
-        )}
-      </Text>
     </HStack>
   );
 }
@@ -491,26 +478,35 @@ const Extras = ({
   }, [mealExtras]);
 
   return (
-    <HStack borderRadius="8px" border="1px solid transparent" display="block">
-    
+    <HStack
+      borderRadius="8px"
+      border="1px solid transparent"
+      display="block"
+      gap={4}
+    >
       {extras?.protein && (
-        <div className="flex flex-col gap-1 mt-4">
-          <Text fontSize="md" fontWeight="400" color="brand.greyText">
+        <div className="flex gap-4">
+          <Text
+            fontSize={{ base: "14px", md: "16px" }}
+            fontWeight="400"
+            color="brand.greyText"
+          >
             Protein
           </Text>
-          <div>
-            <div>Extra: {proteinExtra?.name}</div>
-          </div>
+          <p className="text-sm md:text-base">Extra: {proteinExtra?.name}</p>
         </div>
       )}
 
       {extras?.swallow && (
-        <div className="flex flex-col gap-1 mt-4">
-          <Text fontSize="md" fontWeight="400" color="brand.greyText">
+        <div className="flex gap-4">
+          <Text
+            fontSize={{ base: "14px", md: "16px" }}
+            fontWeight="400"
+            color="brand.greyText"
+          >
             Swallow
           </Text>
-
-          <div>Extra: {swallowExtra?.name}</div>
+          <p className="text-sm md:text-base">Extra: {swallowExtra?.name}</p>
         </div>
       )}
     </HStack>

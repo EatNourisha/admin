@@ -153,16 +153,6 @@ export default function UserDetails() {
               >
                 Back
               </Button>
-              {/* <Button
-              size="xs"
-              color="brand.black"
-              variant="transparent"
-              fontSize="md"
-              fontWeight="600"
-              leftIcon={<Icon type="edit" />}
-            >
-              Edit
-            </Button> */}
               <HStack gridGap="10px">
                 <FormControl
                   display="flex"
@@ -479,7 +469,7 @@ function Detail(props: DetailProps) {
         <Text fontSize="md" fontWeight="400" color="brand.greyText">
           {title}
         </Text>
-        <Skeleton isLoaded={isLoading} borderRadius="12px" {..._desc}>
+        <Skeleton isLoaded={isLoading} borderRadius="8px" {..._desc}>
           <Text
             fontSize={{ base: "14px", md: "18px" }}
             textTransform="capitalize"
