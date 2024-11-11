@@ -44,7 +44,6 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
 
   return (
     <Link
-      // as={HStack}
       display="flex"
       flexDir="row"
       alignItems="center"
@@ -52,26 +51,12 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => {
       mb="16px !important"
       p="14px 34px"
       w="100%"
-      // border="4px solid transparent"
-      // borderRadius="4px"
       color="#ffffff8f"
       _hover={{
         bg: "rgba(255, 255, 255, 0.2)",
       }}
       overflow="hidden"
       minH="51px"
-      // _after={{
-      //   content: '""',
-      //   pos: "absolute",
-      //   w: "0px",
-      //   h: "100%",
-      //   bg: "white",
-      //   top: 0,
-      //   left: -1,
-      //   borderRightRadius: "4px",
-      //   willChange: "width",
-      //   transition: "width .3s ease-in-out",
-      // }}
       {...syntheticProps}
     >
       <HStack>

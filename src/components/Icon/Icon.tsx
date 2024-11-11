@@ -24,6 +24,7 @@ import { ReactComponent as PlusSquareIcon } from "assets/svgs/plus.svg";
 
 // Nourisha
 import { ReactComponent as LogoIcon } from "assets/svgs/logo-icon.svg";
+import { ReactComponent as LogoIcon2 } from "assets/svgs/logo-icon2.svg";
 import { ReactComponent as FullLogoIcon } from "assets/svgs/full-logo.svg";
 import { ReactComponent as DashboardIcon } from "assets/svgs/sidebar/dashboard.svg";
 import { ReactComponent as UsersIcon } from "assets/svgs/sidebar/users.svg";
@@ -73,6 +74,7 @@ export type IconNames =
   // Nourisha
   | "fullLogo"
   | "logo"
+  | "logo2"
   | "users"
   | "meals"
   | "subscriptions"
@@ -130,6 +132,7 @@ export default function Icon(props: IconProps) {
 
       // Nourisha
       logo: LogoIcon,
+      logo2: LogoIcon2,
       fullLogo: FullLogoIcon,
       dashboard: DashboardIcon,
       profile: ProfileIcon,

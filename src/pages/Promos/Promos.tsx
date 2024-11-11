@@ -175,7 +175,6 @@ export default function Promos() {
 
             {hasPromos && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

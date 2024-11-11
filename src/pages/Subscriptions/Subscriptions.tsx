@@ -1,5 +1,11 @@
-import { useEffect, useMemo } from "react";
-import { Box, FormControl, HStack, Select, Text } from "@chakra-ui/react";
+import {
+  Box,
+  FormControl,
+  HStack,
+  Select,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
@@ -11,16 +17,18 @@ import {
   SubscriptionBadge,
   Topbar,
 } from "components";
+import { useMemo } from "react";
 
-import { capitalize, join, omit } from "lodash";
-import usePageFilters from "hooks/usePageFilters";
-import useSubscriptions from "hooks/useSubscriptions";
-import { PlanRo, UserRo } from "interfaces";
-import { format, parseISO } from "date-fns";
 import { navigate } from "@reach/router";
 import configs from "config";
+import { format, parseISO } from "date-fns";
+import usePageFilters from "hooks/usePageFilters";
 import usePlans from "hooks/usePlans";
+import useSubscriptions from "hooks/useSubscriptions";
+import { PlanRo, UserRo } from "interfaces";
+import { capitalize, join, omit } from "lodash";
 import SubscriptionPopover from "./SubscriptionPopover";
+import MobileSubscriptionsData from "./MobileSubscriptionsData";
 
 export default function Subscriptions() {
   const { state, filter, setFilter, onPageChange } = usePageFilters(
@@ -44,7 +52,6 @@ export default function Subscriptions() {
     [subscriptions]
   );
 
-
   const handleSubscriptionType = (value: string) => {
     setFilter("subType", value);
     if (value !== "all") {
@@ -63,7 +70,6 @@ export default function Subscriptions() {
     if (value !== "all") setFilter("status", value);
     else setFilter("status", undefined);
   };
-
 
   const sortOptions = [
     { label: "All", value: "all" },
@@ -87,9 +93,17 @@ export default function Subscriptions() {
       <MainLayoutContainer>
         <Box>
           <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <HStack w="100%" gridGap="16px" justifyContent="space-between">
-
-              <FormControl w="fit-content" ml="0 !important" minW="250px">
+            <Stack
+              w="100%"
+              direction={{ base: "column", md: "row" }}
+              gap="16px"
+              justifyContent="space-between"
+            >
+              <FormControl
+                w={{ base: "100%", md: "auto" }}
+                ml="0 !important"
+                minW="250px"
+              >
                 <InputLabel
                   isLoading={isLoadingPlans}
                   fontSize="14px"
@@ -111,15 +125,19 @@ export default function Subscriptions() {
                   // maxW="300px"
                 >
                   <option value="all">All</option>
-                  {(plans?.data ?? []).map((plan) => (
-                    <option value={plan?._id}>
+                  {(plans?.data ?? []).map((plan, i) => (
+                    <option key={i} value={plan?._id}>
                       {capitalize(plan?.name ?? "")}
                     </option>
                   ))}
                 </Select>
               </FormControl>
 
-              <FormControl w="fit-content" ml="0 !important" minW="250px">
+              <FormControl
+                w={{ base: "100%", md: "auto" }}
+                ml="0 !important"
+                minW="250px"
+              >
                 <InputLabel
                   isLoading={isLoadingPlans}
                   fontSize="14px"
@@ -139,16 +157,19 @@ export default function Subscriptions() {
                   value={filter?.sort}
                   onChange={(e) => handleStatusSort(e.target.value)}
                 >
-                  {statusOptions.map((sort) => (
-                    <option key={sort.value} value={sort.value}>
+                  {statusOptions.map((sort, i) => (
+                    <option key={i} value={sort.value}>
                       {sort.label}
                     </option>
                   ))}
                 </Select>
               </FormControl>
 
-
-              <FormControl w="fit-content" ml="0 !important" minW="250px">
+              <FormControl
+                w={{ base: "100%", md: "auto" }}
+                ml="0 !important"
+                minW="250px"
+              >
                 <InputLabel
                   isLoading={isLoadingPlans}
                   fontSize="14px"
@@ -175,9 +196,7 @@ export default function Subscriptions() {
                   ))}
                 </Select>
               </FormControl>
-            </HStack>
-
-         
+            </Stack>
           </HStack>
           <Box
             borderRadius="8px"
@@ -200,7 +219,6 @@ export default function Subscriptions() {
                     const user = sub?.customer as UserRo;
                     const plan = sub?.plan as PlanRo;
 
-
                     return (
                       <GenericTableItem
                         isClickable={false}
@@ -217,7 +235,9 @@ export default function Subscriptions() {
                               navigate(`${configs.paths.users}/${user?._id}`)
                             }
                           />,
-                          <Text width="130px" fontSize="14px">{user?.email}</Text>,
+                          <Text width="130px" fontSize="14px">
+                            {user?.email}
+                          </Text>,
                           <Text fontSize="14px">
                             {!!sub?.start_date
                               ? format(
@@ -241,20 +261,22 @@ export default function Subscriptions() {
                           <SubscriptionBadge
                             type={(plan?.slug as any) ?? "no_subscription"}
                           />,
-                          <SubscriptionPopover sub={sub} />
+                          <SubscriptionPopover sub={sub} />,
                         ]}
                       />
                     );
                   })
                 : null}
             </GenericTable>
+            <MobileSubscriptionsData
+              data={subscriptions}
+              isLoading={isLoading}
+            />
           </Box>
 
           <Box>
-
             {hasSubscriptions && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
   Box,
@@ -13,7 +12,6 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useDebounce } from "use-debounce";
 import {
   APaginator,
   AddMealModal,
@@ -25,17 +23,19 @@ import {
   PageMotion,
   Topbar,
 } from "components";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
 
-import { orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import { MealRo } from "interfaces";
+import { orderBy } from "lodash";
 
 // import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
-import useMeals from "hooks/useMeals";
-import useMealMutations from "hooks/useMealMutations";
 import { navigate, useLocation } from "@reach/router";
+import useMealMutations from "hooks/useMealMutations";
+import useMeals from "hooks/useMeals";
 import { currencyFormat } from "utils";
-import { post, put } from "utils/makeRequest";
+import { post } from "utils/makeRequest";
 
 export default function Meals() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +72,7 @@ export default function Meals() {
   const hasMeals = useMemo(() => (meals ?? []).length > 0, [meals]);
   const totalCount = useMemo(() => data?.totalCount ?? 0, [data]);
 
-  const searchMeals = async () => {
+  const searchMeals = useCallback(async () => {
     setSearchingMeals(true);
     const response = await post(`/meals/pack/search/phrase`, {
       searchPhrase: value,
@@ -80,13 +80,13 @@ export default function Meals() {
     //@ts-ignore
     setSearchResult(response?.data);
     setSearchingMeals(false);
-  };
+  }, [value, setSearchingMeals, setSearchResult]);
 
   useEffect(() => {
     if (value) {
       searchMeals();
     }
-  }, [value]);
+  }, [value, searchMeals]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -103,6 +103,7 @@ export default function Meals() {
         <Box>
           <HStack as="form" justifyContent="flex-end" w="100%" mb="24px">
             <Button
+              w={{ base: "100%", md: "auto" }}
               ml="0 !important"
               leftIcon={<Icon type="add" />}
               onClick={() => navigate("/meals/add")}
@@ -121,13 +122,15 @@ export default function Meals() {
           <VStack>
             {searchingMeals && <Loader mx="auto" my="160px" />}
             {hasMeals && (
-              <Grid w="100%" templateColumns="repeat(3, 1fr)" gap="16px">
-                {/* {Array(12)
-              .fill(0)
-              .map((_, i) => (
-                <MealItem />
-              ))} */}
-
+              <Grid
+                w="100%"
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  sm: "repeat(2, 1fr)",
+                  lg: "repeat(3, 1fr)",
+                }}
+                gap="16px"
+              >
                 {(!!searchMealsText ? searchResult?.meals ?? [] : meals).map(
                   (meal, i) => (
                     <MealItem key={`meal-${i}`} keys={[key]} {...meal} />
@@ -141,7 +144,6 @@ export default function Meals() {
           <Box>
             {hasMeals && totalCount >= (state?.limit ?? 0) && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

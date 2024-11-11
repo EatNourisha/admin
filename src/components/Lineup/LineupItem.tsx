@@ -1,7 +1,7 @@
-import { Box, BoxProps, Grid, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, BoxProps, Grid, Text, VStack } from "@chakra-ui/react";
+import { daysOfWeek } from "config";
 import { MealPackRo, MealRo } from "interfaces";
 import { ILineUpFoodItem } from "types";
-import { daysOfWeek } from "config";
 
 interface LineupItemProps extends BoxProps {
   day: string;

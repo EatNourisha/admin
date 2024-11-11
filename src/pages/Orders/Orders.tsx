@@ -147,7 +147,6 @@ export default function Orders() {
 
             {hasOrders && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

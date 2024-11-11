@@ -142,10 +142,7 @@ const Topbar: FC<TopbarProps> = (props) => {
       pos="sticky"
       zIndex="99"
       mb="26px"
-      // backdropFilter="blur(10px)"
-      // mt="52px"
       borderBottom="1px solid #D0D5DD"
-      // pos="relative"
       {...xprops}
     >
       <HStack w="100%" pos="relative" bg="white" minH="100px">
@@ -153,7 +150,10 @@ const Topbar: FC<TopbarProps> = (props) => {
           <HStack w="100%" justifyContent="space-between">
             <Stack>
               <Skeleton isLoaded={!isLoading || true}>
-                <Heading fontSize="3xl" fontWeight="700" letterSpacing="-2px">
+                <Heading
+                  fontSize={{ base: "xl", md: "3xl" }}
+                  fontWeight="700"
+                >
                   {pageTitle}
                 </Heading>
               </Skeleton>

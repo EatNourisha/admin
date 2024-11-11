@@ -10,7 +10,6 @@ import {
   Text,
   TextProps,
 } from "@chakra-ui/react";
-import { add, isPast, parseISO } from "date-fns";
 import { useMemo } from "react";
 import { when } from "utils";
 
@@ -58,7 +57,7 @@ export default function Gravatar(props: GravatarProps) {
     _textContainer,
     isLoading,
     initials,
-    createdAt,
+    // createdAt,
     onClick,
     IsReturningCustomer,
   } = props;
@@ -151,7 +150,7 @@ export default function Gravatar(props: GravatarProps) {
       {..._container}
     >
       <SkeletonCircle
-        isLoaded={!isLoading ?? true}
+        isLoaded={!isLoading}
         w="fit-content"
         h="fit-content"
       >
@@ -168,7 +167,7 @@ export default function Gravatar(props: GravatarProps) {
         <Box ml="4px" {...variants?.textContainer} {..._textContainer}>
           {title && (
             <Skeleton
-              isLoaded={!isLoading ?? true}
+              isLoaded={!isLoading}
               w="fit-content"
               h="20px"
               borderRadius="12px"
@@ -206,7 +205,7 @@ export default function Gravatar(props: GravatarProps) {
           )}
           {subtitle && (
             <Skeleton
-              isLoaded={!isLoading ?? true}
+              isLoaded={!isLoading}
               w="fit-content"
               h="20px"
               borderRadius="12px"

@@ -16,7 +16,7 @@ import { useRef, useState } from "react";
 import { put } from "utils";
 import { Icon } from "@iconify/react";
 
-export default ({ sub }: { sub: SubscriptionRo }) => {
+const SubscriptionPopover = ({ sub }: { sub: SubscriptionRo }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -63,14 +63,13 @@ export default ({ sub }: { sub: SubscriptionRo }) => {
         initialFocusRef={firstFieldRef}
         onOpen={onOpen}
         onClose={onClose}
-        placement="left"
         closeOnBlur={true}
       >
         <PopoverTrigger>
           <HStack gap="5px">
             <Icon icon="cil:options" />
             <Text textAlign="center" className="text-primary text-center">
-              {sub.status === "incomplete_expired" ? "Incomplete":sub.status}
+              {sub.status === "incomplete_expired" ? "Incomplete" : sub.status}
             </Text>
           </HStack>
         </PopoverTrigger>
@@ -79,7 +78,7 @@ export default ({ sub }: { sub: SubscriptionRo }) => {
             <PopoverArrow />
             <PopoverCloseButton />
 
-            {sub.status !== ("active" || "incomplete_expired") && (
+            {!["active", "incomplete_expired"].includes(sub.status) && (
               <Button
                 mt="0 !important"
                 w="80%"
@@ -112,3 +111,5 @@ export default ({ sub }: { sub: SubscriptionRo }) => {
     </HStack>
   );
 };
+
+export default SubscriptionPopover;

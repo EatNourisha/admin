@@ -277,7 +277,6 @@ export default function Admins() {
           <Box>
             {hasAdmins && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

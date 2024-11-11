@@ -31,54 +31,61 @@ export default function GenericTable(props: GenericTableProps) {
   const { headers, isLoading, children } = props;
 
   return (
-    <Table variant="simple" borderRadius="8px">
-      {(isLoading || (!isLoading && !!children)) && (
-        <Thead bg="brand.neutral50" h="74px">
-          <Tr>
-            {headers.map((header) => (
-              <Th
-                textTransform="capitalize"
-                fontSize="14px"
-                color="brand.black"
-              >
-                {header}
-              </Th>
-            ))}
-          </Tr>
-        </Thead>
-      )}
-      <Tbody>
-        {isLoading &&
-          Array(10)
-            .fill(0)
-            .map((_, i) => (
-              <Tr key={`header-row:${i}`}>
-                {headers.map((header, i) => (
-                  <Td key={`header-loading:${i}`}>
-                    <Skeleton
-                      isLoaded={!isLoading ?? true}
-                      borderRadius="12px"
-                      h="14px"
-                    >
-                      {header}
-                    </Skeleton>
-                  </Td>
-                ))}
-              </Tr>
-            ))}
-
-        {!isLoading && children}
-
-        {!isLoading && !children && (
-          <VStack maxW="200px" mx="auto" my="180px">
-            <Image src={Empty} alt="empty list" boxSize="150px" />
-            <Text textAlign="center" fontSize="14px">
-              Sorry, it looks like you have nothing here yet
-            </Text>
-          </VStack>
+    <div className="max-w-full overflow-auto">
+      <Table
+        variant="simple"
+        borderRadius="8px"
+        hideBelow={"md"}
+      >
+        {(isLoading || (!isLoading && !!children)) && (
+          <Thead bg="brand.neutral50" h="74px">
+            <Tr>
+              {headers.map((header, i) => (
+                <Th
+                  key={`header:${i}`}
+                  textTransform="capitalize"
+                  fontSize="14px"
+                  color="brand.black"
+                >
+                  {header}
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
         )}
-      </Tbody>
-    </Table>
+        <Tbody>
+          {isLoading &&
+            Array(10)
+              .fill(0)
+              .map((_, i) => (
+                <Tr key={`header-row:${i}`}>
+                  {headers.map((header, i) => (
+                    <Td key={`header-loading:${i}`}>
+                      <Skeleton
+                        isLoaded={!isLoading}
+                        borderRadius="12px"
+                        h="14px"
+                      >
+                        {header}
+                      </Skeleton>
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+
+          {!isLoading && children}
+
+          {!isLoading && !children && (
+            <VStack maxW="200px" mx="auto" my="180px">
+              <Image src={Empty} alt="empty list" boxSize="150px" />
+              <Text textAlign="center" fontSize="14px">
+                Sorry, it looks like you have nothing here yet
+              </Text>
+            </VStack>
+          )}
+        </Tbody>
+      </Table>
+    </div>
   );
 }
 

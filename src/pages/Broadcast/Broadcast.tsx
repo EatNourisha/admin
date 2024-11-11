@@ -149,7 +149,6 @@ export default function Broadcasts() {
 
             {hasBroadcasts && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

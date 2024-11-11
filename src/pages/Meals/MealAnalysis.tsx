@@ -1,5 +1,16 @@
-import { useMemo } from "react";
-import { Box, FormControl, HStack, Select, Text } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  FormControl,
+  HStack,
+  Image,
+  Select,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { navigate, useParams } from "@reach/router";
+import Empty from "assets/images/folder.png";
 import {
   APaginator,
   GenericTable,
@@ -10,14 +21,19 @@ import {
   PageMotion,
   Topbar,
 } from "components";
-
-import { capitalize, join } from "lodash";
-import usePageFilters from "hooks/usePageFilters";
-import { MealPackRo, UserRo } from "interfaces";
-import { navigate, useParams } from "@reach/router";
+import MobileDataSkeleton from "components/MobileDataSkeleton";
+import { ReferralCounter } from "components/ReferralCount/ReferralCount";
 import configs from "config";
 import useMealAnalysis from "hooks/useMealAnalysis";
-import { ReferralCounter } from "components/ReferralCount/ReferralCount";
+import usePageFilters from "hooks/usePageFilters";
+import { MealAnalysisRo, MealPackRo, UserRo } from "interfaces";
+import { capitalize, join } from "lodash";
+import { useMemo } from "react";
+
+interface MobileTableDataProps extends BoxProps {
+  data?: MealAnalysisRo[];
+  isLoading?: boolean;
+}
 
 export default function MealAnalysis() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +50,7 @@ export default function MealAnalysis() {
     meal_type: filter?.meal_type,
   });
 
-  console.log("Meal Analysis", id, data);
+  // console.log("Meal Analysis", id, data);
 
   const analysis = useMemo(() => data?.data ?? [], [data]);
 
@@ -75,22 +91,20 @@ export default function MealAnalysis() {
     <PageMotion key="meal-analysis-root" pb="100px">
       <Topbar pageTitle="Meal Stats" />
       <MainLayoutContainer>
-        <Box>
-          <HStack
-            mt="48px"
-            as="form"
-            justifyContent="flex-start"
-            w="100%"
-            mb="24px"
-          >
+        <Box w="100%">
+          <HStack mt="48px" as="form" w="100%" mb="30px">
             <ReferralCounter
               isLoading={isLoading}
               count={data?.totalCount ?? 0}
               description={"Total Count"}
             />
           </HStack>
-          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <HStack gridGap="16px">
+          <HStack as="form" justifyContent="space-between" w="100%" mb="30px">
+            <Stack
+              w="full"
+              direction={{ base: "column", md: "row" }}
+              gap="16px"
+            >
               {/* <Input
                 // w="100%"
                 minH="48px"
@@ -159,12 +173,14 @@ export default function MealAnalysis() {
                     "friday",
                     "saturday",
                     "sunday",
-                  ].map((day) => (
-                    <option value={day}>{capitalize(day)}</option>
+                  ].map((day, i) => (
+                    <option key={i} value={day}>
+                      {capitalize(day)}
+                    </option>
                   ))}
                 </Select>
               </FormControl>
-            </HStack>
+            </Stack>
 
             {/* <Button
               ml="0 !important"
@@ -225,6 +241,7 @@ export default function MealAnalysis() {
                   })
                 : null}
             </GenericTable>
+            <MobileTableData data={analysis} isLoading={isLoading} />
           </Box>
 
           <Box>
@@ -239,7 +256,6 @@ export default function MealAnalysis() {
 
             {hasAnalysis && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}
@@ -253,3 +269,91 @@ export default function MealAnalysis() {
     </PageMotion>
   );
 }
+
+const MobileTableData = (props: MobileTableDataProps) => {
+  const { data = [], isLoading } = props;
+
+  // Loading state - show 3 skeleton items
+  if (isLoading) {
+    return <MobileDataSkeleton count={10} />;
+  }
+
+  // Empty state
+  if (!data.length) {
+    return (
+      <VStack maxW="200px" mx="auto" my="180px" hideFrom={"md"}>
+        <Image src={Empty} alt="empty list" boxSize="150px" />
+        <Text textAlign="center" fontSize="14px">
+          Sorry, it looks like you have nothing here yet
+        </Text>
+      </VStack>
+    );
+  }
+
+  // Render actual data
+  return (
+    <VStack spacing={4} width="full" py={4} hideFrom={"md"}>
+      {data.map((lysis, index) => {
+        const user = lysis?.customer as UserRo;
+        const pack = lysis?.pack as MealPackRo;
+
+        return (
+          <Box
+            key={`subscription-${index}`}
+            borderWidth="1px"
+            borderRadius="lg"
+            p={4}
+            fontSize="sm"
+            w="full"
+          >
+            <VStack alignItems="stretch" spacing="12px">
+              <Gravatar
+                src={user?.profilePhotoUrl}
+                title={join([user?.first_name, user?.last_name], " ")}
+                onClick={() => navigate(`${configs.paths.users}/${user?._id}`)}
+              />
+              <HStack justifyContent="space-between">
+                <Box>
+                  <Text mb="8px">Meal:</Text>
+                  <Text fontSize="14px" fontWeight="bold">
+                    {pack?.name ?? "----------"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text textAlign="right" mb="8px">
+                    Day:
+                  </Text>
+                  <Text fontSize="14px" fontWeight="bold">
+                    {capitalize(lysis?.day ?? "--------------")}
+                  </Text>
+                </Box>
+              </HStack>
+              <HStack justifyContent="space-between">
+                <Box>
+                  <Text mb="8px">Meal Type:</Text>
+                  <Text
+                    fontSize="14px"
+                    fontWeight="bold"
+                    textTransform="capitalize"
+                  >
+                    {capitalize(lysis?.meal_type ?? "--------------")}
+                  </Text>
+                </Box>
+                <Box textAlign={"right"}>
+                  <Text mb="8px">Delivery Day:</Text>
+                  <Text
+                    fontSize="14px"
+                    fontWeight="bold"
+                    textTransform="capitalize"
+                  >
+                    {capitalize(user?.delivery_day ?? "--------------")}
+                  </Text>
+                </Box>
+              </HStack>
+            </VStack>
+          </Box>
+        );
+      })}
+    </VStack>
+  );
+};

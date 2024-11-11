@@ -19,37 +19,36 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import {
-  MainLayoutContainer,
-  Topbar,
-  Icon,
-  Gravatar,
-  PageMotion,
-  TransactionDetailModal,
   APaginator,
+  ConfirmationModal,
+  Gravatar,
+  Icon,
+  InputLabel,
   LineupItem,
   Loader,
+  MainLayoutContainer,
+  PageMotion,
   Textarea,
-  InputLabel,
-  ConfirmationModal,
+  Topbar,
+  TransactionDetailModal,
 } from "components";
 
 import { navigate, useParams } from "@reach/router";
-import useUserDetails from "hooks/useUserDetails";
-import { format, parseISO } from "date-fns";
-import join from "lodash/join";
-import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
-import { currencyFormat, get, post, when } from "utils";
-import useBillHistory from "hooks/useBillHistory";
-import { TransactionRo } from "interfaces";
-import { capitalize, omit } from "lodash";
-import usePageFilters from "hooks/usePageFilters";
-import useLineup from "hooks/useLineUp";
 import { EmptyCrate } from "components/Crate/Empty";
-import useUserMutations from "hooks/useUserMutations";
-import { AllergyRo, UserRo } from "interfaces/auth.interface";
 import Modal from "components/Modal";
 import ReportModal from "components/Modals/ReportModal";
-import { IReport } from "types";
+import { format, parseISO } from "date-fns";
+import useBillHistory from "hooks/useBillHistory";
+import useLineup from "hooks/useLineUp";
+import usePageFilters from "hooks/usePageFilters";
+import useUserDetails from "hooks/useUserDetails";
+import useUserMutations from "hooks/useUserMutations";
+import { TransactionRo } from "interfaces";
+import { AllergyRo, UserRo } from "interfaces/auth.interface";
+import { capitalize, omit } from "lodash";
+import join from "lodash/join";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { currencyFormat, get, when } from "utils";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -137,10 +136,9 @@ export default function UserDetails() {
           gap="24px"
         >
           <Box
-            p="38px"
+            p={{ base: "0", md: "38px" }}
             borderRadius="8px"
-            border="2px solid transparent"
-            borderColor="brand.neutral100"
+            border={{ base: "none", md: "2px solid brand.neutral100" }}
             mb="20px"
           >
             <HStack w="100%" justifyContent="space-between">
@@ -247,29 +245,6 @@ export default function UserDetails() {
                     // isLoading={isDeleting}
                   />
                 </Tooltip>
-                {/* <Tooltip label="View Meal Stats">
-                  <IconButton
-                    minH="unset"
-                    minW="unset"
-                    maxH="unset"
-                    maxW="unset"
-                    boxSize="28px"
-                    borderRadius="8px"
-                    bg="transparent"
-                    aria-label="edit user note"
-                    icon={<Icon type="stats" color="black" />}
-                    _hover={{
-                      bg: "transparent",
-                    }}
-                    _active={{
-                      bg: "transparent",
-                    }}
-                    _loading={{ color: "brand.primary" }}
-                    onClick={() => navigate(`/meals/analysis?customer=${id}`)}
-                    // disabled={isDeleting}
-                    // isLoading={isDeleting}
-                  />
-                </Tooltip> */}
               </HStack>
             </HStack>
 
@@ -283,7 +258,10 @@ export default function UserDetails() {
               />
             </VStack>
 
-            <Grid templateColumns="repeat(2, 1fr)" gap="20px">
+            <Grid
+              templateColumns="repeat(2, 1fr)"
+              gap={{ base: "10px", md: "20px" }}
+            >
               <Detail
                 isLoading={!isLoading}
                 title="Email"
@@ -298,7 +276,6 @@ export default function UserDetails() {
               <Detail
                 isLoading={!isLoading}
                 title="Delivery Day"
-                // description={user?.delivery_day}
                 description={delivery_day}
               />
               <Detail
@@ -369,7 +346,7 @@ export default function UserDetails() {
               mutationKeys={[key]}
             />
 
-             <Box mt="58px">
+            <Box mt="58px">
               <Text mb="16px">Billing history</Text>
               <VStack gridGap="10px">
                 {!isLoadingBills &&
@@ -405,9 +382,6 @@ export default function UserDetails() {
                 />
               )}
             </Box>
-
-
-            
           </Box>
 
           <Box className="hidden md:block" position="sticky" top="100px">
@@ -495,31 +469,26 @@ function Detail(props: DetailProps) {
   return (
     <Box
       w="100%"
-      h="fit-content"
-      p="24px 22px"
+      p={{ base: "16px", md: "20px 24px" }}
       borderRadius="8px"
       shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
+      wordBreak="break-word"
       {...xprops}
     >
-      <HStack color="brand.black">
-        {/* <Icon type="phone" /> */}
+      <VStack alignItems="flex-start" color="brand.black">
         <Text fontSize="md" fontWeight="400" color="brand.greyText">
           {title}
         </Text>
-      </HStack>
-
-      <Skeleton
-        isLoaded={isLoading }
-        w="fit-content"
-        h={isLoading ? "20px" : "fit-content"}
-        borderRadius="12px"
-        mt="8px"
-        {..._desc}
-      >
-        <Text fontSize="18px" textTransform="capitalize" {..._desc}>
-          {description ?? "--------"}
-        </Text>
-      </Skeleton>
+        <Skeleton isLoaded={isLoading} borderRadius="12px" {..._desc}>
+          <Text
+            fontSize={{ base: "14px", md: "18px" }}
+            textTransform="capitalize"
+            {..._desc}
+          >
+            {description ?? "--------"}
+          </Text>
+        </Skeleton>
+      </VStack>
     </Box>
   );
 }
@@ -751,7 +720,7 @@ const SelectAssignedCS = ({
     loading: true,
     data: [],
   });
-  const fetchCSAdmins = async () => {
+  const fetchCSAdmins = useCallback(async () => {
     const admins = await get(`cs`);
     setData({
       loading: false,
@@ -760,10 +729,11 @@ const SelectAssignedCS = ({
     });
     //@ts-ignore
     setSelectedCSId(admins?.data[0]?._id);
-  };
+  }, [setData, setSelectedCSId]);
+
   useEffect(() => {
     fetchCSAdmins();
-  }, []);
+  }, [fetchCSAdmins]);
   return (
     <div>
       <p className="text-[#7E8494] text-[0.75rem] font-inter">ASSIGNED CS</p>
@@ -796,7 +766,7 @@ function Report({ userId, csID }: { userId?: string; csID: string }) {
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      const data = await post(`/cs/report/${userId}`, { text, teamId: csID });
+      // const data = await post(`/cs/report/${userId}`, { text, teamId: csID });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -810,17 +780,19 @@ function Report({ userId, csID }: { userId?: string; csID: string }) {
     }
   };
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const data = await get(`cs/report/${userId}`);
     //@ts-ignore
     const d = data?.data;
     if (d && d[0]?.text) {
       setText(d[0]?.text);
     }
-  };
+  }, [userId, setText]);
+
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
+
   return (
     <div className="flex gap-4 flex-col">
       <Modal
@@ -881,11 +853,10 @@ function FollowUp({ userId, csID }: { userId?: string; csID: string }) {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
-
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      const data = await post(`/cs/followup/${userId}`, { text, teamId: csID });
+      // const data = await post(`/cs/followup/${userId}`, { text, teamId: csID });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -899,17 +870,18 @@ function FollowUp({ userId, csID }: { userId?: string; csID: string }) {
     }
   };
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const data = await get(`cs/followup/${userId}`);
     //@ts-ignore
     const d = data?.data;
     if (d && d[0]?.text) {
       setText(d[0]?.text);
     }
-  };
+  }, [userId]);
+
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
   return (
     <div onSubmit={addFollowUp} className="flex gap-4 flex-col mb-8">

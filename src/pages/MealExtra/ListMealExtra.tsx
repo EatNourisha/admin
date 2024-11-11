@@ -149,8 +149,9 @@ function ListMealExtra() {
       <Topbar pageTitle="Meals Extra" />
       <MainLayoutContainer>
         <Box>
-          <HStack as="form" justifyContent="flex-end" w="100%" mb="24px">
+          <HStack as="form" mb="24px">
             <Button
+              w={{ base: "100%", md: "auto" }}
               ml="0 !important"
               leftIcon={<Icon type="add" />}
               onClick={() => setOpenAddMealExtraModal(true)}
@@ -163,7 +164,15 @@ function ListMealExtra() {
             {loading ? (
               <div className="text-center text-sm">Loading...</div>
             ) : (
-              <Grid w="100%" templateColumns="repeat(3, 1fr)" gap="16px">
+              <Grid
+                w="100%"
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  sm: "repeat(2, 1fr)",
+                  lg: "repeat(3, 1fr)",
+                }}
+                gap="16px"
+              >
                 {mealExtras?.map((mealExtra, i) => (
                   <MealExtraItem
                     setMealExtras={setMealExtras}

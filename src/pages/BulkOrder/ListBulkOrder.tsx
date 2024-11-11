@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import {
   Badge,
   Box,
@@ -23,17 +22,17 @@ import {
   PageMotion,
   Topbar,
 } from "components";
+import { useMemo } from "react";
 
-import { orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import { MealRo } from "interfaces";
+import { orderBy } from "lodash";
 
 // import { ReactComponent as PlateSVG } from "assets/svgs/plate.svg";
-import useMeals from "hooks/useMeals";
-import useMealMutations from "hooks/useMealMutations";
 import { navigate, useLocation } from "@reach/router";
-import { currencyFormat } from "utils";
 import useBulkOrder from "hooks/useBulkOrder";
+import useMealMutations from "hooks/useMealMutations";
+import { currencyFormat } from "utils";
 
 export default function BulkOrders() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -68,6 +67,7 @@ export default function BulkOrders() {
         <Box>
           <HStack as="form" justifyContent="flex-end" w="100%" mb="24px">
             <Button
+              w={{ base: "100%", md: "auto" }}
               ml="0 !important"
               leftIcon={<Icon type="add" />}
               onClick={() => navigate("/meals/add")}
@@ -78,13 +78,15 @@ export default function BulkOrders() {
 
           <VStack>
             {hasMeals && (
-              <Grid w="100%" templateColumns="repeat(3, 1fr)" gap="16px">
-                {/* {Array(12)
-              .fill(0)
-              .map((_, i) => (
-                <MealItem />
-              ))} */}
-
+              <Grid
+                w="100%"
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  sm: "repeat(2, 1fr)",
+                  lg: "repeat(3, 1fr)",
+                }}
+                gap="16px"
+              >
                 {meals.map((meal, i) => (
                   <MealItem key={`meal-${i}`} keys={[key]} {...meal} />
                 ))}
@@ -96,7 +98,6 @@ export default function BulkOrders() {
           <Box>
             {hasMeals && totalCount >= (state?.limit ?? 0) && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

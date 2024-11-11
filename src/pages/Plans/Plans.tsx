@@ -151,7 +151,6 @@ export default function Plans() {
 
             {hasPlans && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

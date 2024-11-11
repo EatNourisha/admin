@@ -1,21 +1,26 @@
-import { Text, TextProps, HStack } from "@chakra-ui/layout";
-import { CircularProgress } from "@chakra-ui/progress";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FC } from "react";
+import { Text, TextProps } from "@chakra-ui/react";
+import { Loader2 } from "lucide-react";
 
 interface InputLabelProps extends TextProps {
   isLoading?: boolean;
   htmlFor?: string;
 }
 
-const InputLabel: FC<InputLabelProps> = (props) => {
-  const { isLoading, children } = props;
+const InputLabel: React.FC<InputLabelProps> = ({
+  isLoading,
+  htmlFor,
+  className,
+  children,
+  ...props
+}) => {
   return (
-    <HStack alignItems="center">
+    <div className="flex items-center">
       <AnimatePresence initial={false} mode="wait">
         <motion.div
-          key={`input-label-motion-${isLoading ? "loading" : "stale"}`}
-          style={{ display: "inherit" }}
+          key="input-label-text"
+          className="inline-flex"
           layout="position"
           initial={{ x: -4, opacity: 1 }}
           animate={{ x: 0, opacity: 1 }}
@@ -23,45 +28,20 @@ const InputLabel: FC<InputLabelProps> = (props) => {
         >
           <Text
             as="label"
-            display="inline-block"
-            fontSize="sm"
-            color="brand.black"
-            mb="4px !important"
+            htmlFor={htmlFor}
+            className={`inline-block text-sm text-black mb-1 ${
+              className || ""
+            }`}
             {...props}
           >
             {children}
           </Text>
         </motion.div>
-        {/* </AnimatePresence> */}
-        {/* <Text
-        as="label"
-        display="inline-block"
-        fontSize="sm"
-        color="brand.black"
-        mb="4px !important"
-        {...props}
-      >
-        {children}
-      </Text> */}
-
-        {/* <AnimatePresence initial={false} exitBeforeEnter={true}> */}
-        <motion.div
-          key={`input-label-motion-${isLoading ? "loading" : "stale"}`}
-          style={{ display: "inherit", marginTop: "-3px" }}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-        >
-          {isLoading && (
-            <CircularProgress
-              isIndeterminate
-              color="brand.primary"
-              size="16px"
-            />
-          )}
-        </motion.div>
       </AnimatePresence>
-    </HStack>
+      {isLoading && (
+        <Loader2 className="animate-spin ml-2 text-primary" size={16} strokeWidth={2} />
+      )}
+    </div>
   );
 };
 

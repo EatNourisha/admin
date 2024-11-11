@@ -40,6 +40,8 @@ export {
   usePaginator,
 } from "./Paginator/Paginator";
 
+export {default as MobileNav} from "./MobileNav/MobileNav";
+
 export { default as Loader } from "./Loader/Loader";
 
 export { default as DetailItem } from "./DetailItem/DetailItem";

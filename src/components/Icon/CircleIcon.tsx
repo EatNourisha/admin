@@ -1,32 +1,43 @@
-import { Box } from "@chakra-ui/react";
+import { Box, ResponsiveValue } from "@chakra-ui/react";
 import { useMemo } from "react";
 import Icon, { IconProps } from "./Icon";
 
-type IconSizes = "xs" | "sm" | "md" | "lg";
+type IconSizeKey = "xs" | "sm" | "md" | "lg";
+type IconSizes = ResponsiveValue<IconSizeKey>;
+type IconStyleProps = Omit<IconProps, "type">;
 
-interface CircleIconProps extends IconProps {
+interface CircleIconProps extends Omit<IconProps, "size"> {
   size?: IconSizes;
-  _icon?: IconProps;
+  _icon?: IconStyleProps;
 }
 
 export default function CircleIcon(props: CircleIconProps) {
   const { type, size = "sm", bg, boxSize, _icon, ...xprops } = props;
 
-  const sizes = useMemo(() => {
-    const map: Record<IconSizes, string> = {
+  const getSize = (value: IconSizeKey): string => {
+    const sizeMap: Record<IconSizeKey, string> = {
       xs: "16px",
       sm: "24px",
       md: "32px",
       lg: "63px",
     };
+    return sizeMap[value];
+  };
 
-    return map[size];
+  const responsiveSize = useMemo(() => {
+    if (typeof size === "object") {
+      return Object.entries(size).reduce((acc, [breakpoint, value]) => {
+        acc[breakpoint] = getSize(value as IconSizeKey);
+        return acc;
+      }, {} as Record<string, string>);
+    }
+    return getSize(size as IconSizeKey);
   }, [size]);
 
   return (
     <Box
       display="flex"
-      boxSize={boxSize ?? sizes}
+      boxSize={boxSize ?? responsiveSize}
       justifyContent="center"
       alignItems="center"
       bg={bg}

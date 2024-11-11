@@ -1,4 +1,12 @@
-import { Box, BoxProps, HStack, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  HStack,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import {
   APaginator,
@@ -16,6 +24,7 @@ import { PromoRo, UserRo } from "interfaces";
 import { join } from "lodash";
 import { useMemo } from "react";
 import { currencyFormat, when } from "utils";
+import MobileReferalData from "../MobileReferalData";
 
 interface Props extends BoxProps {
   customer?: string;
@@ -39,19 +48,26 @@ export function UsersSubscribed(props: Props) {
   return (
     <Stack my="20px">
       <HStack mb="20px !important">
-        <Input
-          // w="100%"
+        <InputGroup
+          display="block"
+          w="100%"
           minH="48px"
-          minW="340px"
-          maxW="400px"
-          placeholder="Filter referrals by influencer's refcode"
-          value={state?.ref_code ?? ""}
-          endAdornment={<Icon type="search" />}
-          onChange={(e) => {
-            e.preventDefault();
-            setFilter("ref_code", e.target.value);
-          }}
-        />
+          maxW={{ base: "100%", md: "400px" }}
+        >
+          <Input
+            w="full"
+            pr="40px"
+            placeholder="Filter referrals by influencer's refcode"
+            value={state?.ref_code ?? ""}
+            onChange={(e) => {
+              e.preventDefault();
+              setFilter("ref_code", e.target.value);
+            }}
+          />
+          <InputRightElement top="4px">
+            <Icon type="search" />
+          </InputRightElement>
+        </InputGroup>
       </HStack>
 
       <Box
@@ -152,12 +168,16 @@ export function UsersSubscribed(props: Props) {
               );
             })}
         </GenericTable>
+        <MobileReferalData
+          data={customers}
+          isLoading={isLoading}
+          reward={true}
+        />
       </Box>
 
       <Box>
         {hasCustomers && (
           <APaginator
-            flexDir={"row"}
             isLoading={isLoading}
             totalCount={data?.totalCount}
             limit={state?.limit}

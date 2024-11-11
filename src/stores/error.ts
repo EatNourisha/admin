@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { produce } from "immer";
 import { nanoid } from "nanoid";
 // import omit from "lodash/omit";

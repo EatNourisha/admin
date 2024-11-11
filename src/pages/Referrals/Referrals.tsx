@@ -1,61 +1,24 @@
 import {
-  HStack,
-  // Select,
-  VStack,
-  Tabs,
+  Grid,
   Tab,
   TabList,
-  TabProps,
-  TabPanels,
   TabPanel,
+  TabPanels,
+  TabProps,
+  Tabs,
+  // Select,
+  VStack,
 } from "@chakra-ui/react";
 import { MainLayoutContainer, PageMotion, Topbar } from "components";
 
+import { useLocation } from "@reach/router";
+import { ReferralCounter } from "components/ReferralCount/ReferralCount";
 import useReferralStats from "hooks/useReferralStats";
-import { UsersInvited } from "./Panels/UsersInvited";
-import { UsersSubscribed } from "./Panels/UsersSubscribed";
+import { useMemo } from "react";
 import { PaidOut } from "./Panels/PaidOut";
 import { PendingWithdrawals } from "./Panels/PendingWithdrawals";
-import { useLocation } from "@reach/router";
-import { useMemo } from "react";
-import { ReferralCounter } from "components/ReferralCount/ReferralCount";
-
-// function EmptyState() {
-//   return (
-//     <Box>
-//       <HStack justifyContent="flex-end">
-//         <Button onClick={() => navigate(configs.paths.addAdministrator)}>
-//           Add Administrator
-//         </Button>
-//       </HStack>
-
-//       <VStack
-//         py="180px"
-//         justifyContent="center"
-//         maxW="200px"
-//         textAlign="center"
-//         m="0 auto"
-//         alignItems="center"
-//       >
-//         <Image boxSize="120px" src={EmptyFolder} alt="" />
-//         <Text>Sorry, it looks like you have nobody yet</Text>
-//         <Link
-//           to={configs.paths.addAdministrator}
-//           textDecoration="underline"
-//           color="brand.primary"
-//           fontWeight="bold"
-//         >
-//           Add Administrator
-//         </Link>
-//       </VStack>
-//     </Box>
-//   );
-// }
-
-// interface IState {
-//   email: string;
-//   name: string;
-// }
+import { UsersInvited } from "./Panels/UsersInvited";
+import { UsersSubscribed } from "./Panels/UsersSubscribed";
 
 export default function Referrals() {
   // const { isOpen, onClose, onOpen } = useDisclosure();
@@ -98,7 +61,18 @@ export default function Referrals() {
     <PageMotion key="referral-root">
       <Topbar pageTitle="Referrals" />
       <MainLayoutContainer>
-        <HStack mt="48px" as="form" justifyContent="center" w="100%" mb="24px">
+        <Grid
+          gap={{ base: "10px", md: "20px" }}
+          mt={{ base: "24px", md: "48px" }}
+          as="form"
+          templateColumns={{
+            base: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          }}
+          w="100%"
+          mb={{ base: "12px", md: "24px" }}
+        >
           <ReferralCounter
             isLoading={isStatsLoading}
             count={
@@ -125,7 +99,7 @@ export default function Referrals() {
             description={"Pending Withdrawals"}
             bg="#e7f3ff"
           />
-        </HStack>
+        </Grid>
 
         <VStack position="relative">
           <Tabs w="100%">
@@ -138,8 +112,6 @@ export default function Referrals() {
               >
                 <CTab>Users Invited</CTab>
                 <CTab>Users Subscribed</CTab>
-                {/* <CTab>Paid Out</CTab>
-                <CTab>Pending Withdrawals</CTab> */}
               </TabList>
             </VStack>
 

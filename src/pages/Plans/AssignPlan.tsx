@@ -183,7 +183,6 @@ export default function AssignPlan() {
 
             {hasCustomers && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

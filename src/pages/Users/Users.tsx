@@ -1,5 +1,12 @@
-import { useCallback, useMemo, useState } from "react";
-import { Box, Button, HStack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+  useToast
+} from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
@@ -12,17 +19,19 @@ import {
   SubscriptionBadge,
   Topbar,
 } from "components";
+import { useCallback, useMemo, useState } from "react";
 
 import { navigate } from "@reach/router";
 import configs from "config";
-import useUsers from "hooks/useUsers";
-import { join, orderBy } from "lodash";
-import usePageFilters from "hooks/usePageFilters";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { useExport } from "hooks/useExports";
-import { when } from "utils";
-import { UserRo } from "interfaces";
+import usePageFilters from "hooks/usePageFilters";
 import useUserMutations from "hooks/useUserMutations";
+import useUsers from "hooks/useUsers";
+import { UserRo } from "interfaces";
+import { join, orderBy } from "lodash";
+import { when } from "utils";
+import MobileUserDetails from "./MobileUserDetails";
 
 export default function Users() {
   const toast = useToast();
@@ -98,20 +107,32 @@ export default function Users() {
       />
       <MainLayoutContainer>
         <Box>
-          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <Input
-              // w="100%"
+          <Stack
+            as="form"
+            direction={{ base: "column", md: "row" }}
+            justifyContent="space-between"
+            w="100%"
+            mb="24px"
+          >
+            <InputGroup
+              display="block"
+              w="100%"
               minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search Users"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => {
-                e.preventDefault();
-                setFilter("searchPhrase", e.target.value);
-              }}
-            />
+              maxW={{ base: "100%", md: "400px" }}
+            >
+              <Input
+                w="full"
+                placeholder="Search Users"
+                value={state?.searchPhrase ?? ""}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setFilter("searchPhrase", e.target.value);
+                }}
+              />
+              <InputRightElement top="4px">
+                <Icon type="search" />
+              </InputRightElement>
+            </InputGroup>
 
             <Button
               size="md"
@@ -123,11 +144,10 @@ export default function Users() {
             >
               Sync to mailchimp
             </Button>
-          </HStack>
+          </Stack>
           <Box
-            borderRadius="8px"
-            overflow="hidden"
-            shadow="0px 2px 12px rgba(0, 0, 0, 0.05)"
+            borderRadius={{ base: "none", md: "8px" }}
+            shadow={{ base: "none", md: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
           >
             <GenericTable
               isLoading={isLoading}
@@ -182,6 +202,7 @@ export default function Users() {
                 />
               ))}
             </GenericTable>
+            <MobileUserDetails data={customers} isLoading={isLoading} />
           </Box>
 
           <Box>
@@ -196,7 +217,6 @@ export default function Users() {
 
             {hasCustomers && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}

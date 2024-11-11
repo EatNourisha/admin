@@ -1,4 +1,3 @@
-import { HStack, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import {
   Pagination,
   PaginationContainer,
@@ -9,6 +8,12 @@ import {
   PaginationSeparator,
   usePagination,
 } from "@ajna/pagination";
+import {
+  HStack,
+  Stack,
+  Text,
+  useColorModeValue
+} from "@chakra-ui/react";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -90,18 +95,9 @@ export default function APaginator(props /*: PaginatorProps*/) {
   };
 
   return (
-    <VStack
-      // bg="white"
-      p="20px 0"
-      justifyContent="space-between"
-      // borderRadius="0px 0px 16px 16px"
-      // flexDir={["column", "row"]}
-      w="100%"
-      // mt="0 !important"
-      {...xprops}
-    >
+    <Stack direction={{ base: "column", md: "row" }} p="20px 0" alignItems="center" justifyContent="space-between" w="100%" {...xprops}>
       {totalCount > 0 && (
-        <HStack>
+        <HStack p={{ base: "0 16px", md: "0" }}>
           <Text>
             Showing {offset + 1} to{" "}
             {clamp(
@@ -125,7 +121,7 @@ export default function APaginator(props /*: PaginatorProps*/) {
           <PaginationContainer
             align="center"
             justify="space-between"
-            p={4}
+            p={2}
             w="full"
           >
             <PaginationPrevious
@@ -251,6 +247,6 @@ export default function APaginator(props /*: PaginatorProps*/) {
           </PaginationContainer>
         </Pagination>
       </HStack>
-    </VStack>
+    </Stack>
   );
 }

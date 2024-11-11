@@ -16,7 +16,7 @@ import {
   Switch,
   Text,
 } from "@chakra-ui/react";
-import { navigate, useLocation, useParams } from "@reach/router";
+import { navigate, useParams } from "@reach/router";
 import { get } from "utils/makeRequest";
 import {
   Gravatar,
@@ -40,11 +40,18 @@ import Uploader, { FilePreviewType } from "components/Uploader/Uploader";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { CONTINENTS } from "config";
 import { IMealExtra } from "pages/MealExtra/ListMealExtra";
+import CurrencyInput from "components/Input/CurrencyInput";
+
+interface LastEditedBy {
+  email: string;
+  first_name?: string;
+  last_name?: string;
+}
 
 export default function EditMeal() {
   //   const toast = useToast();
   const { id } = useParams();
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
   const { data: meal, isLoading } = useMeal(id);
 
   const [extras, setExtras] = useState<{
@@ -64,6 +71,13 @@ export default function EditMeal() {
     submitForm,
     hasChanges,
   } = useMealForm(meal);
+
+  const formatEditorName = (editor: LastEditedBy | undefined) => {
+    if (!editor) return "";
+    const firstName = editor.first_name || "";
+    const lastName = editor.last_name || "";
+    return `${firstName} ${lastName}`.trim();
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -97,13 +111,12 @@ export default function EditMeal() {
     getExtras();
   }, []);
 
-
   return (
     <PageMotion key="meal-edit">
       <Topbar pageTitle="Meals" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p="0" maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
@@ -131,16 +144,18 @@ export default function EditMeal() {
             <Stack
               my="46px !important"
               as="form"
-              gridGap="24px"
+              gridGap={{ base: "16px", md: "24px" }}
               onSubmit={handleSubmit}
             >
               {!!meal?.lastEditedBy?.email && (
-                <p className="text-right">
-                  <span className="font-bold">Last editted by: </span>
-                  {`${ meal?.lastEditedBy?.first_name && meal?.lastEditedBy?.first_name} ${meal?.lastEditedBy?.last_name && meal?.lastEditedBy?.last_name}`}
-                </p>
+                <Text textAlign="right">
+                  <Text as="span" fontWeight="bold">
+                    Last edited by:{" "}
+                  </Text>
+                  {formatEditorName(meal.lastEditedBy)}
+                </Text>
               )}
-              <HStack gridGap="24px">
+              <HStack gridGap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -155,24 +170,14 @@ export default function EditMeal() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
-                    value={state?.price?.amount ?? ""}
-                    onChange={(e) => setPrice({ amount: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.price?.currency === "gbp"
-                          ? "£GBP"
-                          : state?.price?.currency ?? "£GBP"}
-                      </Text>
-                    }
+                    value={state?.price?.amount ?? 0}
+                    onChange={(e) => setPrice({ deliveryFee: e.target.value })}
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gridGap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -186,25 +191,18 @@ export default function EditMeal() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Previous Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder={""}
-                    value={state?.price?.previousAmount ?? ""}
+                  <CurrencyInput
+                    value={state?.price?.previousAmount ?? 0}
                     isDisabled
-                    // onChange={(e) => setPrice({ amount: +e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.price?.currency === "gbp"
-                          ? "£GBP"
-                          : state?.price?.currency ?? "£GBP"}
-                      </Text>
-                    }
+                    placeholder={""}
+                    // onChange={(e) =>
+                    //   setPrice({ previousAmount: e.target.value })
+                    // }
+                    // currency={state?.price?.currency ?? "gbp"}
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gridGap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Order Type</InputLabel>
                   <Select
@@ -232,24 +230,14 @@ export default function EditMeal() {
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gridGap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder={""}
+                  <CurrencyInput
                     isRequired={false}
-                    value={state?.price?.deliveryFee ?? ""}
+                    value={state?.price?.deliveryFee ??  0}
                     onChange={(e) => setPrice({ deliveryFee: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.price?.currency === "gbp"
-                          ? "£GBP"
-                          : state?.price?.currency ?? "£GBP"}
-                      </Text>
-                    }
+                    currency={state?.price?.currency ?? "gbp"}
                   />
                 </FormControl>
 
@@ -262,7 +250,7 @@ export default function EditMeal() {
                     placeholder={""}
                     type="number"
                     min={0}
-                    value={state?.available_quantity ?? ""}
+                    value={state?.available_quantity ?? 0}
                     onChange={(e) =>
                       set({ available_quantity: e.target.value })
                     }
@@ -298,7 +286,7 @@ export default function EditMeal() {
                 <Select
                   placeholder="Select continent"
                   borderRadius="4px"
-                  value={state?.continent}
+                  value={state?.continent ?? ""}
                   onChange={(e) => set({ continent: e.target.value })}
                 >
                   {CONTINENTS.map((value, index) => (
@@ -464,14 +452,20 @@ export default function EditMeal() {
                 />
               </FormControl>
 
-              <HStack justifyContent={"space-between"}>
+              <Grid
+                templateColumns={{
+                  base: "repeat(2, 1fr)",
+                  sm: "repeat(3, 1fr)",
+                }}
+                gap="8px"
+              >
                 <FormControl
                   display="flex"
                   w="fit-content"
                   alignSelf="flex-start"
                 >
                   <Switch
-                    ml="8px"
+                    ml={{ base: "0px", md: "8px" }}
                     aria-label="switch meal availability"
                     disabled={isLoading}
                     isChecked={state?.is_available}
@@ -503,7 +497,7 @@ export default function EditMeal() {
                   alignSelf="flex-start"
                 >
                   <Switch
-                    ml="8px"
+                    ml={{ base: "0px", md: "8px" }}
                     aria-label="Switch protein"
                     disabled={isSubmiting}
                     isChecked={state?.isProtein}
@@ -535,7 +529,7 @@ export default function EditMeal() {
                   alignSelf="flex-start"
                 >
                   <Switch
-                    ml="8px"
+                    ml={{ base: "0px", md: "8px" }}
                     aria-label="switch meal availability"
                     disabled={isLoading}
                     isChecked={state?.isSwallow}
@@ -560,7 +554,7 @@ export default function EditMeal() {
                     {when(!!state?.isSwallow, "Swallow", "Not Swallow")}
                   </InputLabel>
                 </FormControl>
-              </HStack>
+              </Grid>
 
               <HStack gap="3rem">
                 {state?.isProtein && (
@@ -616,7 +610,7 @@ export default function EditMeal() {
                             key={`single_extra_${index}`}
                           >
                             <Checkbox
-                              size="lg"
+                              size={{ base: "sm", md: "lg" }}
                               colorScheme="red"
                               className="capitalize"
                               isChecked={state?.expected_swallows?.some(
@@ -652,7 +646,10 @@ export default function EditMeal() {
 
               <Stack>
                 <Grid
-                  templateColumns="repeat(3, 1fr)"
+                  templateColumns={{
+                    base: "repeat(2, 1fr)",
+                    md: "repeat(3, 1fr)",
+                  }}
                   gap="10px"
                   mb="20px !important"
                 >
@@ -683,7 +680,7 @@ export default function EditMeal() {
                 />
               </Stack>
 
-              <HStack>
+              <HStack justify="center">
                 <Button
                   disabled={isDisabled}
                   isLoading={isSubmiting}

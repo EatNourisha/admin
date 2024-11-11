@@ -30,37 +30,46 @@ export default function TotalFeatureCount(props: TotalFeatureCountProps) {
 
   return (
     <Box
-      p="40px 34px"
+      p={{ base: "16px", md: "20px" }}
       border="1px solid transparent"
       borderColor="brand.neutral"
       borderRadius="8px"
-      minW="252px"
+      minW="167px"
     >
       <HStack>
         <CircleIcon
           type={type as any}
-          size="lg"
+          size={{ base: "md", lg: "lg" }}
+          flexShrink={{ base: 0, lg: 1 }}
           bg={iconColor.bg}
           shadow={iconColor.shadow}
+          _icon={{
+            w: { base: "16px", md: "20px", lg: "32px" },
+            h: { base: "16px", md: "20px", lg: "32px" },
+          }}
         />
 
         <Box ml="8px !important">
           <Skeleton
-            isLoaded={!isLoading ?? true}
+            isLoaded={!isLoading}
             borderRadius="12px"
             h={isLoading ? "16px" : "initial"}
           >
-            <Text fontSize="3xl" fontWeight="800" color="brand.black">
+            <Text
+              fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+              fontWeight="800"
+              color="brand.black"
+            >
               {value}
             </Text>
           </Skeleton>
           <Skeleton
-            isLoaded={!isLoading ?? true}
+            isLoaded={!isLoading}
             borderRadius="12px"
             h={isLoading ? "14px" : "initial"}
             mt={isLoading ? "8px" : "initial"}
           >
-            <Text fontSize="md" fontWeight="400">
+            <Text fontSize={{ base: "sm", md: "md" }} fontWeight="400">
               {label}
             </Text>
           </Skeleton>

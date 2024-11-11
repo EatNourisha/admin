@@ -1,8 +1,7 @@
-import { Button, Text, useDisclosure } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import { GenericTableItem } from "components/GenericTable/GenericTable";
 import Gravatar from "components/Gravatar/Gravatar";
-import LineupDetailModal from "components/Modals/LineupDetails";
 import LineupStatus from "components/Status/LineupStatus";
 import SubscriptionBadge from "components/SubscriptionBadge/SubscriptionBadge";
 import configs from "config";
@@ -14,28 +13,29 @@ import { useMemo } from "react";
 interface WeeklyMealLineUpProps {
   data: SubscriptionRo[];
   isLoading?: boolean;
+  onViewLineup?: (user: UserRo) => void;
 }
 
 export function WeeklyMealLineUp(props: WeeklyMealLineUpProps) {
-  const { data } = props;
+  const { data, onViewLineup } = props;
 
   return (
     <>
-      {(data ?? []).map((sub) => (
-        <Item {...sub} />
+      {(data ?? []).map((sub, i) => (
+        <Item key={i} {...sub} onViewLineup={onViewLineup} />
       ))}
     </>
   );
 }
 
-interface ItemProps extends SubscriptionRo {}
+interface ItemProps extends SubscriptionRo {
+  onViewLineup?: (user: UserRo) => void;
+}
 
 function Item(props: ItemProps) {
-  const { customer, plan: _plan } = props;
+  const { customer, plan: _plan, onViewLineup } = props;
   const user = customer as UserRo;
   const plan = _plan as PlanRo;
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const delivery_day = useMemo(() => {
     const info = user?.delivery_info;
@@ -69,16 +69,13 @@ function Item(props: ItemProps) {
             size="sm"
             variant="outline"
             isDisabled={!user?.lineup}
-            onClick={onOpen}
+            onClick={() => onViewLineup?.(user)}
           >
             View Lineup
           </Button>,
         ]}
       />
 
-      {!!user?.lineup && (
-        <LineupDetailModal user={user} isOpen={isOpen} onClose={onClose} />
-      )}
     </>
   );
 }

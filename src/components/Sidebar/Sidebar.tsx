@@ -20,10 +20,8 @@ import take from "lodash/take";
 import takeRight from "lodash/takeRight";
 
 import { RouterProps } from "@reach/router";
-import Icon from "../Icon/Icon";
 import useAuth from "hooks/useAuth";
-import { useMediaQuery } from "react-responsive";
-import configs from "config";
+import Icon from "../Icon/Icon";
 
 interface SidebarProps extends BoxProps {
   location: RouterProps["location"];
@@ -181,7 +179,10 @@ const Sidebar: FC<SidebarProps> = (props) => {
       height="100vh"
       pos="fixed"
       top="0"
-      display={"flex"}
+      display={{
+        base: "none",
+        lg: "flex",
+      }}
       alignItems={"center"}
       justifyContent={"center"}
       {...xprops}
@@ -191,15 +192,11 @@ const Sidebar: FC<SidebarProps> = (props) => {
           color="white"
           justifyContent="center"
           alignItems="center"
+          gap="0"
           w="100%"
         >
-          <Icon type="fullLogo" w="85px" h="90px" />
-          <Text
-            fontFamily="var(--manjari)"
-            position="relative"
-            top="-16px"
-            mt="0 !important"
-          >
+          <Icon type="fullLogo" w="85px" h="85px" />
+          <Text fontFamily="var(--manjari)" lineHeight="24px">
             Admin
           </Text>
         </VStack>

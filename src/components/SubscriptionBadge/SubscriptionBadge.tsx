@@ -72,12 +72,12 @@ export default function SubscriptionBadge(props: SubscriptionBadgeProps) {
 
   return (
     <Badge
-      p="8px 12px"
+      p={{ base: 0, md: "8px 12px" }}
       borderRadius="24px"
       fontSize="14px"
       fontWeight="600"
       textTransform="capitalize"
-      bg={details.bg}
+      bg={{ md: details.bg, base: "transparent" }}
       border="2px solid transparent"
       borderColor="transparent"
       color={details.color}

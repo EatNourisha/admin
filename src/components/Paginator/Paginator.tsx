@@ -144,7 +144,7 @@ export function Paginator(props: PaginatorProps) {
     hasNext,
     hasPrevious,
   } = props;
-  const { history, onPrev, onNext } = usePaginator();
+  const { onPrev, onNext } = usePaginator();
 
   const goBack = () => {
     const value = onPrev();

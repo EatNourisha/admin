@@ -1,52 +1,59 @@
-import { Box, Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
+  LineupDetailModal,
   Link,
   MainLayoutContainer,
   PageMotion,
   Topbar,
   WeeklyMealLineUp,
 } from "components";
+import MobileTableData from "pages/Dashboard/MobileTableData";
 import TotalFeatureCount from "components/TotalFeatureCount/TotalFeatureCount";
 import useDashboard from "hooks/useDashboard";
 import usePageFilters from "hooks/usePageFilters";
 import useSubscriptions from "hooks/useSubscriptions";
-// import { LinkedList } from "libs";
-import { useMemo } from "react";
+import { UserRo } from "interfaces";
+import { useMemo, useState } from "react";
 
 export default function Home() {
   const { state, onPageChange } = usePageFilters({ limit: 10, page: 1 });
-
-  // const { data, isLoading } = useUsers({
-  //   has_lineup: true,
-  //   has_subscription: true,
-  //   ...state,
-  // });
-
-  const { data, isLoading } = useSubscriptions({ ...state, status: "active" });
-
+  const { data, isLoading } = useSubscriptions({ ...state, status: "active" })
   const { data: dashboardData, isLoading: isDashboadLoading } = useDashboard();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedUser, setSelectedUser] = useState<UserRo | null>(null);
+
+  const handleOpenModal = (user: UserRo) => {
+    setSelectedUser(user);
+    onOpen();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedUser(null);
+    onClose();
+  };
+
   const subscriptions = useMemo(() => data?.data ?? [], [data]);
   const hasSubscriptions = useMemo(
     () => (subscriptions ?? []).length > 0,
     [subscriptions]
-  );
-
-  console.log("Customers", subscriptions);
-
-  // const list = new LinkedList<number>();
-  // Array(10)
-  //   .fill(0)
-  //   .forEach((_, i) => list.push(i + 1));
-  // console.log(list);
+  );  
 
   return (
     <PageMotion key="dashboard-home">
       <Topbar pageTitle="Dashboard" />
       <MainLayoutContainer pb="60px">
         <Box>
-          <Grid templateColumns="repeat(5, 1fr)" gap="16px">
+          <Grid
+            templateColumns={{
+              base: "repeat(2, 1fr)",
+              md: "repeat(3, 1fr)",
+              xl: "repeat(4, 1fr)",
+            }}
+            gap={{ base: "12px", md: "16px" }}
+          >
             <TotalFeatureCount
               type="meals"
               value={dashboardData?.meals ?? 0}
@@ -71,20 +78,28 @@ export default function Home() {
               label="Orders"
               isLoading={isDashboadLoading}
             />
-            <Box
-              p="40px 34px"
+            <GridItem
+              p={{ base: "16px", md: "20px" }}
               border="1px solid transparent"
               borderColor="brand.neutral"
               borderRadius="8px"
-              minW="252px"
+              colSpan={{ base: 2, md: 1 }}
+              minW="167px"
             >
-              <Text fontSize="3xl" fontWeight="800">
+              <Text
+                fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+                fontWeight="800"
+              >
                 Menu
               </Text>
-              <Link to="/meals" color="brand.primary">
+              <Link
+                fontSize={{ base: "sm", md: "md", lg: "lg" }}
+                to="/meals"
+                color="brand.primary"
+              >
                 View this week menu
               </Link>
-            </Box>
+            </GridItem>
           </Grid>
         </Box>
 
@@ -94,6 +109,11 @@ export default function Home() {
               Weekly Meal Lineups
             </Heading>
           </Box>
+          <MobileTableData
+            isLoading={isLoading}
+            data={subscriptions}
+            onViewLineup={handleOpenModal}
+          />
           <GenericTable
             isLoading={isLoading}
             headers={[
@@ -106,13 +126,24 @@ export default function Home() {
             ]}
           >
             {hasSubscriptions ? (
-              <WeeklyMealLineUp data={subscriptions} isLoading={false} />
+              <WeeklyMealLineUp
+                data={subscriptions}
+                isLoading={false}
+                onViewLineup={handleOpenModal}
+              />
             ) : null}
           </GenericTable>
 
+          {selectedUser && (
+            <LineupDetailModal
+              user={selectedUser}
+              isOpen={isOpen}
+              onClose={handleCloseModal}
+            />
+          )}
+
           {hasSubscriptions && (
             <APaginator
-              flexDir={"row"}
               isLoading={isLoading}
               totalCount={data?.totalCount}
               limit={state?.limit}

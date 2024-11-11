@@ -169,7 +169,7 @@ export function useMealForm(meal?: MealRo) {
         {
           ...state?.price,
           deliveryFee: +(state?.price?.deliveryFee ?? 0) as any,
-        } ?? {},
+        },
       image_url: images[0],
       images,
     });
@@ -179,9 +179,9 @@ export function useMealForm(meal?: MealRo) {
 
   const saveMealChanges = async () => {
     const uploaded_images = await uploadFiles();
-    const saved_images = (state?.images ?? [])
-      .filter((i) => !i.removed)
-      .map((pk) => pk?.url);
+    // const saved_images = (state?.images ?? [])
+    //   .filter((i) => !i.removed)
+    //   .map((pk) => pk?.url);
 
     const result = await updateMeal(id, {
       ...(state as any),
@@ -189,7 +189,7 @@ export function useMealForm(meal?: MealRo) {
         {
           ...state?.price,
           deliveryFee: +(state?.price?.deliveryFee ?? 0) as any,
-        } ?? {},
+        },
       image_url: uploaded_images[0],
     });
 

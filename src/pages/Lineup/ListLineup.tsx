@@ -1,9 +1,18 @@
-import { Text, Button, Heading, HStack, Select, Stack } from "@chakra-ui/react";
+import {
+  Text,
+  Button,
+  Heading,
+  HStack,
+  Select,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
   GenericTableItem,
   Gravatar,
+  LineupDetailModal,
   MainLayoutContainer,
   PageMotion,
   Topbar,
@@ -11,7 +20,7 @@ import {
 import { join } from "lodash";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { currencyFormat } from "utils";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ILineUpItem } from "types";
 import { navigate } from "@reach/router";
 
@@ -19,7 +28,8 @@ import { get } from "utils";
 import { WeeklyMealLineUp } from "./WeeklyLineup";
 import { OrderStatusBadge } from "pages/Orders/OrderStatusBadge";
 import configs from "config";
-import { OrderRo } from "interfaces";
+import { OrderRo, UserRo } from "interfaces";
+import MobileTableData from "pages/Dashboard/MobileTableData";
 
 export default function ListLineup() {
   const [lineUpData, setLineUpData] = useState<{
@@ -30,19 +40,31 @@ export default function ListLineup() {
   const [week, setWeek] = useState("");
   const [page, setPage] = useState(1);
 
-  const getLineUps = async () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedUser, setSelectedUser] = useState<UserRo | null>(null);
+
+  const handleOpenModal = (user: UserRo) => {
+    setSelectedUser(user);
+    onOpen();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedUser(null);
+    onClose();
+  };
+
+  const getLineUps = useCallback(async () => {
     setLineUpData({ ...lineUpData, loading: true });
     const data = await get(`/orders/lineup/one-section?page=${page}&limit=10`);
-    console.log("\n\n\n\n\n\n\n\n")
+    console.log("\n\n\n\n\n\n\n\n");
     //@ts-ignore
-    console.log(data?.data)
-    console.log("Lineup data")
-    console.log("\n\n\n\n\n\n\n\n")
-
+    console.log(data?.data);
+    console.log("Lineup data");
+    console.log("\n\n\n\n\n\n\n\n");
 
     //@ts-ignore
     setLineUpData({ loading: false, data: data?.data });
-  };
+  }, [page, lineUpData, setLineUpData]);
 
   useEffect(() => {
     getLineUps();
@@ -71,6 +93,9 @@ export default function ListLineup() {
     getStatusLineup();
   }, [status, week]);
 
+  console.log("LINEUPS", lineUpData);
+  
+
   return (
     <PageMotion key="dashboard-home">
       <Topbar pageTitle="Line Up" />
@@ -78,12 +103,18 @@ export default function ListLineup() {
         <Stack my="26px">
           <div>
             {/* LINEUPS */}
-            <HStack justifyContent="space-between">
+            <Stack
+              direction={{ base: "column", md: "row" }}
+              justifyContent="space-between"
+            >
               <Heading fontSize="lg" fontWeight="700">
                 Weekly Meal Lineups
               </Heading>
-              <HStack>
-                <Select width="150px" onChange={(e) => setWeek(e.target.value)}>
+              <Stack direction={{ base: "column", md: "row" }}>
+                <Select
+                  width={{ base: "100%", md: "150px" }}
+                  onChange={(e) => setWeek(e.target.value)}
+                >
                   <option value="all">All</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -91,15 +122,15 @@ export default function ListLineup() {
                   <option value="4">4</option>
                 </Select>
                 <Select
-                  width="150px"
+                  width={{ base: "100%", md: "150px" }}
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="all">All</option>
                   <option value="active">Active</option>
                   <option value="deactivated">Deactivated</option>
                 </Select>
-              </HStack>
-            </HStack>
+              </Stack>
+            </Stack>
             <GenericTable
               isLoading={lineUpData.loading}
               headers={["Fullname", "Status", "City", "Delivery day", "Action"]}
@@ -113,6 +144,19 @@ export default function ListLineup() {
                 />
               ) : null}
             </GenericTable>
+            {/* <MobileTableData
+              data={lineUpData?.data?._lineups?.lineups}
+              isLoading={lineUpData?.loading}
+              onViewLineup={handleOpenModal}
+            /> */}
+
+            {selectedUser && (
+              <LineupDetailModal
+                user={selectedUser}
+                isOpen={isOpen}
+                onClose={handleCloseModal}
+              />
+            )}
 
             <APaginator
               flexDir={"row"}
@@ -191,7 +235,7 @@ export default function ListLineup() {
                             {currencyFormat("gbp").format(order?.total ?? 0)}
                           </Text>,
                           <Text fontSize="14px" textTransform="capitalize">
-                            {order?.coupon ??"---"}
+                            {order?.coupon ?? "---"}
                           </Text>,
                           <Text fontSize="14px" textTransform="capitalize">
                             <OrderStatusBadge type={order?.status} />
@@ -213,16 +257,15 @@ export default function ListLineup() {
                   })}
             </GenericTable>
           </div>
-            <APaginator
-              flexDir={"row"}
-              isLoading={!lineUpData.loading}
-              /* @ts-ignore */
-              totalCount={lineUpData.data?._orders?.totalCount}
-              limit={10}
-              page={page}
-              /* @ts-ignore */
-              onPageChange={(p) => setPage(p)}
-            />
+          <APaginator
+            isLoading={!lineUpData.loading}
+            /* @ts-ignore */
+            totalCount={lineUpData.data?._orders?.totalCount}
+            limit={10}
+            page={page}
+            /* @ts-ignore */
+            onPageChange={(p) => setPage(p)}
+          />
         </Stack>
       </MainLayoutContainer>
     </PageMotion>

@@ -21,13 +21,13 @@ export function Detail(props: DetailProps) {
     >
       <HStack color="brand.black">
         {/* <Icon type="phone" /> */}
-        <Text fontSize="md" fontWeight="400" color="brand.greyText">
+        <Text fontSize={{base: "sm", md: "md"}}fontWeight="400" color="brand.greyText">
           {title}
         </Text>
       </HStack>
 
       <Skeleton
-        isLoaded={!isLoading ?? true}
+        isLoaded={!isLoading}
         w="fit-content"
         h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"

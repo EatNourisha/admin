@@ -13,9 +13,10 @@ export function ReferralCounter(props: ReferralCounterProps) {
     <VStack
       w="100%"
       borderRadius="8px"
-      maxW="252px"
+      justifyContent="center"
+      alignItems="center"
       bg="#FFE6E4"
-      p="44px"
+      p={{ base: "14px", md: "40px" }}
       {...xprops}
     >
       <Skeleton isLoaded={!isLoading} opacity={when(!!isLoading, 0.5, 1)}>
@@ -25,9 +26,9 @@ export function ReferralCounter(props: ReferralCounterProps) {
       </Skeleton>
       <Skeleton isLoaded={!isLoading} opacity={when(!!isLoading, 0.5, 1)}>
         <Text
+          textAlign="center"
           mt="0 !important"
-          fontSize="16px"
-          fontWeight="400"
+          fontSize={{ base: "14px", md: "16px" }}
           color="black"
           textTransform="capitalize"
         >

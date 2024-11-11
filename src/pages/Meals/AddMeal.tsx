@@ -17,29 +17,28 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
-import { get } from "utils/makeRequest";
 import {
+  ConfirmationModal,
   Gravatar,
   Icon,
   Input,
+  InputLabel,
   MainLayoutContainer,
   PageMotion,
-  Topbar,
-  InputLabel,
-  ConfirmationModal,
   Textarea,
+  Topbar,
 } from "components";
+import { get } from "utils/makeRequest";
 // import { EmptyCrate } from "components/Crate/Empty";
 
 import configs, { CONTINENTS } from "config";
 
-import { useEffect, useMemo, useState } from "react";
-import { useMealForm } from "./useMealForm";
-import { when } from "utils";
-import Uploader, { FilePreviewType } from "components/Uploader/Uploader";
 import { RepeatIcon } from "@chakra-ui/icons";
-import { ApiResponse } from "interfaces";
+import Uploader, { FilePreviewType } from "components/Uploader/Uploader";
 import { IMealExtra } from "pages/MealExtra/ListMealExtra";
+import { useEffect, useMemo, useState } from "react";
+import { when } from "utils";
+import { useMealForm } from "./useMealForm";
 
 export default function AddMeal() {
   const [extras, setExtras] = useState<{
@@ -98,7 +97,7 @@ export default function AddMeal() {
       <Topbar pageTitle="Meals" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p="0" maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
@@ -126,10 +125,10 @@ export default function AddMeal() {
             <Stack
               my="46px !important"
               as="form"
-              gridGap="24px"
+              gap={{ base: "16px", md: "24px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -162,7 +161,7 @@ export default function AddMeal() {
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -195,7 +194,7 @@ export default function AddMeal() {
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Order Type</InputLabel>
                   <Select
@@ -224,7 +223,7 @@ export default function AddMeal() {
                 </FormControl>
               </HStack>
 
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
                   <Input
@@ -458,7 +457,13 @@ export default function AddMeal() {
                 />
               </FormControl>
 
-              <HStack justifyContent={"space-between"}>
+              <Grid
+                templateColumns={{
+                  base: "repeat(2, 1fr)",
+                  sm: "repeat(3, 1fr)",
+                }}
+                gap="8px"
+              >
                 <FormControl
                   display="flex"
                   w="fit-content"
@@ -554,7 +559,7 @@ export default function AddMeal() {
                     {when(!!state?.isSwallow, "Swallow", "Not swallow")}
                   </InputLabel>
                 </FormControl>
-              </HStack>
+              </Grid>
 
               <HStack alignItems="flex-start" gap="3rem">
                 {state?.isProtein && (
@@ -575,7 +580,6 @@ export default function AddMeal() {
                                 (value) => value === extra?._id
                               )}
                               onChange={(e) => {
-                                
                                 const ep = state?.expected_proteins?.includes(
                                   extra?._id!
                                 )
@@ -605,40 +609,38 @@ export default function AddMeal() {
                     <label>Swallow</label>
                     {extras && (
                       <div>
-                        {extras?.swallow?.data
-                          ?.sort()
-                          ?.map((extra, index) => (
-                            <div
-                              className="flex items-center"
-                              key={`single_extra_${index}`}
+                        {extras?.swallow?.data?.sort()?.map((extra, index) => (
+                          <div
+                            className="flex items-center"
+                            key={`single_extra_${index}`}
+                          >
+                            <Checkbox
+                              size="lg"
+                              colorScheme="red"
+                              className="capitalize"
+                              isChecked={state?.expected_swallows?.some(
+                                (value) => value === extra?._id
+                              )}
+                              onChange={(e) => {
+                                const ep = state?.expected_swallows?.includes(
+                                  extra?._id!
+                                )
+                                  ? state?.expected_swallows?.filter(
+                                      (e) => e !== extra?._id
+                                    )
+                                  : [
+                                      ...(state?.expected_swallows ?? [])!,
+                                      extra?._id,
+                                    ];
+                                set({
+                                  expected_swallows: ep as string[],
+                                });
+                              }}
                             >
-                              <Checkbox
-                                size="lg"
-                                colorScheme="red"
-                                className="capitalize"
-                                isChecked={state?.expected_swallows?.some(
-                                  (value) => value === extra?._id
-                                )}
-                                onChange={(e) => {
-                                  const ep = state?.expected_swallows?.includes(
-                                    extra?._id!
-                                  )
-                                    ? state?.expected_swallows?.filter(
-                                        (e) => e !== extra?._id
-                                      )
-                                    : [
-                                        ...(state?.expected_swallows ?? [])!,
-                                        extra?._id,
-                                      ];
-                                  set({
-                                    expected_swallows: ep as string[],
-                                  });
-                                }}
-                              >
-                                {extra?.name}
-                              </Checkbox>
-                            </div>
-                          ))}
+                              {extra?.name}
+                            </Checkbox>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
@@ -680,7 +682,7 @@ export default function AddMeal() {
                 />
               </Stack>
 
-              <HStack>
+              <HStack justify="center">
                 <Button
                   disabled={isDisabled}
                   isLoading={isSubmiting}

@@ -1,5 +1,12 @@
-import { useMemo, useState } from "react";
-import { Box, Button, HStack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import {
   APaginator,
   ConfirmationModal,
@@ -11,17 +18,19 @@ import {
   PageMotion,
   Topbar,
 } from "components";
+import { useMemo, useState } from "react";
 
 import { navigate } from "@reach/router";
-import { orderBy } from "lodash";
-import usePageFilters from "hooks/usePageFilters";
 import { useExport } from "hooks/useExports";
-import useUserMutations from "hooks/useUserMutations";
 import useGiftCard from "hooks/useGiftCards";
-import { destroy } from "utils";
+import usePageFilters from "hooks/usePageFilters";
+import useUserMutations from "hooks/useUserMutations";
+import { orderBy } from "lodash";
+import MobileGiftCardData from "./MobileGiftCardData";
+// import { destroy } from "utils";
 
 export default function GiftCards() {
-  const toast = useToast();
+  // const toast = useToast();
   // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, setFilter, onPageChange } = usePageFilters({
     limit: 10,
@@ -37,8 +46,7 @@ export default function GiftCards() {
 
   const { isLoading: isSyncing } = useUserMutations();
 
-  const { isDownloading, isLoading: isExporting } =
-    useExport();
+  const { isDownloading, isLoading: isExporting } = useExport();
 
   const giftCards = useMemo(
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
@@ -55,8 +63,8 @@ export default function GiftCards() {
 
   const handleDeleteGiftCard = async () => {
     setDeleteGiftCard({ ...deleteGiftCard, loading: true });
-    const res = await destroy(`/gift/custom/${deleteGiftCard.id}`);
-    setDeleteGiftCard({ show:false,id:"", loading: false });
+    // const res = await destroy(`/gift/custom/${deleteGiftCard.id}`);
+    setDeleteGiftCard({ show: false, id: "", loading: false });
   };
 
   return (
@@ -68,7 +76,9 @@ export default function GiftCards() {
       />
       <ConfirmationModal
         isOpen={deleteGiftCard.show}
-        onClose={() => setDeleteGiftCard({ show: false, id: "", loading:false })}
+        onClose={() =>
+          setDeleteGiftCard({ show: false, id: "", loading: false })
+        }
         title="Confirm deletion"
         description="Are you sure you want to proceed?"
         onConfirm={handleDeleteGiftCard}
@@ -77,20 +87,32 @@ export default function GiftCards() {
       />
       <MainLayoutContainer>
         <Box>
-          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <Input
-              // w="100%"
+          <Stack
+            as="form"
+            direction={{ base: "column", md: "row" }}
+            justifyContent="space-between"
+            w="100%"
+            mb="24px"
+          >
+            <InputGroup
+              display="block"
+              w="100%"
               minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search gift cards"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => {
-                e.preventDefault();
-                setFilter("searchPhrase", e.target.value);
-              }}
-            />
+              maxW={{ base: "100%", md: "400px" }}
+            >
+              <Input
+                w="full"
+                placeholder="Search Users"
+                value={state?.searchPhrase ?? ""}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setFilter("searchPhrase", e.target.value);
+                }}
+              />
+              <InputRightElement top="4px">
+                <Icon type="search" />
+              </InputRightElement>
+            </InputGroup>
 
             <Button
               size="md"
@@ -102,7 +124,7 @@ export default function GiftCards() {
             >
               Add Gift card
             </Button>
-          </HStack>
+          </Stack>
           <Box
             borderRadius="8px"
             overflow="hidden"
@@ -135,6 +157,9 @@ export default function GiftCards() {
                       </Button>
 
                       <Button
+                        color="#E5432E"
+                        border="1px solid #E5432E"
+                        _hover={{ bg: "#E5432E", color: "white" }}
                         onClick={() =>
                           setDeleteGiftCard({
                             show: true,
@@ -143,7 +168,7 @@ export default function GiftCards() {
                           })
                         }
                         size="sm"
-                        variant="ghost"
+                        variant="outline"
                       >
                         Delete
                       </Button>
@@ -152,6 +177,11 @@ export default function GiftCards() {
                 />
               ))}
             </GenericTable>
+            <MobileGiftCardData
+              data={giftCards}
+              isLoading={isLoading}
+              setDeleteGiftCard={setDeleteGiftCard}
+            />
           </Box>
 
           <Box>
@@ -166,7 +196,6 @@ export default function GiftCards() {
 
             {hasCustomers && (
               <APaginator
-                flexDir={"row"}
                 isLoading={isLoading}
                 totalCount={data?.totalCount}
                 limit={state?.limit}
