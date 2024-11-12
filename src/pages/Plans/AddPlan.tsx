@@ -32,6 +32,7 @@ import { useMemo } from "react";
 import { usePlanForm } from "./usePlanForm";
 import { PerkItem } from "./PerkItem";
 import { when } from "utils";
+import CurrencyInput from "components/Input/CurrencyInput";
 
 export default function AddPlan() {
   //   const toast = useToast();
@@ -78,7 +79,7 @@ export default function AddPlan() {
       <Topbar pageTitle="Plans" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p={0} maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
@@ -92,24 +93,22 @@ export default function AddPlan() {
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Add Plan
             </Heading>
 
-            <Gravatar
-              initials={"Plan"}
-              //   isLoading={isLoading}
-              variant="vert"
-              //   src={user?.profilePhotoUrl}
-            />
+            <Gravatar initials={"Plan"} variant="vert" />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -124,22 +123,15 @@ export default function AddPlan() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
                     value={state?.amount ?? ""}
                     onChange={(e) => set({ amount: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.currency === "gbp" ? "£GBP" : state?.currency}
-                      </Text>
-                    }
+                    type="number"
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -170,7 +162,7 @@ export default function AddPlan() {
                 </FormControl>
               </HStack>
 
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Country</InputLabel>
                   <Input
@@ -184,21 +176,14 @@ export default function AddPlan() {
                 </FormControl>
               </HStack>
 
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
                     value={state?.delivery_fee ?? ""}
                     onChange={(e) => set({ delivery_fee: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.currency === "gbp" ? "£GBP" : state?.currency}
-                      </Text>
-                    }
+                    type="number"
                   />
                 </FormControl>
               </HStack>
@@ -378,7 +363,7 @@ export default function AddPlan() {
                 )}
               </Stack>
 
-              <HStack>
+              <HStack justifyContent="center">
                 <Button
                   disabled={isDisabled}
                   isLoading={isSubmiting}

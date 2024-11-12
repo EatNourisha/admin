@@ -39,6 +39,7 @@ import { IMealExtra } from "pages/MealExtra/ListMealExtra";
 import { useEffect, useMemo, useState } from "react";
 import { when } from "utils";
 import { useMealForm } from "./useMealForm";
+import CurrencyInput from "components/Input/CurrencyInput";
 
 export default function AddMeal() {
   const [extras, setExtras] = useState<{
@@ -143,21 +144,11 @@ export default function AddMeal() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
+                  <CurrencyInput
                     type="number"
-                    borderColor="brand.neutral200"
                     placeholder={""}
                     value={state?.price?.amount ?? ""}
                     onChange={(e) => setPrice({ amount: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.price?.currency === "gbp"
-                          ? "£GBP"
-                          : state?.price?.currency ?? "£GBP"}
-                      </Text>
-                    }
                   />
                 </FormControl>
               </HStack>
@@ -175,22 +166,12 @@ export default function AddMeal() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Previous Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
                     isRequired={false}
                     value={state?.price?.previousAmount ?? ""}
                     isDisabled
-                    // onChange={(e) => setPrice({ amount: +e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.price?.currency === "gbp"
-                          ? "£GBP"
-                          : state?.price?.currency ?? "£GBP"}
-                      </Text>
-                    }
+                    type="number"
                   />
                 </FormControl>
               </HStack>
@@ -226,21 +207,12 @@ export default function AddMeal() {
               <HStack gap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
                     isRequired={false}
                     value={state?.price?.deliveryFee ?? ""}
                     onChange={(e) => setPrice({ deliveryFee: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.price?.currency === "gbp"
-                          ? "£GBP"
-                          : state?.price?.currency ?? "£GBP"}
-                      </Text>
-                    }
+                    type="number"
                   />
                 </FormControl>
 

@@ -1,11 +1,16 @@
 import { useMemo, useState } from "react";
 import {
   Box,
+  BoxProps,
   Button,
   HStack,
+  Image,
+  InputGroup,
+  InputRightElement,
   Text,
   useDisclosure,
   useToast,
+  VStack,
 } from "@chakra-ui/react";
 import {
   APaginator,
@@ -19,7 +24,7 @@ import {
   PageMotion,
   Topbar,
 } from "components";
-
+import Empty from "assets/images/folder.png";
 import { navigate, useParams } from "@reach/router";
 import configs from "config";
 import useUsers from "hooks/useUsers";
@@ -28,6 +33,17 @@ import usePageFilters from "hooks/usePageFilters";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { useExport } from "hooks/useExports";
 import usePlanMutations from "hooks/usePlanMutations";
+import MobileDataSkeleton from "components/MobileDataSkeleton";
+import { UserRo } from "interfaces";
+import { ArrowLeft } from "lucide-react";
+
+interface MobileDataProps extends BoxProps {
+  data?: UserRo[];
+  isLoading?: boolean;
+  isAssigning?: boolean;
+  selectedId?: string;
+  handleAssignClick: (id: string) => void;
+}
 
 export default function AssignPlan() {
   const toast = useToast();
@@ -94,28 +110,39 @@ export default function AssignPlan() {
       />
       <MainLayoutContainer>
         <Box>
-          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <Input
-              // w="100%"
-              minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search Users"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => {
-                e.preventDefault();
-                setFilter("searchPhrase", e.target.value);
-              }}
-            />
-
-            {/* <Button
-              ml="0 !important"
-              leftIcon={<Icon type="export" />}
-              onClick={exportUsers}
+          <HStack>
+            <Button
+              size="xs"
+              mb="12px"
+              color="brand.black"
+              variant="transparent"
+              leftIcon={<ArrowLeft size={16} />}
+              onClick={() => navigate(-1)}
             >
-              Export
-            </Button> */}
+              Back
+            </Button>
+          </HStack>
+          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
+            <InputGroup
+              display="block"
+              w="100%"
+              minH="48px"
+              maxW={{ base: "100%", md: "400px" }}
+            >
+              <Input
+                w="full"
+                pr="40px"
+                placeholder="Search Users"
+                value={state?.searchPhrase ?? ""}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setFilter("searchPhrase", e.target.value);
+                }}
+              />
+              <InputRightElement top="4px">
+                <Icon type="search" />
+              </InputRightElement>
+            </InputGroup>
           </HStack>
           <Box
             borderRadius="8px"
@@ -169,18 +196,16 @@ export default function AssignPlan() {
                 />
               ))}
             </GenericTable>
+            <MobileData
+              data={customers}
+              isLoading={isLoading}
+              isAssigning={isAssigning}
+              selectedId={selectedId}
+              handleAssignClick={handleAssignClick}
+            />
           </Box>
 
           <Box>
-            {/* <PaginatorContainer>
-              <Paginator
-                {...pageData}
-                onPrev={(prev) => onPrevPage(prev)}
-                onNext={(next) => onNextPage(next)}
-              />
-              
-            </PaginatorContainer> */}
-
             {hasCustomers && (
               <APaginator
                 isLoading={isLoading}
@@ -202,5 +227,96 @@ export default function AssignPlan() {
         />
       </MainLayoutContainer>
     </PageMotion>
+  );
+}
+
+function MobileData({
+  data = [],
+  isLoading,
+  isAssigning,
+  selectedId,
+  handleAssignClick,
+}: MobileDataProps) {
+  // Loading state - show 3 skeleton items
+  if (isLoading) {
+    return <MobileDataSkeleton count={10} />;
+  }
+
+  // Empty state
+  if (!data.length) {
+    return (
+      <VStack maxW="200px" mx="auto" my="180px" hideFrom={"md"}>
+        <Image src={Empty} alt="empty list" boxSize="150px" />
+        <Text textAlign="center" fontSize="14px">
+          Sorry, it looks like you have nothing here yet
+        </Text>
+      </VStack>
+    );
+  }
+
+  // Render actual data
+  return (
+    <VStack spacing={4} width="full" py={4} hideFrom={"md"}>
+      {data.map((value, index) => {
+        return (
+          <Box
+            key={`subscription-${index}`}
+            borderWidth="1px"
+            borderRadius="lg"
+            p={4}
+            fontSize="sm"
+            w="full"
+          >
+            <VStack alignItems="stretch" spacing="12px">
+              <Gravatar
+                src={value?.profilePhotoUrl}
+                title={join([value?.first_name, value?.last_name], " ")}
+                createdAt={value?.createdAt}
+                subtitle={
+                  !value?.createdAt
+                    ? undefined
+                    : `${formatDistanceToNow(parseISO(value?.createdAt!))} ago`
+                }
+                onClick={() => navigate(`${configs.paths.users}/${value?._id}`)}
+              />
+              <HStack justifyContent="space-between">
+                <Box>
+                  <Text mb="8px">Email:</Text>
+                  <Text fontSize="14px">{value?.email}</Text>
+                </Box>
+                <Box>
+                  <Text textAlign="right" mb="8px">
+                    Phone Number:
+                  </Text>
+                  <Text fontSize="14px">{value?.phone}</Text>
+                </Box>
+              </HStack>
+              <HStack justifyContent="space-between">
+                <Box>
+                  <Text mb="8px">Date:</Text>
+                  <Text fontSize="14px" textTransform="capitalize">
+                    {format(
+                      parseISO(value?.createdAt ?? new Date().toISOString()),
+                      "dd/MM/yyyy"
+                    )}
+                  </Text>
+                </Box>
+              </HStack>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  handleAssignClick(value?._id);
+                }}
+                isLoading={isAssigning && selectedId === value?._id}
+                disabled={isAssigning && selectedId === value?._id}
+              >
+                Assign
+              </Button>
+            </VStack>
+          </Box>
+        );
+      })}
+    </VStack>
   );
 }

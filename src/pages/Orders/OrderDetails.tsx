@@ -475,7 +475,7 @@ const Extras = ({
         mealExtras?.swallow?.data?.find((e) => e?._id === extras?.swallow)!
       );
     }
-  }, [mealExtras]);
+  }, [mealExtras, extras]);
 
   return (
     <HStack

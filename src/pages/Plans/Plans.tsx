@@ -1,5 +1,13 @@
 import { useMemo } from "react";
-import { Box, Button, HStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import {
   APaginator,
   GenericTable,
@@ -17,6 +25,7 @@ import { omit, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import usePlans from "hooks/usePlans";
 import { currencyFormat } from "utils";
+import MobilePlansData from "./MobilePlansData";
 
 export default function Plans() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -36,39 +45,45 @@ export default function Plans() {
   );
   const hasPlans = useMemo(() => (plans ?? []).length > 0, [plans]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
-
   return (
     <PageMotion key="plans-root" pb="100px">
       <Topbar pageTitle="Plans" />
       <MainLayoutContainer>
         <Box>
-          <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            <Input
-              // w="100%"
+          <Stack
+            direction={{ base: "column", md: "row" }}
+            as="form"
+            justifyContent="space-between"
+            w="100%"
+            mb="24px"
+          >
+            <InputGroup
+              display="block"
+              w="100%"
               minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search Plans"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => setFilter("searchPhrase", e.target.value)}
-            />
+              maxW={{ base: "100%", md: "400px" }}
+            >
+              <Input
+                w="full"
+                pr="40px"
+                placeholder="Search Plans"
+                value={state?.searchPhrase ?? ""}
+                onChange={(e) => setFilter("searchPhrase", e.target.value)}
+              />
+              <InputRightElement top="4px">
+                <Icon type="search" />
+              </InputRightElement>
+            </InputGroup>
 
             <Button
+              w={{ base: "100%", md: "auto" }}
               ml="0 !important"
               leftIcon={<Icon type="add" />}
               onClick={() => navigate(configs.paths.addPlan)}
             >
               Add
             </Button>
-          </HStack>
+          </Stack>
           <Box
             borderRadius="8px"
             overflow="hidden"
@@ -108,8 +123,8 @@ export default function Plans() {
                           {plan?.subscription_interval}ly
                         </Text>,
                         <Text fontSize="14px" textTransform="capitalize">
-                        {plan?.country ?? "--------"}
-                      </Text>,
+                          {plan?.country ?? "--------"}
+                        </Text>,
                         <HStack>
                           <Button
                             size="sm"
@@ -137,6 +152,7 @@ export default function Plans() {
                   ))
                 : null}
             </GenericTable>
+            <MobilePlansData data={plans} isLoading={isLoading} />
           </Box>
 
           <Box>

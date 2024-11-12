@@ -120,16 +120,9 @@ const pageLinks = [
   {
     activeIcon: ReferralIcon,
     icon: ReferralIcon,
-    label: "Referral",
-    to: "/referrals",
-  },
-  {
-    activeIcon: ReferralIcon,
-    icon: ReferralIcon,
     label: "Promotions",
     to: "/promos",
   },
-
   {
     activeIcon: ProfileIcon,
     icon: ProfileIcon,

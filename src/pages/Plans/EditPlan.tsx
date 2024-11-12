@@ -13,26 +13,28 @@ import {
 } from "@chakra-ui/react";
 import { navigate, useParams } from "@reach/router";
 import {
+  ConfirmationModal,
   Gravatar,
   Icon,
   Input,
+  InputLabel,
   MainLayoutContainer,
   PageMotion,
-  Topbar,
-  InputLabel,
-  ConfirmationModal,
   Textarea,
+  Topbar,
 } from "components";
 import { EmptyCrate } from "components/Crate/Empty";
 
 import configs from "config";
+import usePlan from "hooks/usePlan";
 import { PlanInterval } from "interfaces";
 import { capitalize } from "lodash";
+import { ArrowLeft } from "lucide-react";
 import { useMemo } from "react";
-import { usePlanForm } from "./usePlanForm";
-import { PerkItem } from "./PerkItem";
-import usePlan from "hooks/usePlan";
 import { when } from "utils";
+import { PerkItem } from "./PerkItem";
+import { usePlanForm } from "./usePlanForm";
+import CurrencyInput from "components/Input/CurrencyInput";
 
 export default function EditPlan() {
   //   const toast = useToast();
@@ -81,38 +83,37 @@ export default function EditPlan() {
       <Topbar pageTitle="Plans" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p={0} maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
                 size="xs"
+                mb="12px"
                 color="brand.black"
                 variant="transparent"
-                leftIcon={<Icon type="leftArrow" />}
+                leftIcon={<ArrowLeft size={16} />}
                 onClick={() => navigate(-1)}
               >
                 Back
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Edit Plan
             </Heading>
 
-            <Gravatar
-              initials={"Plan"}
-              isLoading={isLoading}
-              variant="vert"
-              //   src={user?.profilePhotoUrl}
-            />
+            <Gravatar initials={"Plan"} isLoading={isLoading} variant="vert" />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -127,22 +128,15 @@ export default function EditPlan() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
                     value={state?.amount ?? ""}
                     onChange={(e) => set({ amount: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.currency === "gbp" ? "£GBP" : state?.currency}
-                      </Text>
-                    }
+                    type="number"
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -172,7 +166,7 @@ export default function EditPlan() {
                   </Select>
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Country</InputLabel>
                   <Input
@@ -185,21 +179,14 @@ export default function EditPlan() {
                   />
                 </FormControl>
               </HStack>
-              <HStack gridGap="24px">
+              <HStack gap={{ base: "10px", md: "20px" }}>
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
                     value={state?.delivery_fee ?? ""}
                     onChange={(e) => set({ delivery_fee: e.target.value })}
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.currency === "gbp" ? "£GBP" : state?.currency}
-                      </Text>
-                    }
+                    type="number"
                   />
                 </FormControl>
               </HStack>
@@ -342,7 +329,6 @@ export default function EditPlan() {
                     {(state?.perks ?? []).map((perk, i) => (
                       <PerkItem
                         key={`perk-${i}`}
-                        // my="16px"
                         mode="read"
                         {...perk}
                         onRemove={(e) => removePerk(e)}
@@ -358,7 +344,7 @@ export default function EditPlan() {
                   !perkDraft &&
                   Array(3)
                     .fill(0)
-                    .map((_, i) => <PerkItem isLoading={isLoading} />)}
+                    .map((_, i) => <PerkItem key={i} isLoading={isLoading} />)}
 
                 {!hasPerks && !perkDraft && (
                   <Box>

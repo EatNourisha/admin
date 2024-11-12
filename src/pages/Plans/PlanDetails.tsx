@@ -69,12 +69,10 @@ export default function UserDetails() {
           gap="24px"
         >
           <Box
-            p="38px"
+            p={{ base: "0", md: "38px" }}
             borderRadius="8px"
-            border="2px solid transparent"
-            borderColor="brand.neutral100"
+            border={{ base: "none", md: "2px solid brand.neutral100" }}
             mb="20px"
-            minH="700px"
           >
             <HStack w="100%" justifyContent="space-between">
               <Button
@@ -127,7 +125,11 @@ export default function UserDetails() {
               </HStack>
             </HStack>
 
-            <Grid mt="98px" templateColumns="repeat(2, 1fr)" gap="20px">
+            <Grid
+              mt={{ base: "50px", md: "98px" }}
+              templateColumns="repeat(2, 1fr)"
+              gap={{ base: "10px", md: "20px" }}
+            >
               <Detail
                 isLoading={isLoading}
                 title="Name"
@@ -259,10 +261,10 @@ function Detail(props: DetailProps) {
   return (
     <Box
       w="100%"
-      h="fit-content"
-      p="24px 22px"
+      p={{ base: "16px", md: "20px 24px" }}
       borderRadius="8px"
       shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
+      wordBreak="break-word"
       {...xprops}
     >
       <HStack color="brand.black">
@@ -273,9 +275,8 @@ function Detail(props: DetailProps) {
       </HStack>
 
       <Skeleton
-        isLoaded={!isLoading ?? true}
+        isLoaded={!isLoading}
         w="fit-content"
-        h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"
         mt="8px"
       >
@@ -302,7 +303,7 @@ function PerkItem(props: PerkItemProps) {
       <HStack justifyContent="space-between">
         <Stack>
           <Skeleton
-            isLoaded={!isLoading ?? true}
+            isLoaded={!isLoading}
             w="fit-content"
             h={isLoading ? "8px" : "fit-content"}
             borderRadius="12px"
@@ -314,7 +315,7 @@ function PerkItem(props: PerkItemProps) {
           </Skeleton>
 
           <SkeletonText
-            isLoaded={!isLoading ?? true}
+            isLoaded={!isLoading}
             w="fit-content"
             h={isLoading ? "12px" : "fit-content"}
             borderRadius="10px"

@@ -60,7 +60,7 @@ export function PerkItem(props: PerkItemProps) {
         <HStack w="100%" justifyContent="space-between">
           <Stack w="100%">
             <Skeleton
-              isLoaded={!isLoading ?? true}
+              isLoaded={!isLoading}
               w="fit-content"
               h={isLoading ? "8px" : "fit-content"}
               borderRadius="12px"
@@ -72,7 +72,7 @@ export function PerkItem(props: PerkItemProps) {
             </Skeleton>
 
             <SkeletonText
-              isLoaded={!isLoading ?? true}
+              isLoaded={!isLoading}
               w="100%"
               h={isLoading ? "12px" : "fit-content"}
               borderRadius="10px"
