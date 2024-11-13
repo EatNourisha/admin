@@ -32,6 +32,7 @@ import { when } from "utils";
 import configs from "config";
 import usePromo from "hooks/usePromo";
 import { usePromoForm } from "./usePromoForm";
+import CurrencyInput from "components/Input/CurrencyInput";
 
 export default function EditPromo() {
   //   const toast = useToast();
@@ -76,8 +77,6 @@ export default function EditPromo() {
     [state, isSubmiting]
   );
 
-  // const isDisabled = false;
-
   return (
     <PageMotion key="edit-promo">
       <Topbar pageTitle="Promotion Codes" />
@@ -97,39 +96,29 @@ export default function EditPromo() {
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Edit Promotion Code
             </Heading>
 
-            <Gravatar
-              initials={"Plan"}
-              isLoading={isLoading}
-              variant="vert"
-              //   src={user?.profilePhotoUrl}
-            />
+            <Gravatar initials={"Plan"} isLoading={isLoading} variant="vert" />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
               <HStack justifyContent="space-between">
                 <Text fontWeight="600">Influencer Details</Text>
-                {/* <Button
-                  size="xs"
-                  color="brand.black"
-                  variant="transparent"
-                  fontSize="sm"
-                  fontWeight="600"
-                  leftIcon={<Icon type="add" />}
-                  onClick={addPerkDraft}
-                >
-                  Add Perk
-                </Button> */}
               </HStack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Firstname</InputLabel>
                   <Input
@@ -154,9 +143,12 @@ export default function EditPromo() {
                     onChange={(e) => setInflu({ last_name: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Email</InputLabel>
                   <Input
@@ -181,18 +173,7 @@ export default function EditPromo() {
                     onChange={(e) => setInflu({ phone_number: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
-
-              {/* <FormControl>
-                <InputLabel>Description</InputLabel>
-                <Textarea
-                  borderWidth="2px"
-                  borderColor="brand.neutral200"
-                  placeholder="Add a description"
-                  // value={state?.description ?? ""}
-                  // onChange={(e) => set({ description: e.target.value })}
-                />
-              </FormControl> */}
+              </Stack>
 
               <Divider />
 
@@ -220,7 +201,10 @@ export default function EditPromo() {
                 </RadioGroup>
               </HStack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Code</InputLabel>
                   <Input
@@ -231,7 +215,6 @@ export default function EditPromo() {
                     placeholder={""}
                     isDisabled
                     defaultValue={state?.code ?? ""}
-                    // onChange={(e) => set({ code: e.target.value })}
                   />
                 </FormControl>
                 <FormControl>
@@ -251,17 +234,16 @@ export default function EditPromo() {
                     <option value={"gbp"}>GBP</option>
                   </Select>
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>{capitalize(state?.by)} Off</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+                  <CurrencyInput
                     placeholder={""}
-                    type="number"
                     isDisabled
                     min={when(state?.by === "percent", 0, 1)}
                     max={when(state?.by === "percent", 100, undefined)}
@@ -270,13 +252,8 @@ export default function EditPromo() {
                       ((state?.coupon as any) ?? {})[percent_or_amount_field] ??
                       ""
                     }
-                    onChange={(e) =>
-                      setCoupon({ [percent_or_amount_field]: e.target.value })
-                    }
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        {state?.by === "amount" ? "£" : "%"}
-                      </Text>
+                    onChange={(value) =>
+                      setCoupon({ [percent_or_amount_field]: value })
                     }
                   />
                 </FormControl>
@@ -298,9 +275,12 @@ export default function EditPromo() {
                     ))}
                   </Select>
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Duration In Months</InputLabel>
                   <Input
@@ -319,7 +299,7 @@ export default function EditPromo() {
                     }
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
               <Divider />
 
@@ -343,26 +323,22 @@ export default function EditPromo() {
                 </Checkbox>
               </HStack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Minimum Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
+
+                  <CurrencyInput
                     placeholder={""}
-                    type="number"
                     isRequired={false}
-                    min={0}
                     isDisabled
+                    min={0}
                     value={state?.restrictions?.minimum_amount ?? ""}
-                    onChange={(e) =>
-                      setRestrictions({ minimum_amount: e.target.value })
-                    }
-                    endAdornment={
-                      <Text fontSize="md" textTransform="uppercase">
-                        £
-                      </Text>
+                    currency="£"
+                    onChange={(value) =>
+                      setRestrictions({ minimum_amount: value })
                     }
                   />
                 </FormControl>
@@ -384,9 +360,12 @@ export default function EditPromo() {
                     }}
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Expires At</InputLabel>
                   <Input
@@ -416,9 +395,9 @@ export default function EditPromo() {
                     <option value={"gbp"}>GBP</option>
                   </Select>
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack mt="40px !important">
+              <Stack mt="40px !important">
                 <Button
                   isDisabled={isDisabled}
                   isLoading={isSubmiting}
@@ -426,7 +405,7 @@ export default function EditPromo() {
                 >
                   Save Promo Changes
                 </Button>
-              </HStack>
+              </Stack>
             </Stack>
           </Stack>
         </Container>

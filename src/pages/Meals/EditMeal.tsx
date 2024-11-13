@@ -15,6 +15,11 @@ import {
   Checkbox,
   Switch,
   Text,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { navigate, useParams } from "@reach/router";
 import { get } from "utils/makeRequest";
@@ -78,6 +83,8 @@ export default function EditMeal() {
     const lastName = editor.last_name || "";
     return `${firstName} ${lastName}`.trim();
   };
+
+  console.log(meal?.price);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -164,7 +171,7 @@ export default function EditMeal() {
                     borderWidth="2px"
                     borderColor="brand.neutral200"
                     placeholder={""}
-                    value={state?.name}
+                    value={state?.name ?? ""}
                     onChange={(e) => set({ name: e.target.value })}
                   />
                 </FormControl>
@@ -173,7 +180,7 @@ export default function EditMeal() {
                   <CurrencyInput
                     placeholder={""}
                     value={state?.price?.amount ?? 0}
-                    onChange={(e) => setPrice({ deliveryFee: e.target.value })}
+                    onChange={(value) => setPrice({ amount: value })}
                   />
                 </FormControl>
               </HStack>
@@ -195,10 +202,7 @@ export default function EditMeal() {
                     value={state?.price?.previousAmount ?? 0}
                     isDisabled
                     placeholder={""}
-                    // onChange={(e) =>
-                    //   setPrice({ previousAmount: e.target.value })
-                    // }
-                    // currency={state?.price?.currency ?? "gbp"}
+                    currency={state?.price?.currency ?? "gbp"}
                   />
                 </FormControl>
               </HStack>
@@ -235,26 +239,27 @@ export default function EditMeal() {
                   <InputLabel>Delivery Fee</InputLabel>
                   <CurrencyInput
                     isRequired={false}
-                    value={state?.price?.deliveryFee ??  0}
-                    onChange={(e) => setPrice({ deliveryFee: e.target.value })}
+                    value={state?.price?.deliveryFee ?? 0}
+                    onChange={(value) => setPrice({ deliveryFee: value })}
                     currency={state?.price?.currency ?? "gbp"}
                   />
                 </FormControl>
 
                 <FormControl>
                   <InputLabel>Available Quantity</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder={""}
-                    type="number"
-                    min={0}
+                  <NumberInput
                     value={state?.available_quantity ?? 0}
-                    onChange={(e) =>
-                      set({ available_quantity: e.target.value })
-                    }
-                  />
+                    onChange={(value) => {
+                      console.log(value);
+                      set({ available_quantity: value });
+                    }}
+                  >
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
                 </FormControl>
               </HStack>
 
@@ -468,7 +473,7 @@ export default function EditMeal() {
                     ml={{ base: "0px", md: "8px" }}
                     aria-label="switch meal availability"
                     disabled={isLoading}
-                    isChecked={state?.is_available}
+                    isChecked={state?.is_available ?? false}
                     onChange={() => set({ is_available: !state?.is_available })}
                     sx={{
                       "--switch-track-width": "26px",

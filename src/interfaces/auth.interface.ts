@@ -68,16 +68,14 @@ export interface GiftCardRo {
 export interface UserRo {
   _id: string;
   email: string;
-
   firstName: string;
   lastName: string;
-
   first_name: string;
   last_name: string;
   phone: string;
   is_email_verified: boolean;
   delivery_day: string;
-  IsReturningCustomer?:boolean;
+  IsReturningCustomer?: boolean;
   delivery_info: {
     customer: string;
     next_delivery_date: string;
@@ -102,7 +100,7 @@ export interface UserRo {
   };
 
   lineup: string | {};
-
+  assigned_cs: string[];
   createdAt: string;
   updatedAt: string;
   gender: Gender;

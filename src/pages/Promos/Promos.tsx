@@ -18,6 +18,7 @@ import usePageFilters from "hooks/usePageFilters";
 import { currencyFormat, when } from "utils";
 import usePromos from "hooks/usePromos";
 import { CouponRo, UserRo } from "interfaces";
+import MobilePromoData from "./MobilePromoData";
 
 export default function Promos() {
   // const [isLoading, setIsLoading] = useState(true);
@@ -35,8 +36,6 @@ export default function Promos() {
     customer: params.get("customer") ?? undefined,
   });
 
-  console.log("Orders", data);
-
   const promos = useMemo(
     () => orderBy(data?.data ?? [], ["createdAt"], ["desc"]),
     [data]
@@ -49,18 +48,8 @@ export default function Promos() {
       <MainLayoutContainer>
         <Box>
           <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-            {/* <Input
-              // w="100%"
-              minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search Plans"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => setFilter("searchPhrase", e.target.value)}
-            /> */}
-
             <Button
+              w={{ base: "100%", md: "auto" }}
               ml="0 !important"
               leftIcon={<Icon type="add" />}
               onClick={() => navigate(`/promos/create`)}
@@ -128,20 +117,6 @@ export default function Promos() {
                           <Text fontSize="14px">
                             {when(!!promo?.active, "Active", "Inactive")}
                           </Text>,
-                          //   <Text fontSize="14px" textTransform="uppercase">
-                          //     {currencyFormat("gbp").format(order?.subtotal ?? 0)}
-                          //   </Text>,
-                          //   <Text fontSize="14px">
-                          //     {currencyFormat("gbp").format(
-                          //       order?.delivery_fee ?? 0
-                          //     )}
-                          //   </Text>,
-                          //   <Text fontSize="14px" textTransform="capitalize">
-                          //     {currencyFormat("gbp").format(order?.total ?? 0)}
-                          //   </Text>,
-                          //   <Text fontSize="14px" textTransform="capitalize">
-                          //     <OrderStatusBadge type={order?.status} />
-                          //   </Text>,
                           <HStack>
                             <Button
                               size="sm"
@@ -161,18 +136,9 @@ export default function Promos() {
                   })
                 : null}
             </GenericTable>
+            <MobilePromoData data={promos} isLoading={isLoading} />
           </Box>
-
           <Box>
-            {/* <PaginatorContainer>
-              <Paginator
-                {...pageData}
-                onPrev={(prev) => onPrevPage(prev)}
-                onNext={(next) => onNextPage(next)}
-              />
-              
-            </PaginatorContainer> */}
-
             {hasPromos && (
               <APaginator
                 isLoading={isLoading}

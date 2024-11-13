@@ -1,174 +1,173 @@
 import {
-    Box,
-    Button,
-    Center,
-    Container,
-    Divider,
-    FormControl,
-    Grid,
-    Heading,
-    HStack,
-    IconButton,
-    Image,
-    Select,
-    Stack,
-    Switch,
-    Text,
-    useToast,
-  } from "@chakra-ui/react";
-  import { navigate, useParams } from "@reach/router";
-  import {
-    Gravatar,
-    Icon,
-    Input,
-    MainLayoutContainer,
-    PageMotion,
-    Topbar,
-    InputLabel,
-    ConfirmationModal,
-  } from "components";
-  
-  import configs from "config";
-  
-  import { useEffect, useMemo, useState } from "react";
-  import { useMealForm } from "../Meals/useMealForm";
-  import { get, post, when } from "utils";
-  import { FilePreviewType } from "components/Uploader/Uploader";
-  import { RepeatIcon } from "@chakra-ui/icons";
-  import { ApiResponse, GiftCardRo } from "interfaces";
-  
-  export default function EditGiftCard() {
-    //   const toast = useToast();
-    const { id } = useParams();
-    const [values, setValues] = useState<GiftCardRo>({ subscription_interval:"month"} as GiftCardRo);
-    const [loading, setLoading] = useState(false);
-    const toast = useToast();
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  Heading,
+  HStack,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Stack,
+  useToast,
+} from "@chakra-ui/react";
+import { navigate, useParams } from "@reach/router";
+import {
+  Icon,
+  Input,
+  InputLabel,
+  MainLayoutContainer,
+  PageMotion,
+  Topbar,
+} from "components";
 
+import { ApiResponse, GiftCardRo } from "interfaces";
+import { useCallback, useEffect, useState } from "react";
+import { get, post } from "utils";
 
-  
-    const handleSubmit = async (e: any) => {
-      e.preventDefault();
-      setLoading(true);
-      const res = (
-        await post<ApiResponse<GiftCardRo>, GiftCardRo>("/gift", values)
-      ).data as GiftCardRo;
-  
-      if (res) {
-        toast({
-          position: "bottom-right",
-          title: "Gift card added",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        navigate(-1);
-      }
-      setLoading(false);
-    };
+export default function EditGiftCard() {
+  //   const toast = useToast();
+  const { id } = useParams();
+  const [values, setValues] = useState<GiftCardRo>({
+    subscription_interval: "month",
+  } as GiftCardRo);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
-    const getGiftCard = async ()=>{
-      const res = (
-        await get<ApiResponse<GiftCardRo>>(`/gift/${id}`)
-      ).data as GiftCardRo;
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    const res = (
+      await post<ApiResponse<GiftCardRo>, GiftCardRo>("/gift", values)
+    ).data as GiftCardRo;
+
+    if (res) {
+      toast({
+        position: "bottom-right",
+        title: "Gift card added",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+      navigate(-1);
     }
+    setLoading(false);
+  };
 
-    useEffect(()=>{
-      getGiftCard();
-    },[])
-  
-    return (
-      <PageMotion key="meal-add">
-        <Topbar pageTitle="Meals" />
-  
-        <MainLayoutContainer>
-          <Container maxW="3xl" m="0">
-            <Stack>
-              <HStack>
-                <Button
-                  size="xs"
-                  color="brand.black"
-                  variant="transparent"
-                  leftIcon={<Icon type="leftArrow" />}
-                  onClick={() => navigate(-1)}
-                >
-                  Back
-                </Button>
-              </HStack>
-  
-              <Heading fontSize="2xl" mb="56px !important">
-                Edit Gift Card
-              </Heading>
-  
-              <Stack
-                my="46px !important"
-                as="form"
-                gridGap="24px"
-                onSubmit={handleSubmit}
+  const getGiftCard = useCallback(async () => {
+    const res = (await get<ApiResponse<GiftCardRo>>(`/gift/${id}`))
+      .data as GiftCardRo;
+  }, [id]);
+
+  useEffect(() => {
+    getGiftCard();
+  }, [getGiftCard]);
+
+  return (
+    <PageMotion key="meal-add">
+      <Topbar pageTitle="Meals" />
+
+      <MainLayoutContainer>
+        <Container maxW="3xl" m="0">
+          <Stack>
+            <HStack>
+              <Button
+                size="xs"
+                color="brand.black"
+                variant="transparent"
+                leftIcon={<Icon type="leftArrow" />}
+                onClick={() => navigate(-1)}
               >
-                <HStack gridGap="24px">
-                  <FormControl>
-                    <InputLabel>Name</InputLabel>
-                    <Input
-                      isRequired={false}
-                      bg="white !important"
-                      borderWidth="2px"
-                      borderColor="brand.neutral200"
-                      placeholder={""}
-                      value={values?.name}
-                      onChange={(e) =>
-                        setValues({
-                          ...values,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <InputLabel>Amount</InputLabel>
-                    <Input
-                      bg="white !important"
-                      borderWidth="2px"
-                      borderColor="brand.neutral200"
-                      placeholder={""}
-                      value={values?.amount ?? ""}
-                      type="number"
-                      onChange={(e) =>
-                        setValues({
-                          ...values,
-                          amount: parseInt(e.target.value),
-                        })
-                      }
-                    />
-                  </FormControl>
-                </HStack>
-  
+                Back
+              </Button>
+            </HStack>
+
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
+              Edit Gift Card
+            </Heading>
+
+            <Stack
+              my={{ base: "20px !important", md: "40px !important" }}
+              as="form"
+              gap={{ base: "10px", md: "20px" }}
+              onSubmit={handleSubmit}
+            >
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
-                  <InputLabel>Subscription Interval</InputLabel>
+                  <InputLabel>Name</InputLabel>
                   <Input
+                    isRequired={false}
                     bg="white !important"
                     borderWidth="2px"
                     borderColor="brand.neutral200"
                     placeholder={""}
-                    value={"month"}
-                    opacity={0.3}
-                    isReadOnly
+                    value={values?.name}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        name: e.target.value,
+                      })
+                    }
                   />
-                 
                 </FormControl>
-  
-                <Divider />
-  
-                <HStack>
-                  <Button isLoading={loading} type="submit">
-                    Save Changes
-                  </Button>
-                </HStack>
+                <FormControl>
+                  <InputLabel>Amount</InputLabel>
+                  <NumberInput
+                    value={values?.amount ?? 0}
+                    onChange={(value) =>
+                      setValues({
+                        ...values,
+                        amount: parseInt(value),
+                      })
+                    }
+                  >
+                    <NumberInputField
+                      bg="white !important"
+                      borderWidth="2px"
+                      borderColor="brand.neutral200"
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </FormControl>
               </Stack>
+
+              <FormControl>
+                <InputLabel>Subscription Interval</InputLabel>
+                <Input
+                  bg="white !important"
+                  borderWidth="2px"
+                  borderColor="brand.neutral200"
+                  placeholder={""}
+                  value={"month"}
+                  opacity={0.3}
+                  isReadOnly
+                />
+              </FormControl>
+
+              <Divider />
+
+              <HStack>
+                <Button isLoading={loading} type="submit">
+                  Save Changes
+                </Button>
+              </HStack>
             </Stack>
-          </Container>
-        </MainLayoutContainer>
-  
-        {/* <ConfirmationModal
+          </Stack>
+        </Container>
+      </MainLayoutContainer>
+
+      {/* <ConfirmationModal
           isOpen={isOpen}
           onClose={onClose}
           title="Confirm"
@@ -178,7 +177,6 @@ import {
           buttonText={["Save"]}
           description="Are you sure you want to save changes to this meal"
         /> */}
-      </PageMotion>
-    );
-  }
-  
+    </PageMotion>
+  );
+}

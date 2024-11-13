@@ -88,14 +88,6 @@ export default function Meals() {
     }
   }, [value, searchMeals]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
-
   return (
     <PageMotion key="meals-root" pb="100px">
       <Topbar pageTitle="Meals" />
@@ -163,7 +155,7 @@ export default function Meals() {
   );
 }
 
-interface MealItemProps extends Partial<MealRo>, BoxProps {
+interface MealItemProps extends Partial<MealRo>, Omit<BoxProps, keyof MealRo> {
   keys?: string[];
 }
 
@@ -178,22 +170,36 @@ function MealItem(props: MealItemProps) {
     available_quantity,
     calories,
     spice_level,
-    ...xprops
+    lastEditedBy, // Destructure but don't pass to DOM
+    createdAt,
+    updatedAt,
+    isSwallow,
+    meals,
+    category,
+    slug,
+    isProtein,
+    weight,
+    orderType,
+    country,
+    mealInfo,
+    images,
+    description,
+    continent,
+    lastEdited,
+    expected_proteins,
+    expected_swallows,
+    ...domProps // Only DOM-safe props remain
   } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: editIsOpen,
-    // onOpen: editOnOpen,
-    onClose: editOnClose,
-  } = useDisclosure();
+  const { isOpen: editIsOpen, onClose: editOnClose } = useDisclosure();
 
   const { deleteMeal, isLoading } = useMealMutations(keys);
 
   const removeMeal = async () => {
-    if (!props?._id) return;
+    if (!_id) return;
     onClose();
-    await deleteMeal(props?._id!);
+    await deleteMeal(_id);
   };
 
   return (
@@ -203,7 +209,7 @@ function MealItem(props: MealItemProps) {
       borderColor="brand.neutral"
       borderRadius="8px"
       pos="relative"
-      {...xprops}
+      {...domProps}
     >
       {!is_available && (
         <Badge
@@ -222,7 +228,6 @@ function MealItem(props: MealItemProps) {
         w="128px"
         minW="128px"
         h="120px"
-        // bg="brand.neutral"
         bg="rgb(233 87 63 / 20%)"
         borderRadius="8px"
         display="flex"
@@ -335,13 +340,12 @@ function MealItem(props: MealItemProps) {
         description="Are you sure you want to delete this meal?"
       />
 
-      {/* The add meal modal is being used in edit mode here */}
       <AddMealModal
         meal={{
           name,
-          _id: props?._id,
-          image_url: props?.image_url,
-          is_available: props?.is_available,
+          _id,
+          image_url,
+          is_available,
         }}
         keys={keys}
         isOpen={editIsOpen}

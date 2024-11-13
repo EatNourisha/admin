@@ -131,8 +131,7 @@ export default function EditPlan() {
                   <CurrencyInput
                     placeholder={""}
                     value={state?.amount ?? ""}
-                    onChange={(e) => set({ amount: e.target.value })}
-                    type="number"
+                    onChange={(value) => set({ amount: value })}
                   />
                 </FormControl>
               </HStack>
@@ -185,8 +184,7 @@ export default function EditPlan() {
                   <CurrencyInput
                     placeholder={""}
                     value={state?.delivery_fee ?? ""}
-                    onChange={(e) => set({ delivery_fee: e.target.value })}
-                    type="number"
+                    onChange={(value) => set({ delivery_fee: value })}
                   />
                 </FormControl>
               </HStack>

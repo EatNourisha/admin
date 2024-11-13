@@ -16,9 +16,9 @@ import { omit, orderBy } from "lodash";
 import usePageFilters from "hooks/usePageFilters";
 import useBroadcasts from "hooks/useBroadcasts";
 import { format, parseISO } from "date-fns";
+import MobileBroadcastData from "./MobileBroadcastData";
 
 export default function Broadcasts() {
-  // const [isLoading, setIsLoading] = useState(true);
   const { state, filter, onPageChange } = usePageFilters({
     limit: 10,
     page: 1,
@@ -38,33 +38,14 @@ export default function Broadcasts() {
     [broadcasts]
   );
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 2000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading]);
-
   return (
     <PageMotion key="broadcast-root" pb="100px">
       <Topbar pageTitle="Broadcasts" />
       <MainLayoutContainer>
         <Box>
           <HStack as="form" justifyContent="flex-end" w="100%" mb="24px">
-            {/* <Input
-              // w="100%"
-              minH="48px"
-              minW="340px"
-              maxW="400px"
-              placeholder="Search Plans"
-              value={state?.searchPhrase ?? ""}
-              endAdornment={<Icon type="search" />}
-              onChange={(e) => setFilter("searchPhrase", e.target.value)}
-              visibility="hidden"
-            /> */}
-
             <Button
+              w={{ base: "100%", md: "auto" }}
               ml="0 !important"
               leftIcon={<Icon type="add" />}
               onClick={() => navigate(configs.paths.sendBroadcast)}
@@ -135,18 +116,10 @@ export default function Broadcasts() {
                   ))
                 : null}
             </GenericTable>
+            <MobileBroadcastData data={broadcasts} isLoading={isLoading} />
           </Box>
 
           <Box>
-            {/* <PaginatorContainer>
-              <Paginator
-                {...pageData}
-                onPrev={(prev) => onPrevPage(prev)}
-                onNext={(next) => onNextPage(next)}
-              />
-              
-            </PaginatorContainer> */}
-
             {hasBroadcasts && (
               <APaginator
                 isLoading={isLoading}

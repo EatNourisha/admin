@@ -48,7 +48,7 @@ import { AllergyRo, UserRo } from "interfaces/auth.interface";
 import { capitalize, omit } from "lodash";
 import join from "lodash/join";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { currencyFormat, get, when } from "utils";
+import { currencyFormat, get, post, when } from "utils";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -59,6 +59,8 @@ export default function UserDetails() {
   const { data: user, isLoading, key } = useUserDetails(id);
   const { suspendUser, isLoading: isSuspending } = useUserMutations([key]);
   const { data: lineupData } = useLineup(id);
+  console.log(lineupData, user);
+  
 
   const lineup = useMemo(
     () =>
@@ -153,7 +155,7 @@ export default function UserDetails() {
               >
                 Back
               </Button>
-              <HStack gridGap="10px">
+              <HStack gap="10px">
                 <FormControl
                   display="flex"
                   w="fit-content"
@@ -208,8 +210,6 @@ export default function UserDetails() {
                     }}
                     _loading={{ color: "brand.primary" }}
                     onClick={() => navigate(`/referrals?customer=${id}`)}
-                    // disabled={isDeleting}
-                    // isLoading={isDeleting}
                   />
                 </Tooltip>
                 <Tooltip label="View Orders">
@@ -231,8 +231,6 @@ export default function UserDetails() {
                     }}
                     _loading={{ color: "brand.primary" }}
                     onClick={() => navigate(`/meals/orders?customer=${id}`)}
-                    // disabled={isDeleting}
-                    // isLoading={isDeleting}
                   />
                 </Tooltip>
               </HStack>
@@ -244,7 +242,6 @@ export default function UserDetails() {
                 isLoading={isLoading}
                 src={user?.profilePhotoUrl}
                 title={join([user?.first_name, user?.last_name], " ")}
-                // subtitle={capitalize(user?.gender ?? "male")}
               />
             </VStack>
 
@@ -338,7 +335,7 @@ export default function UserDetails() {
 
             <Box mt="58px">
               <Text mb="16px">Billing history</Text>
-              <VStack gridGap="10px">
+              <VStack gap="10px">
                 {!isLoadingBills &&
                   history?.map((tx, i) => (
                     <BillItem
@@ -401,7 +398,7 @@ export default function UserDetails() {
                 "0px 2px 12px rgba(0, 0, 0, 0.05)",
                 "none"
               )}
-              gridGap="16px"
+              gap="16px"
             >
               {!!lineupData &&
                 !isLoading &&
@@ -756,7 +753,7 @@ function Report({ userId, csID }: { userId?: string; csID: string }) {
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      // const data = await post(`/cs/report/${userId}`, { text, teamId: csID });
+      await post(`/cs/report/${userId}`, { text, teamId: csID });
       setLoading(false);
       setConfirm(false);
       setText("");
@@ -846,7 +843,7 @@ function FollowUp({ userId, csID }: { userId?: string; csID: string }) {
   const addFollowUp = async () => {
     if (text) {
       setLoading(true);
-      // const data = await post(`/cs/followup/${userId}`, { text, teamId: csID });
+      await post(`/cs/followup/${userId}`, { text, teamId: csID });
       setLoading(false);
       setConfirm(false);
       setText("");

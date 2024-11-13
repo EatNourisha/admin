@@ -161,16 +161,6 @@ const Topbar: FC<TopbarProps> = (props) => {
             </Stack>
 
             <HStack>
-              {/* <Input
-              w="100%"
-              minW="380px"
-              mr="20px !important"
-              placeholder="Enter your search term"
-              startAdornment={<Icon type="search" />}
-            /> */}
-              {/* <SkeletonCircle isLoaded={!isLoading ?? true}>
-              <NotificationButton />
-            </SkeletonCircle> */}
               {pageTitle?.toLowerCase().includes("admin") && (
                 <Button
                   size="sm"

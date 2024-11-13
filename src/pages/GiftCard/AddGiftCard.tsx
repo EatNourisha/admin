@@ -1,46 +1,36 @@
 import {
-  Box,
   Button,
-  Center,
   Container,
   Divider,
   FormControl,
-  Grid,
   Heading,
   HStack,
-  IconButton,
-  Image,
-  Select,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Stack,
-  Switch,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import {
-  Gravatar,
   Icon,
   Input,
+  InputLabel,
   MainLayoutContainer,
   PageMotion,
   Topbar,
-  InputLabel,
-  ConfirmationModal,
 } from "components";
 
-import configs from "config";
-
-import { useMemo, useState } from "react";
-import { useMealForm } from "../Meals/useMealForm";
-import { post, when } from "utils";
-import { FilePreviewType } from "components/Uploader/Uploader";
-import { RepeatIcon } from "@chakra-ui/icons";
 import { ApiResponse, GiftCardRo } from "interfaces";
+import { useState } from "react";
+import { post } from "utils";
 
 export default function AddMeal() {
-  //   const toast = useToast();
-
-  const [values, setValues] = useState<GiftCardRo>({ subscription_interval:"month"} as GiftCardRo);
+  const [values, setValues] = useState<GiftCardRo>({
+    subscription_interval: "month",
+  } as GiftCardRo);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -83,17 +73,23 @@ export default function AddMeal() {
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Add Gift Card
             </Heading>
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -113,22 +109,28 @@ export default function AddMeal() {
                 </FormControl>
                 <FormControl>
                   <InputLabel>Amount</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder={""}
-                    value={values?.amount ?? ""}
-                    type="number"
-                    onChange={(e) =>
+                  <NumberInput
+                    isRequired
+                    value={values?.amount ?? 0}
+                    onChange={(value) =>
                       setValues({
                         ...values,
-                        amount: parseInt(e.target.value),
+                        amount: parseInt(value),
                       })
                     }
-                  />
+                  >
+                    <NumberInputField
+                      bg="white !important"
+                      borderWidth="2px"
+                      borderColor="brand.neutral200"
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
                 </FormControl>
-              </HStack>
+              </Stack>
 
               <FormControl>
                 <InputLabel>Subscription Interval</InputLabel>
@@ -141,7 +143,6 @@ export default function AddMeal() {
                   opacity={0.3}
                   isReadOnly
                 />
-               
               </FormControl>
 
               <Divider />
@@ -155,17 +156,6 @@ export default function AddMeal() {
           </Stack>
         </Container>
       </MainLayoutContainer>
-
-      {/* <ConfirmationModal
-        isOpen={isOpen}
-        onClose={onClose}
-        title="Confirm"
-        onConfirm={submitForm(() => {
-          navigate(`${configs.paths.meals}`, { replace: true });
-        })}
-        buttonText={["Save"]}
-        description="Are you sure you want to save changes to this meal"
-      /> */}
     </PageMotion>
   );
 }

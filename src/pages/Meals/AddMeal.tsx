@@ -9,6 +9,11 @@ import {
   Grid,
   Heading,
   HStack,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   IconButton,
   Image,
   Select,
@@ -118,7 +123,6 @@ export default function AddMeal() {
 
             <Gravatar
               initials={"Meal"}
-              //   isLoading={isLoading}
               variant="vert"
               src={state?.image_url ?? (state?.images ?? [])[0]?.url}
             />
@@ -129,7 +133,10 @@ export default function AddMeal() {
               gap={{ base: "16px", md: "24px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gap={{ base: "16px", md: "24px" }}>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "16px", md: "24px" }}
+              >
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -145,14 +152,16 @@ export default function AddMeal() {
                 <FormControl>
                   <InputLabel>Amount</InputLabel>
                   <CurrencyInput
-                    type="number"
                     placeholder={""}
                     value={state?.price?.amount ?? ""}
-                    onChange={(e) => setPrice({ amount: e.target.value })}
+                    onChange={(value) => setPrice({ amount: value })}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gap={{ base: "16px", md: "24px" }}>
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "16px", md: "24px" }}
+              >
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -171,11 +180,13 @@ export default function AddMeal() {
                     isRequired={false}
                     value={state?.price?.previousAmount ?? ""}
                     isDisabled
-                    type="number"
                   />
                 </FormControl>
-              </HStack>
-              <HStack gap={{ base: "16px", md: "24px" }}>
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "16px", md: "24px" }}
+              >
                 <FormControl>
                   <InputLabel>Order Type</InputLabel>
                   <Select
@@ -202,47 +213,60 @@ export default function AddMeal() {
                     onChange={(e) => set({ country: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack gap={{ base: "16px", md: "24px" }}>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "16px", md: "24px" }}
+              >
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
                   <CurrencyInput
                     placeholder={""}
                     isRequired={false}
                     value={state?.price?.deliveryFee ?? ""}
-                    onChange={(e) => setPrice({ deliveryFee: e.target.value })}
-                    type="number"
+                    onChange={(value) => setPrice({ deliveryFee: value })}
                   />
                 </FormControl>
 
                 <FormControl>
                   <InputLabel>Available Quantity</InputLabel>
-                  <Input
-                    bg="white !important"
-                    borderWidth="2px"
-                    borderColor="brand.neutral200"
-                    placeholder={""}
-                    type="number"
-                    min={0}
-                    value={state?.available_quantity ?? ""}
-                    onChange={(e) =>
-                      set({ available_quantity: e.target.value })
-                    }
-                  />
+                  <NumberInput
+                    value={state?.available_quantity ?? 0}
+                    onChange={(value) => {
+                      set({ available_quantity: value });
+                    }}
+                  >
+                    <NumberInputField
+                      bg="white !important"
+                      borderWidth="2px"
+                      borderColor="brand.neutral200"
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
                 </FormControl>
-              </HStack>
+              </Stack>
 
               <FormControl>
                 <InputLabel>Calories</InputLabel>
-                <Input
-                  borderWidth="2px"
-                  type="number"
-                  borderColor="brand.neutral200"
-                  placeholder="Add a calorie count"
+                <NumberInput
                   value={state?.calories ?? ""}
-                  onChange={(e) => set({ calories: e.target.value })}
-                />
+                  onChange={(value) => set({ calories: value })}
+                >
+                  <NumberInputField
+                    bg="white !important"
+                    borderWidth="2px"
+                    borderColor="brand.neutral200"
+                    placeholder="Add a calorie count"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
               </FormControl>
 
               <FormControl>

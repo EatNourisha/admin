@@ -8,24 +8,22 @@ import {
 } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import {
+  ConfirmationModal,
   Gravatar,
-  Icon,
   Input,
+  InputLabel,
   MainLayoutContainer,
   PageMotion,
-  Topbar,
-  InputLabel,
-  ConfirmationModal,
   Textarea,
+  Topbar
 } from "components";
 
 import configs from "config";
+import { ArrowLeft } from "lucide-react";
 import { useMemo } from "react";
 import { useBroadcastForm } from "./useBroadcastForm";
 
 export default function AddBroadcast() {
-  //   const toast = useToast();
-
   const {
     set,
     state,
@@ -51,38 +49,37 @@ export default function AddBroadcast() {
       <Topbar pageTitle="Broadcasts" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p={0} maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
                 size="xs"
+                mb="12px"
                 color="brand.black"
                 variant="transparent"
-                leftIcon={<Icon type="leftArrow" />}
+                leftIcon={<ArrowLeft size={16} />}
                 onClick={() => navigate(-1)}
               >
                 Back
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Send Broadcast
             </Heading>
 
-            <Gravatar
-              initials={"Broadcast"}
-              //   isLoading={isLoading}
-              variant="vert"
-              //   src={user?.profilePhotoUrl}
-            />
+            <Gravatar initials={"Broadcast"} variant="vert" />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "16px", md: "24px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <Stack direction={{ base: "column", md: "row" }} gap={{ base: "16px", md: "24px" }}>
                 <FormControl>
                   <InputLabel>Title</InputLabel>
                   <Input
@@ -106,38 +103,7 @@ export default function AddBroadcast() {
                     onChange={(e) => set({ tag: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
-              {/* <HStack gridGap="24px">
-                <FormControl>
-                  <InputLabel>Currency</InputLabel>
-                  <Select
-                    placeholder="Select Currency"
-                    borderRadius="4px"
-                    value={state?.currency ?? ""}
-                    onChange={(e) => set({ currency: e.target.value })}
-                  >
-                    <option value={"gbp"}>GBP</option>
-                  </Select>
-                </FormControl>
-                <FormControl>
-                  <InputLabel>Interval</InputLabel>
-                  <Select
-                    placeholder="Select Interval"
-                    borderRadius="4px"
-                    value={state?.subscription_interval ?? ""}
-                    onChange={(e) =>
-                      set({ subscription_interval: e.target.value })
-                    }
-                  >
-                    {Object.values(PlanInterval).map((intv, i) => (
-                      <option key={`${intv}ly-interval`} value={intv}>
-                        {capitalize(intv)}ly
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </HStack> */}
-
+              </Stack>
               <FormControl>
                 <InputLabel>Content</InputLabel>
                 <Textarea

@@ -20,29 +20,29 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import {
-  MainLayoutContainer,
-  Topbar,
-  Icon,
-  Gravatar,
-  PageMotion,
-  Loader,
-  InputLabel,
   APaginator,
   ConfirmationModal,
+  Gravatar,
+  Icon,
+  InputLabel,
+  Loader,
+  MainLayoutContainer,
+  PageMotion,
+  Topbar,
 } from "components";
 
 import { navigate, useParams } from "@reach/router";
-import { format, parseISO } from "date-fns";
-import join from "lodash/join";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { currencyFormat, when } from "utils";
-import { CouponRo } from "interfaces";
-import usePageFilters from "hooks/usePageFilters";
 import { EmptyCrate } from "components/Crate/Empty";
+import { format, parseISO } from "date-fns";
+import usePageFilters from "hooks/usePageFilters";
 import usePromo from "hooks/usePromo";
-import { ReferralRo, UserRo } from "interfaces/auth.interface";
 import usePromoMutations from "hooks/usePromoMutation";
+import { CouponRo } from "interfaces";
+import { ReferralRo, UserRo } from "interfaces/auth.interface";
 import { capitalize } from "lodash";
+import join from "lodash/join";
+import { ReactNode, useMemo, useRef, useState } from "react";
+import { currencyFormat, when } from "utils";
 
 export default function PromoDetails() {
   const { id } = useParams();
@@ -59,15 +59,11 @@ export default function PromoDetails() {
 
   const { data, isLoading, key } = usePromo(id, { ...state });
 
-
   const influencer = useMemo(() => data?.promo?.influencer, [data]);
   const coupon = useMemo(() => data?.promo?.coupon as CouponRo, [data]);
   const earnings = useMemo(() => data?.earnings, [data]);
   const referrals = useMemo(() => data?.referrals, [data]);
   const redeemed_by = useMemo(() => data?.promo?.redeemed_by, [data]);
-
-
-
 
   const {
     updatePromo,
@@ -133,7 +129,6 @@ export default function PromoDetails() {
     }
   };
 
-
   return (
     <PageMotion key="promo-details">
       <Topbar pageTitle="Promotion Code" />
@@ -143,10 +138,9 @@ export default function PromoDetails() {
           gap="24px"
         >
           <Box
-            p="38px"
+            p={{ base: "0", md: "38px" }}
             borderRadius="8px"
-            border="2px solid transparent"
-            borderColor="brand.neutral100"
+            border={{ base: "none", md: "2px solid brand.neutral100" }}
             mb="20px"
           >
             <HStack w="100%" justifyContent="space-between">
@@ -161,7 +155,7 @@ export default function PromoDetails() {
               >
                 Back
               </Button>
-              <HStack gridGap="10px">
+              <HStack gap="10px">
                 <FormControl
                   display="flex"
                   w="fit-content"
@@ -214,8 +208,6 @@ export default function PromoDetails() {
                     }}
                     _loading={{ color: "brand.primary" }}
                     onClick={() => navigate(`/promos/edit/${id}`)}
-                    // disabled={isDeleting}
-                    // isLoading={isDeleting}
                   />
                 </Tooltip>
                 <Tooltip label="Delete Promo">
@@ -240,7 +232,6 @@ export default function PromoDetails() {
                       action.current = "delete";
                       onOpen();
                     }}
-                    // disabled={isDeleting}
                     isLoading={isUpdating && action.current === "delete"}
                   />
                 </Tooltip>
@@ -251,16 +242,17 @@ export default function PromoDetails() {
               <Gravatar
                 variant="vert"
                 isLoading={isLoading}
-                // src={user?.profilePhotoUrl}
                 title={join(
                   [influencer?.first_name, influencer?.last_name],
                   " "
                 )}
-                // subtitle={capitalize(user?.gender ?? "male")}
               />
             </VStack>
 
-            <Grid templateColumns="repeat(2, 1fr)" gap="20px">
+            <Grid
+              templateColumns="repeat(2, 1fr)"
+              gap={{ base: "10px", md: "20px" }}
+            >
               <Detail
                 isLoading={isLoading}
                 title="Email"
@@ -402,7 +394,7 @@ export default function PromoDetails() {
           </Box>
 
           <Box>
-            <HStack gap="40px" justifyContent="center" mb="10px">
+            <HStack gap="40px" justifyContent="center" mb="20px">
               <Text
                 style={{
                   borderBottom: onReferal ? "3px solid orange" : "none",
@@ -423,7 +415,7 @@ export default function PromoDetails() {
               </Text>
             </HStack>
             {onReferal ? (
-              <Box >
+              <Box>
                 <HStack alignItems="center" justifyContent="space-between">
                   <Heading as="h5" fontSize="lg">
                     Referrals
@@ -458,7 +450,7 @@ export default function PromoDetails() {
                     "0px 2px 12px rgba(0, 0, 0, 0.05)",
                     "none"
                   )}
-                  gridGap="16px"
+                  gap="16px"
                 >
                   {!!referrals?.data &&
                     !isLoading &&
@@ -487,7 +479,7 @@ export default function PromoDetails() {
                 </Stack>
               </Box>
             ) : (
-              <Box >
+              <Box>
                 <HStack alignItems="center" justifyContent="space-between">
                   <Heading as="h5" fontSize="lg">
                     Redeemed by
@@ -501,11 +493,10 @@ export default function PromoDetails() {
                     borderRadius="10px"
                     fontSize="14px"
                     onChange={handleRefFilter}
-                    // visibility="hidden"
                   >
                     <option value="all">All</option>
-                    {["subscribed", "pending"].map((name) => (
-                      <option key={name} value={name}>
+                    {["subscribed", "pending"].map((name, i) => (
+                      <option key={i} value={name}>
                         {capitalize(name)}
                       </option>
                     ))}
@@ -516,18 +507,18 @@ export default function PromoDetails() {
                   mt="16px"
                   borderRadius="8px"
                   overflow="hidden"
-                  p="14px"
+                  p={{ base: "0", md: "14px" }}
                   shadow={when(
                     !hasReferrals,
                     "0px 2px 12px rgba(0, 0, 0, 0.05)",
                     "none"
                   )}
-                  gridGap="16px"
+                  gap="16px"
                 >
                   {!!redeemed_by &&
                     !isLoading &&
-                    (redeemed_by ?? []).map((ref) => (
-                      <RedeemedByItem key={`redeemed_by_${ref?._id}`}  {...ref} />
+                    (redeemed_by ?? []).map((ref, i) => (
+                      <RedeemedByItem key={i} {...ref} />
                     ))}
 
                   {isLoading && !hasRedeemedBy && <Loader my="80px" />}
@@ -578,10 +569,10 @@ function Detail(props: DetailProps) {
   return (
     <Box
       w="100%"
-      h="fit-content"
-      p="24px 22px"
+      p={{ base: "16px", md: "20px 24px" }}
       borderRadius="8px"
       shadow="0px 6px 40px rgba(0, 0, 0, 0.05)"
+      wordBreak="break-word"
       {...xprops}
     >
       <HStack color="brand.black">
@@ -592,14 +583,17 @@ function Detail(props: DetailProps) {
       </HStack>
 
       <Skeleton
-        isLoaded={!isLoading ?? true}
+        isLoaded={!isLoading}
         w="fit-content"
-        h={isLoading ? "20px" : "fit-content"}
         borderRadius="12px"
         mt="8px"
         {..._desc}
       >
-        <Text fontSize="18px" textTransform="capitalize" {..._desc}>
+        <Text
+          fontSize={{ base: "14px", md: "18px" }}
+          textTransform="capitalize"
+          {..._desc}
+        >
           {description ?? "--------"}
         </Text>
       </Skeleton>
@@ -669,12 +663,11 @@ function ReferralItem(props: ReferralItemProps) {
 }
 
 function RedeemedByItem(props: UserRo) {
-  const { email, last_name, first_name, subscription, delivery_day, _id } =
-    props;
+  const { email, last_name, first_name, subscription, _id } = props;
   return (
     <Box
       w="100%"
-      p="20px"
+      p={{ base: "16px", md: "20px" }}
       shadow="base"
       border="1px solid"
       borderColor="brand.neutral100"
@@ -684,12 +677,9 @@ function RedeemedByItem(props: UserRo) {
       <HStack justifyContent="space-between">
         <Gravatar
           variant="horizSingle"
-          // src={user?.profilePhotoUrl}
           title={join([first_name, last_name], " ")}
-          // subtitle={format(parseISO(delivery_day), "EEE dd, MMM yyyy")}
           onClick={() => navigate(`/users/${_id}`)}
           _container={{
-            flex: 3.5,
             alignSelf: "center",
             justifyContent: "flex-start",
           }}
@@ -698,11 +688,16 @@ function RedeemedByItem(props: UserRo) {
         <Divider orientation="vertical" />
 
         {!!subscription && (
-          <Stack flex="1" gap="0">
+          <Stack w="fit-content" gap="0">
             <Text fontSize="10px" textAlign="center" color="brand.neutral500">
               Email
             </Text>
-            <Text mt="0 !important" fontSize="sm" fontWeight="600">
+            <Text
+              mt="0 !important"
+              wordBreak="break-word"
+              fontSize="sm"
+              fontWeight="600"
+            >
               {email}
             </Text>
           </Stack>

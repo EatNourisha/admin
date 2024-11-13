@@ -40,8 +40,6 @@ export function PerkItem(props: PerkItemProps) {
 
   const [_content, setContent] = useState<string | null>(content ?? null);
 
-  // console.log(`Content #${index ?? 0}`, content, _content);
-
   const isEditable = useMemo(
     () => mode === "edit" || !!editMode,
     [mode, editMode]
@@ -64,7 +62,6 @@ export function PerkItem(props: PerkItemProps) {
               w="fit-content"
               h={isLoading ? "8px" : "fit-content"}
               borderRadius="12px"
-              // mt="8px"
             >
               <Text fontSize="12px" mt="0 !important" color="brand.greyText">
                 Perk #{isEditable ? "Draft" : index}
@@ -148,7 +145,6 @@ export function PerkItem(props: PerkItemProps) {
             variant="transparent"
             fontSize="xs"
             fontWeight="600"
-            // leftIcon={<Icon type="add" />}
             onClick={() =>
               onSaveDraft &&
               onSaveDraft({
@@ -170,7 +166,6 @@ export function PerkItem(props: PerkItemProps) {
               variant="transparent"
               fontSize="xs"
               fontWeight="600"
-              // leftIcon={<Icon type="add" />}
               onClick={() => toggleEditMode && toggleEditMode(index!)}
             >
               Cancel
