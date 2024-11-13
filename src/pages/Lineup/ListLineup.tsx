@@ -29,7 +29,7 @@ import { WeeklyMealLineUp } from "./WeeklyLineup";
 import { OrderStatusBadge } from "pages/Orders/OrderStatusBadge";
 import configs from "config";
 import { OrderRo, UserRo } from "interfaces";
-import MobileTableData from "pages/Dashboard/MobileTableData";
+import MobileTableData from "./MobileTableData";
 
 export default function ListLineup() {
   const [lineUpData, setLineUpData] = useState<{
@@ -94,7 +94,6 @@ export default function ListLineup() {
   }, [status, week]);
 
   console.log("LINEUPS", lineUpData);
-  
 
   return (
     <PageMotion key="dashboard-home">
@@ -104,6 +103,7 @@ export default function ListLineup() {
           <div>
             {/* LINEUPS */}
             <Stack
+            mb={10}
               direction={{ base: "column", md: "row" }}
               justifyContent="space-between"
             >
@@ -144,11 +144,13 @@ export default function ListLineup() {
                 />
               ) : null}
             </GenericTable>
-            {/* <MobileTableData
+            <MobileTableData
+              type="lineup"
+              //@ts-ignore
               data={lineUpData?.data?._lineups?.lineups}
               isLoading={lineUpData?.loading}
               onViewLineup={handleOpenModal}
-            /> */}
+            />
 
             {selectedUser && (
               <LineupDetailModal
@@ -171,7 +173,7 @@ export default function ListLineup() {
 
             {/* ORDERS?\ */}
 
-            <HStack mt="10" justifyContent="space-between">
+            <HStack my="10" justifyContent="space-between">
               <Heading fontSize="lg" fontWeight="700">
                 Orders
               </Heading>
@@ -256,6 +258,12 @@ export default function ListLineup() {
                     );
                   })}
             </GenericTable>
+            <MobileTableData
+              type="order"
+              //@ts-ignore
+              data={lineUpData.data?._orders?.data}
+              isLoading={lineUpData?.loading}
+            />
           </div>
           <APaginator
             isLoading={!lineUpData.loading}

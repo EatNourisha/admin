@@ -137,7 +137,10 @@ export default function EditMeal() {
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Edit Meal
             </Heading>
 
@@ -149,9 +152,9 @@ export default function EditMeal() {
             />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap={{ base: "16px", md: "24px" }}
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
               {!!meal?.lastEditedBy?.email && (
@@ -162,7 +165,10 @@ export default function EditMeal() {
                   {formatEditorName(meal.lastEditedBy)}
                 </Text>
               )}
-              <HStack gridGap={{ base: "16px", md: "24px" }}>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -183,8 +189,11 @@ export default function EditMeal() {
                     onChange={(value) => setPrice({ amount: value })}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap={{ base: "16px", md: "24px" }}>
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -205,8 +214,11 @@ export default function EditMeal() {
                     currency={state?.price?.currency ?? "gbp"}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap={{ base: "16px", md: "24px" }}>
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Order Type</InputLabel>
                   <Select
@@ -233,8 +245,11 @@ export default function EditMeal() {
                     onChange={(e) => set({ country: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap={{ base: "16px", md: "24px" }}>
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Delivery Fee</InputLabel>
                   <CurrencyInput
@@ -261,7 +276,7 @@ export default function EditMeal() {
                     </NumberInputStepper>
                   </NumberInput>
                 </FormControl>
-              </HStack>
+              </Stack>
 
               <FormControl>
                 <InputLabel>Calories</InputLabel>

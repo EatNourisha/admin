@@ -235,6 +235,7 @@ const MobileNav: FC<MobileNavProps> = (props) => {
                             ? "0 !important"
                             : "8px !important"
                         }
+                        onClick={handleClose}
                       />
                     ))}
 

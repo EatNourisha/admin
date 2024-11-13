@@ -105,7 +105,7 @@ export default function AddAdmin() {
       <Topbar pageTitle="Profile" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p={0} maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
@@ -119,7 +119,10 @@ export default function AddAdmin() {
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Edit Profile
             </Heading>
 
@@ -131,12 +134,15 @@ export default function AddAdmin() {
             />
 
             <Stack
-              mt="46px !important"
+              mt={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Firstname</InputLabel>
                   <Input
@@ -161,8 +167,11 @@ export default function AddAdmin() {
                     onChange={(e) => set({ last_name: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap="24px">
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Email</InputLabel>
                   <Input
@@ -187,8 +196,11 @@ export default function AddAdmin() {
                     // onChange={(e) => set({ phone: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap="24px">
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl w="50%">
                   <InputLabel>Role</InputLabel>
                   <Select borderRadius="4px">
@@ -198,7 +210,7 @@ export default function AddAdmin() {
                   </Select>
                 </FormControl>
                 <FormControl w="50%" visibility="hidden"></FormControl>
-              </HStack>
+              </Stack>
 
               <HStack>
                 <Button

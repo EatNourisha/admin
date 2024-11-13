@@ -2,24 +2,24 @@ import {
   Box,
   Button,
   HStack,
+  Image,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast,
   // Select,
   VStack,
-  Image,
-  Text,
-  useToast,
-  useDisclosure,
-  FormControl,
-  Switch,
 } from "@chakra-ui/react";
 
 import {
-  Icon,
-
   APaginator,
   ConfirmationModal,
   GenericTable,
   GenericTableItem,
   Gravatar,
+  Icon,
   Input,
   Link,
   Loader,
@@ -28,100 +28,18 @@ import {
   Topbar,
 } from "components";
 
+import { navigate } from "@reach/router";
 import EmptyFolder from "assets/images/folder.png";
 import configs from "config";
-import { navigate } from "@reach/router";
-import { useEffect, useMemo, useState } from "react";
-import isEmpty from "lodash/isEmpty";
 import usePageFilters from "hooks/usePageFilters";
+import isEmpty from "lodash/isEmpty";
+import { useMemo, useState } from "react";
 
 import useAdmins from "hooks/useAdmins";
-import { join } from "lodash";
 import useUserMutations from "hooks/useUserMutations";
-import { destroy, get, post } from "utils";
-import { SpinnerIcon } from "@chakra-ui/icons";
-import { NotificationButton } from "components/Topbar/Topbar";
-
-const CSStatus = ({ adminId }: { adminId: string }) => {
-  const [isCS, setIsCS] = useState(false);
-  const [isLoading, setLoading] = useState(true);
-
-  const checkCSStatus = async () => {
-    await get(`cs/get/cs/${adminId}`)
-      .then(() => {
-        setIsCS(true);
-      })
-      .catch(() => {
-        setIsCS(false);
-      });
-
-    setLoading(false);
-  };
-
-  const onUpdateCSStatus = () => {
-    setLoading(true);
-    if (isCS) {
-      destroy(`cs/${adminId}`);
-    } else {
-      post(`cs/${adminId}`, {});
-    }
-    setIsCS(!isCS);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    checkCSStatus();
-  }, []);
-  return (
-    <FormControl
-      display="flex"
-      w="fit-content"
-      alignSelf="flex-start"
-      justifyContent="center"
-      width="100%"
-    >
-      {isLoading ? (
-        <div
-          className="rotate"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "center",
-          }}
-        >
-          <NotificationButton
-          hasNewNotifications={false}
-          isLoading={true}
-          />
-        </div>
-      ) : (
-        <Switch
-          ml="8px"
-          aria-label="switch meal availability"
-          disabled={isLoading}
-          isChecked={isCS}
-          onChange={onUpdateCSStatus}
-          sx={{
-            "--switch-track-width": "26px",
-            ".chakra-switch__track": {
-              bg: "brand.neutral400",
-              padding: "3px",
-              borderRadius: "26px",
-            },
-            ".chakra-switch__track[data-checked]": {
-              bg: "#03CCAA",
-              padding: "3px",
-            },
-            ".chakra-switch__thumb": {
-              shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            },
-          }}
-        />
-      )}
-    </FormControl>
-  );
-};
+import { join } from "lodash";
+import CSStatus from "./CSStatus";
+import MobileAdminData from "./MobileAdminData";
 
 function EmptyState() {
   return (
@@ -198,22 +116,33 @@ export default function Admins() {
     <PageMotion key="admins-root">
       <Topbar pageTitle="Administrators" />
       <MainLayoutContainer>
-        <HStack as="form" justifyContent="space-between" w="100%" mb="24px">
-          <Input
-            // w="100%"
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          as="form"
+          justifyContent="space-between"
+          w="100%"
+          mb="24px"
+        >
+          <InputGroup
+            display="block"
+            w="100%"
             minH="48px"
-            minW="340px"
-            maxW="400px"
-            placeholder="Search Admins"
-            value={state?.searchPhrase ?? ""}
-            endAdornment={<Icon type="search" />}
-            onChange={(e) => setFilter("searchPhrase", e.target.value)}
-          />
-
+            maxW={{ base: "100%", md: "400px" }}
+          >
+            <Input
+              w="full"
+              placeholder="Search Admins"
+              value={state?.searchPhrase ?? ""}
+              onChange={(e) => setFilter("searchPhrase", e.target.value)}
+            />
+            <InputRightElement top="4px">
+              <Icon type="search" />
+            </InputRightElement>
+          </InputGroup>
           <Button onClick={() => navigate(configs.paths.addAdministrator)}>
             Add Administrator
           </Button>
-        </HStack>
+        </Stack>
 
         {!admins && isEmpty(admins) && !isLoading && <EmptyState />}
 
@@ -270,6 +199,14 @@ export default function Admins() {
                 />
               ))}
             </GenericTable>
+            <MobileAdminData
+              data={admins}
+              isLoading={isLoading}
+              currentId={currentId}
+              isRemoving={isRemoving}
+              setId={setId}
+              onOpen={onOpen}
+            />
           </Box>
         )}
 

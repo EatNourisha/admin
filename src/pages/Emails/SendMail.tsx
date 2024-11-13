@@ -1,5 +1,5 @@
 import { useState } from "react";
-import  SendEmail   from "hooks/useSendEmails"
+import SendEmail from "hooks/useSendEmails";
 import {
   // Box,
   Button,
@@ -8,7 +8,7 @@ import {
   // Divider,
   FormControl,
   // Grid,
-//   Heading,
+  //   Heading,
   HStack,
   // IconButton,
   // Image,
@@ -19,60 +19,52 @@ import {
 } from "@chakra-ui/react";
 import {
   Gravatar,
-//   Icon,
+  //   Icon,
   Input,
   MainLayoutContainer,
   PageMotion,
   Topbar,
   InputLabel,
-//   ConfirmationModal,
+  //   ConfirmationModal,
   Textarea,
 } from "components";
 
 export default function SendMail() {
   const [email, setEmail] = useState<string>("");
   const [subject, setSubject] = useState<string>("");
-  const [content, setContent] = useState<string>("")
+  const [content, setContent] = useState<string>("");
 
-  const { activeUser, isLoading, isSuccess, isError } = SendEmail();
+  const { activeUser, isSuccess, isError } = SendEmail();
 
   const handleSendMail = async () => {
-   
     try {
-        
-        await activeUser({
-          subscriptionStatus: email,
-          subject: subject,
-          message: content, 
-        });
-        
-      
-      } catch (error) {
-        console.error("Error sending email:", error);
-      }
-
+      await activeUser({
+        subscriptionStatus: email,
+        subject: subject,
+        message: content,
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
   };
 
   return (
     <PageMotion key="users-root" pb="100px">
       <Topbar pageTitle="Send Mail" />
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p="0" maxW="3xl" m="0">
           <Stack>
-            <Gravatar
-              initials={"Send Emails"}
-              //   isLoading={isLoading}
-              variant="vert"
-              //   src={user?.profilePhotoUrl}
-            />
+            <Gravatar initials={"Send Emails"} variant="vert" />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
-              
+              gap={{ base: "10px", md: "20px" }}
             >
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Subject</InputLabel>
                   <Input
@@ -83,9 +75,8 @@ export default function SendMail() {
                     placeholder={"Enter Subject"}
                     value={subject}
                     onChange={(e) => {
-                        setSubject(e.target.value)}
-                }
-                  
+                      setSubject(e.target.value);
+                    }}
                   />
                 </FormControl>
                 <FormControl>
@@ -93,6 +84,7 @@ export default function SendMail() {
                   <Select
                     bg="white !important"
                     borderWidth="2px"
+                    borderRadius="4px"
                     borderColor="brand.neutral200"
                     placeholder="Enter User Group"
                     value={email}
@@ -100,12 +92,14 @@ export default function SendMail() {
                   >
                     <option value="active">Active</option>
                     <option value="cancelled">Cancelled</option>
-                    <option value="incomplete_expired">Incomplete Expired</option>
+                    <option value="incomplete_expired">
+                      Incomplete Expired
+                    </option>
                     <option value="expired">Expired</option>
                     <option value="">No Subscription</option>
                   </Select>
                 </FormControl>
-              </HStack>
+              </Stack>
 
               <FormControl>
                 <InputLabel>Content</InputLabel>
@@ -113,19 +107,25 @@ export default function SendMail() {
                   borderWidth="2px"
                   borderColor="brand.neutral200"
                   placeholder="Add content"
-                 value={content}
-                 onChange={(e) => setContent(e.target.value)}
+                  value={content}
+                  rows={10}
+                  onChange={(e) => setContent(e.target.value)}
                 />
               </FormControl>
 
               <HStack>
                 <Button
+                  w={{ base: "100%", md: "auto" }}
                   //   disabled={isDisabled}
                   //   isLoading={isSubmiting}
                   onClick={handleSendMail}
                   type="button"
                 >
-                   {isSuccess ? "Email Sent" : isError ? "Error Sending" : "Send Email"}
+                  {isSuccess
+                    ? "Email Sent"
+                    : isError
+                    ? "Error Sending"
+                    : "Send Email"}
                 </Button>
               </HStack>
             </Stack>

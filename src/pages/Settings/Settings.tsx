@@ -31,7 +31,6 @@ import { when } from "utils";
 export default function Settings() {
   const { data: settings, isLoading } = useSettings();
 
-
   const {
     set,
     state,
@@ -43,7 +42,6 @@ export default function Settings() {
     hasChanges,
     setReward,
   } = useSettingsForm(settings);
-
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -68,7 +66,7 @@ export default function Settings() {
       <Topbar pageTitle="Settings" />
 
       <MainLayoutContainer>
-        <Container maxW="3xl" m="0">
+        <Container p={0} maxW="3xl" m="0">
           <Stack>
             <HStack>
               <Button
@@ -82,7 +80,10 @@ export default function Settings() {
               </Button>
             </HStack>
 
-            <Heading fontSize="2xl" mb="56px !important">
+            <Heading
+              fontSize="2xl"
+              mb={{ base: "20px !important", md: "40px !important" }}
+            >
               Change settings
             </Heading>
 
@@ -93,12 +94,15 @@ export default function Settings() {
             />
 
             <Stack
-              my="46px !important"
+              my={{ base: "20px !important", md: "40px !important" }}
               as="form"
-              gridGap="24px"
+              gap={{ base: "10px", md: "20px" }}
               onSubmit={handleSubmit}
             >
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Name</InputLabel>
                   <Input
@@ -130,8 +134,11 @@ export default function Settings() {
                     }
                   />
                 </FormControl>
-              </HStack>
-              <HStack gridGap="24px">
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Currency</InputLabel>
                   <Select
@@ -157,7 +164,7 @@ export default function Settings() {
                     <option value={"per_meal"}>Per Meal</option>
                   </Select>
                 </FormControl>
-              </HStack>
+              </Stack>
 
               <Divider />
 
@@ -165,7 +172,10 @@ export default function Settings() {
                 <Text fontWeight="600">Influencer's Reward</Text>
               </HStack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Type</InputLabel>
                   <Select
@@ -207,9 +217,12 @@ export default function Settings() {
                     }
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
-              <HStack gridGap="24px">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: "10px", md: "20px" }}
+              >
                 <FormControl>
                   <InputLabel>Wed_Sat</InputLabel>
                   <Input
@@ -235,11 +248,11 @@ export default function Settings() {
                     onChange={(e) => set({ sun_tue: e.target.value })}
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
               {/* <Divider /> */}
 
-              <HStack>
+              <HStack justifyContent="center">
                 <Button
                   disabled={isDisabled}
                   isLoading={isSubmiting}

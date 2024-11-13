@@ -206,15 +206,6 @@ export default function Users() {
           </Box>
 
           <Box>
-            {/* <PaginatorContainer>
-              <Paginator
-                {...pageData}
-                onPrev={(prev) => onPrevPage(prev)}
-                onNext={(next) => onNextPage(next)}
-              />
-              
-            </PaginatorContainer> */}
-
             {hasCustomers && (
               <APaginator
                 isLoading={isLoading}
