@@ -135,7 +135,7 @@ export default function Gravatar(props: GravatarProps) {
   //   const date = add(parseISO(createdAt), { days: 10 });
   //   return !isPast(date);
   // }, [createdAt]);
-  const isNew =false;
+  const isNew = false;
 
   return (
     <Box
@@ -149,11 +149,7 @@ export default function Gravatar(props: GravatarProps) {
       {...variants?.container}
       {..._container}
     >
-      <SkeletonCircle
-        isLoaded={!isLoading}
-        w="fit-content"
-        h="fit-content"
-      >
+      <SkeletonCircle isLoaded={!isLoading} w="fit-content" h="fit-content">
         <Avatar
           src={src}
           size="sm"
@@ -169,14 +165,13 @@ export default function Gravatar(props: GravatarProps) {
             <Skeleton
               isLoaded={!isLoading}
               w="fit-content"
-              h="20px"
               borderRadius="12px"
               mb={isLoading ? "3px" : "0"}
             >
               <HStack>
                 <Text
                   maxW="fit-content"
-                  fontSize="14px"
+                  fontSize={{ base: "12px", md: "14px" }}
                   fontWeight="400"
                   color="brand.black"
                   textTransform="capitalize"
@@ -193,14 +188,19 @@ export default function Gravatar(props: GravatarProps) {
                     New
                   </Badge>
                 )}
-               
               </HStack>
 
               {IsReturningCustomer && (
-                  <Badge display="block" bg="brand.primary" color="white">
-                    Returning Client
-                  </Badge>
-                )}
+                <Badge
+                  mt="4px !important"
+                  display="block"
+                  fontSize={{ base: "10px", md: "12px" }}
+                  bg="brand.primary"
+                  color="white"
+                >
+                  Returning Client
+                </Badge>
+              )}
             </Skeleton>
           )}
           {subtitle && (

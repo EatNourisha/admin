@@ -121,7 +121,7 @@ function MobileUserDetails(props: MobileUserDetailsProps) {
               variant="outline"
               onClick={() => navigate(`${configs.paths.users}/${user?._id}`)}
             >
-              View Lineup
+              View more
             </Button>
             ,
           </VStack>

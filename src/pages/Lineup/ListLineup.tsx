@@ -68,7 +68,7 @@ export default function ListLineup() {
 
   useEffect(() => {
     getLineUps();
-  }, [page]);
+  }, [page]);  
 
   useEffect(() => {
     const getStatusLineup = async () => {

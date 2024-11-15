@@ -51,9 +51,14 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
   const renderLineupData = (item: any) => (
     <VStack alignItems="stretch" gap="12px">
       <Gravatar
-        title={join([item?.first_name, item?.last_name], " ")}
+        title={join(
+          [item?.customer?.first_name, item?.customer?.last_name],
+          " "
+        )}
         IsReturningCustomer={item?.isReturningCustomer}
-        onClick={() => navigate(`${configs.paths.users}/${item?._id}`)}
+        onClick={() =>
+          navigate(`${configs.paths.users}/${item?.customer?._id}`)
+        }
       />
       <HStack justifyContent="space-between">
         <Box>
@@ -63,9 +68,11 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           </Text>
         </Box>
         <Box>
-          <Text color="gray.600">City</Text>
+          <Text color="gray.600" textAlign="right">
+            City
+          </Text>
           <Text fontSize="14px" fontWeight="medium">
-            {item?.address?.city ?? "---"}
+            {item?.customer?.address?.city ?? "---"}
           </Text>
         </Box>
       </HStack>
@@ -75,7 +82,7 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           {moment(item?.delivery_date).format("DD/MM/YYYY")}
         </Text>
       </Box>
-      <Button size="sm" width="full" onClick={() => onViewLineup?.(item)}>
+      <Button size="sm" width="full" onClick={() => onViewLineup?.(item?.customer)}>
         View Lineup
       </Button>
     </VStack>
@@ -104,7 +111,9 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           </Text>
         </Box>
         <Box>
-          <Text color="gray.600">Phone</Text>
+          <Text color="gray.600" textAlign="right">
+            Phone
+          </Text>
           <Text fontSize="14px" fontWeight="medium">
             {order?.phone_number ?? "---"}
           </Text>
@@ -118,14 +127,18 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           </Text>
         </Box>
         <Box>
-          <Text color="gray.600">Total</Text>
+          <Text color="gray.600" textAlign="right">
+            Total
+          </Text>
           <Text fontSize="14px" fontWeight="medium">
             {currencyFormat("gbp").format(order?.total ?? 0)}
           </Text>
         </Box>
       </HStack>
       <Box>
-        <Text color="gray.600">Status</Text>
+        <Text color="gray.600" textAlign="right">
+          Status
+        </Text>
         <OrderStatusBadge type={order?.status} />
       </Box>
       <Button

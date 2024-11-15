@@ -34,6 +34,9 @@ interface LineupDetailModalProps extends Omit<ModalProps, "children" | "id"> {
 
 export default function LineupDetailModal(props: LineupDetailModalProps) {
   const { user, isOpen, onClose, _content, _body, ...xprops } = props;
+
+  console.log(user);
+  
   
   const { data: lineupData, isLoading } = useLineup(user?._id);
   const lineup = useMemo(
@@ -48,6 +51,9 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
       ]),
     [lineupData]
   );
+
+  console.log(lineup);
+  
 
   return (
     <Modal

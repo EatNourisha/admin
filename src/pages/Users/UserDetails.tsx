@@ -59,9 +59,6 @@ export default function UserDetails() {
   const { data: user, isLoading, key } = useUserDetails(id);
   const { suspendUser, isLoading: isSuspending } = useUserMutations([key]);
   const { data: lineupData } = useLineup(id);
-  console.log(lineupData, user);
-  
-
   const lineup = useMemo(
     () =>
       omit(lineupData, [
@@ -90,9 +87,7 @@ export default function UserDetails() {
   const delivery_day = useMemo(() => {
     const info = user?.delivery_info;
     if (!!info && !!info?.next_delivery_date) {
-      const day = parseISO(info?.next_delivery_date).getDay();
-      console.log("Delivery Info", { day, info });
-      /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
+      const day = parseISO(info?.next_delivery_date).getDay();      /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
       if ([6, 0, 1].includes(day)) return "------";
       return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
     }
@@ -126,8 +121,6 @@ export default function UserDetails() {
       });
     }
   };
-
-  const [selectedCSId, setSelectedCSId] = useState("");
 
   return (
     <PageMotion key="user-details">
@@ -345,7 +338,11 @@ export default function UserDetails() {
                       {...tx}
                     />
                   ))}
-
+                {!isLoadingBills && history.length === 0 && (
+                  <Text color="gray.600" fontSize="sm" textAlign="center">
+                    No billing history available
+                  </Text>
+                )}
                 {isLoadingBills &&
                   Array(state?.limit ?? 5)
                     .fill(0)
@@ -422,9 +419,8 @@ export default function UserDetails() {
             </Stack>
           </Box>
           <Box display="flex" flexDirection="column" gap="1.5rem">
-            <SelectAssignedCS setSelectedCSId={setSelectedCSId} />
-            {user?._id && <Report userId={user?._id} csID={selectedCSId} />}
-            {user?._id && <FollowUp userId={user?._id} csID={selectedCSId} />}
+            <CSReport userId={user?._id} />
+            <CSReport userId={user?._id} isFollowUp={true} />
           </Box>
         </Grid>
       </MainLayoutContainer>
@@ -695,235 +691,161 @@ function Note(props: NoteProps) {
   );
 }
 
-const SelectAssignedCS = ({
-  setSelectedCSId,
-}: {
-  setSelectedCSId: (cs: string) => void;
-}) => {
-  const [data, setData] = useState<{
+interface CSReportProps {
+  userId?: string;
+  isFollowUp?: boolean;
+}
+
+const CSReport = ({ userId, isFollowUp = false }: CSReportProps) => {
+  // State management
+  const [selectedCSId, setSelectedCSId] = useState<string>("");
+  const [text, setText] = useState("");
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [historyModal, setHistoryModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [csData, setCSData] = useState<{
     loading: boolean;
     data: { team_member: UserRo; added_by: UserRo; _id: string }[];
   }>({
     loading: true,
     data: [],
   });
+
+  const toast = useToast();
+
+  // Fetch CS admins
   const fetchCSAdmins = useCallback(async () => {
     const admins = await get(`cs`);
-    setData({
+    setCSData({
       loading: false,
       //@ts-ignore
       data: admins?.data,
-    });
-    //@ts-ignore
-    setSelectedCSId(admins?.data[0]?._id);
-  }, [setData, setSelectedCSId]);
+    });    //@ts-ignore
+    // setSelectedCSId(admins?.data[0]?._id);
+  }, []);
+
+  // Fetch existing report/followup data
+  // const fetchExistingData = useCallback(async () => {
+  //   const endpoint = isFollowUp ? "followup" : "report";
+  //   const data = await get(`cs/${endpoint}/${userId}`);
+
+  //   //@ts-ignore
+  //   const existingText = data?.data?.[0]?.text;
+  //   if (existingText) {
+  //     setText(existingText);
+  //   }
+  // }, [userId, isFollowUp]);
 
   useEffect(() => {
     fetchCSAdmins();
+    // fetchExistingData();
   }, [fetchCSAdmins]);
+
+  // Handle save
+  const handleSave = async () => {
+    if (!text) return;
+
+    setLoading(true);
+    const endpoint = isFollowUp ? "followup" : "report";
+
+    try {
+      await post(`/cs/${endpoint}/${userId}`, { text, teamId: selectedCSId });
+      setConfirmModal(false);
+      setText("");
+      setSelectedCSId("");
+      toast({
+        position: "bottom-right",
+        title: `${isFollowUp ? "Follow up" : "Report"} added`,
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        position: "bottom-right",
+        title: "Error",
+        description: "Failed to save",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <p className="text-[#7E8494] text-[0.75rem] font-inter">ASSIGNED CS</p>
-      {data?.loading ? (
-        <Loader />
-      ) : (
-        <select
-          onChange={(e) => setSelectedCSId(e.target.value)}
-          className="border-[1px] border-[#7E8494] h-[3.75rem] w-full rounded-[0.5rem] px-3"
-          placeholder="Select CS"
+    <div className="flex gap-4 flex-col mb-8">
+      {/* Modals */}
+      <ConfirmationModal
+        isOpen={confirmModal}
+        title="Confirm"
+        isLoading={loading}
+        onConfirm={handleSave}
+        onClose={() => setConfirmModal(false)}
+        description="Are you sure you want to proceed?"
+      />
+      <Modal show={historyModal} onClose={() => setHistoryModal(false)}>
+        <ReportModal
+          userId={userId}
+          isFollowUp={isFollowUp}
+          close={() => setHistoryModal(false)}
+        />
+      </Modal>
+
+      {/* Report/Follow Up Section */}
+      <div className="flex justify-between">
+        <p className="text-sm" style={{ color: "#7e8494" }}>
+          {isFollowUp ? "FOLLOW UP" : "REPORT"}
+        </p>
+        <p
+          className="cursor-pointer text-sm text-primary"
+          onClick={() => setHistoryModal(true)}
         >
-          {data?.data?.map((user, index) => (
-            <option value={user?._id} key={`cs_user_${index}`}>
-              {user?.team_member?.first_name} {user?.team_member?.lastName}
-            </option>
-          ))}
-        </select>
+          VIEW {isFollowUp ? "FOLLOW UP" : "REPORT"} HISTORY
+        </p>
+      </div>
+
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder={`Enter ${isFollowUp ? "follow up" : "report"} here`}
+        className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
+      />
+
+      {/* CS Selection Section */}
+      {!isFollowUp && (
+        <div>
+          <p className="text-[#7e8494] text-sm mb-4">CX</p>
+          {csData.loading ? (
+            <Loader />
+          ) : (
+            <select
+              onChange={(e) => setSelectedCSId(e.target.value)}
+              className="border-[1px] border-[#BDC0CE] h-[3.75rem] w-full rounded-[0.5rem] px-3"
+              placeholder="Select CS"
+              value={selectedCSId}
+            >
+              <option value="">Select CX</option>
+              {csData.data.map((user, index) => (
+                <option value={user._id} key={`cs_user_${index}`}>
+                  {user.team_member.first_name} {user.team_member.lastName}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
       )}
+
+      <div className="flex justify-end item-center gap-4">
+        <Button
+          onClick={() => text && setConfirmModal(true)}
+          isDisabled={loading || !text || (!isFollowUp && !selectedCSId)}
+          className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4"
+        >
+          {loading ? "Saving..." : "Save"}
+        </Button>
+      </div>
     </div>
   );
 };
-
-function Report({ userId, csID }: { userId?: string; csID: string }) {
-  const [openReportModal, setReportModal] = useState(false);
-
-  const [text, setText] = useState("");
-  const [confirm, setConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const toast = useToast();
-  const addFollowUp = async () => {
-    if (text) {
-      setLoading(true);
-      await post(`/cs/report/${userId}`, { text, teamId: csID });
-      setLoading(false);
-      setConfirm(false);
-      setText("");
-      toast({
-        position: "bottom-right",
-        title: "Report added",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-      });
-    }
-  };
-
-  const getData = useCallback(async () => {
-    const data = await get(`cs/report/${userId}`);
-    //@ts-ignore
-    const d = data?.data;
-    if (d && d[0]?.text) {
-      setText(d[0]?.text);
-    }
-  }, [userId, setText]);
-
-  useEffect(() => {
-    getData();
-  }, [getData]);
-
-  return (
-    <div className="flex gap-4 flex-col">
-      <Modal
-        show={openReportModal}
-        onClose={() => setReportModal(!openReportModal)}
-      >
-        <ReportModal userId={userId} close={() => setReportModal(false)} />
-      </Modal>
-      <ConfirmationModal
-        isOpen={confirm}
-        title="Confirm"
-        isLoading={loading}
-        onConfirm={addFollowUp}
-        onClose={() => setConfirm(false)}
-        description="Are do you want to proceed?"
-      />
-      <div className="flex justify-between">
-        <p className="text-sm" style={{ color: "#7e8494" }}>
-          REPORT
-        </p>
-        <p
-          className=" text-sm text-primary cursor-pointer"
-          onClick={() => setReportModal(true)}
-        >
-          VIEW REPORT HISTORY
-        </p>
-      </div>
-
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Enter report here"
-        className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
-      ></textarea>
-
-      <div className="flex justify-end item-center gap-4">
-        <button
-          onClick={() => {
-            if (text) {
-              setConfirm(true);
-            }
-          }}
-          disabled={loading}
-          className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]"
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
-        {/* <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button> */}
-      </div>
-    </div>
-  );
-}
-
-function FollowUp({ userId, csID }: { userId?: string; csID: string }) {
-  const [openFollowUpModal, setOpenFollowUpModal] = useState(false);
-  const [text, setText] = useState("");
-  const [confirm, setConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const toast = useToast();
-
-  const addFollowUp = async () => {
-    if (text) {
-      setLoading(true);
-      await post(`/cs/followup/${userId}`, { text, teamId: csID });
-      setLoading(false);
-      setConfirm(false);
-      setText("");
-      toast({
-        position: "bottom-right",
-        title: "Follow up added",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-      });
-    }
-  };
-
-  const getData = useCallback(async () => {
-    const data = await get(`cs/followup/${userId}`);
-    //@ts-ignore
-    const d = data?.data;
-    if (d && d[0]?.text) {
-      setText(d[0]?.text);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    getData();
-  }, [getData]);
-
-  return (
-    <div onSubmit={addFollowUp} className="flex gap-4 flex-col mb-8">
-      <ConfirmationModal
-        isOpen={confirm}
-        title="Confirm"
-        isLoading={loading}
-        onConfirm={addFollowUp}
-        onClose={() => setConfirm(false)}
-        description="Are do you want to proceed?"
-      />
-
-      <Modal
-        show={openFollowUpModal}
-        onClose={() => setOpenFollowUpModal(!openFollowUpModal)}
-      >
-        <ReportModal
-          userId={userId}
-          isFollowUp
-          close={() => setOpenFollowUpModal(false)}
-        />
-      </Modal>
-      <div className="flex justify-between">
-        <p className="text-sm" style={{ color: "#7e8494" }}>
-          FOLLOW UP
-        </p>
-        <p
-          onClick={() => setOpenFollowUpModal(true)}
-          className="cursor-pointer text-sm text-primary"
-        >
-          VIEW FOLLOW UP HISTORY
-        </p>
-      </div>
-
-      <textarea
-        onChange={(e) => setText(e.target.value)}
-        value={text}
-        placeholder="Enter follow up here"
-        className="h-[8.2835rem] w-full border-[1px] border-[#BDC0CE] rounded-[0.5rem] p-4"
-      ></textarea>
-
-      <div className="flex justify-end item-center gap-4">
-        <button
-          onClick={() => {
-            if (text) {
-              setConfirm(true);
-            }
-          }}
-          disabled={loading}
-          className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-primary border-[1px] border-primary p-[0.625rem] py-4 w-[4.0625rem]"
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
-        {/* <button className="rounded-[0.5rem] flex justify-center items-center font-inter text-sm text-black border-[1px] border-[#BDC0CE] p-[0.625rem] py-4 w-[4.0625rem]">Cancel</button> */}
-      </div>
-    </div>
-  );
-}

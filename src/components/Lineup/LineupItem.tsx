@@ -1,4 +1,4 @@
-import { Box, BoxProps, Grid, Text, VStack } from "@chakra-ui/react";
+import { Box, BoxProps, Grid, HStack, Text, VStack } from "@chakra-ui/react";
 import { daysOfWeek } from "config";
 import { MealPackRo, MealRo } from "interfaces";
 import { ILineUpFoodItem } from "types";
@@ -73,24 +73,23 @@ function Meal(props: MealProps) {
         ) : (
           "---"
         )}
-      </Box>
-      {foodItem?.extraId?.name && (
-        <VStack width="100%" fontSize={14} color="#303237">
-          <Text color="#303237">{foodItem?.extraId?.name}</Text>
-
-          {/* {foodItem?.extraId?.type && (
-            <Text>Type:{foodItem?.extraId?.type}</Text>
-          )} */}
-        </VStack>
-      )}
-      {/* @ts-ignore */}
-
-      {foodItem?.proteinId?.name && (
-        <VStack width="100%" fontSize={14} color="#303237">
+        <HStack mt="8px">
+          {foodItem?.extraId?.name && (
+            <Box width="100%" fontSize={14} alignItems="start">
+              <Text color="gray.400">Extra</Text>
+              <Text color="#303237">{foodItem?.extraId?.name}</Text>
+            </Box>
+          )}
           {/* @ts-ignore */}
-          <Text color="#303237">{foodItem?.proteinId?.name}</Text>
-        </VStack>
-      )}
+          {foodItem?.proteinId?.name && (
+            <Box width="100%" fontSize={14}>
+              <Text color="gray.400">Protein</Text>
+              {/* @ts-ignore */}
+              <Text color="#303237">{foodItem?.proteinId?.name}</Text>
+            </Box>
+          )}
+        </HStack>
+      </Box>
     </VStack>
   ) : (
     <Box>

@@ -1,3 +1,5 @@
+import { UserRo } from "interfaces";
+
 export interface ILineUpFoodItem {
   mealId: {
     images: [];
@@ -24,7 +26,7 @@ export interface ILineUpFoodItem {
 
 export interface ILineUpItem {
   _id: string;
-  customer: string;
+  customer: UserRo;
   monday: {
     lunch: ILineUpFoodItem;
     dinner: ILineUpFoodItem;
