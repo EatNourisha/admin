@@ -76,7 +76,7 @@ function Meal(props: MealProps) {
         <HStack mt="8px">
           {foodItem?.extraId?.name && (
             <Box width="100%" fontSize={14} alignItems="start">
-              <Text color="gray.400">Extra</Text>
+              <Text color="gray.400">Swallow</Text>
               <Text color="#303237">{foodItem?.extraId?.name}</Text>
             </Box>
           )}
