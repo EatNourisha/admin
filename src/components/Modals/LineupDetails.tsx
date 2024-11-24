@@ -47,7 +47,6 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
         "updatedAt",
         "customer",
         "__v",
-        "delivery_date",
       ]),
     [lineupData]
   );
@@ -139,8 +138,8 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
               />
               <Detail
                 isLoading={isLoading}
-                title="Delivery Day"
-                description={user?.delivery_day}
+                title="Delivery Date"
+                description={lineup?.delivery_date ?? "---------"}
                 _desc={{ fontSize: "16px" }}
               />
             </Grid>

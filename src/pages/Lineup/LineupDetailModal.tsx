@@ -22,6 +22,7 @@ import { Detail } from "components/DetailItem/Detail";
 import { LineupItem } from "components/Lineup/LineupItem";
 import { UserRo } from "interfaces";
 import { join, omit } from "lodash";
+import moment from "moment";
 import { useMemo } from "react";
 import { ILineUpItem } from "types";
 import { when } from "utils";
@@ -49,7 +50,6 @@ console.log(props);
         "updatedAt",
         "customer",
         "__v",
-        "delivery_date",
       ]),
     [lineupData]
   );
@@ -131,8 +131,8 @@ console.log(props);
             />
             <Detail
               isLoading={isLoading}
-              title="Delivery Day"
-              description={user?.delivery_day}
+              title="Delivery Date"
+              description={moment(lineup?.delivery_date).format("DD/MM/YYYY")}
               _desc={{ fontSize: "16px" }}
             />
           </Grid>

@@ -110,6 +110,9 @@ export interface LineupRo {
   wednesday: MealPackRo;
   thursday: MealPackRo;
   friday: MealPackRo;
+  saturday: MealPackRo;
+  sunday: MealPackRo;
+  delivery_date: string;
 }
 
 export enum PlanInterval {

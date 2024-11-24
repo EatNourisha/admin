@@ -1,3 +1,7 @@
+import { useCallback, useEffect, useState } from "react";
+import { join } from "lodash";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { navigate } from "@reach/router";
 import {
   Text,
   Button,
@@ -17,93 +21,179 @@ import {
   PageMotion,
   Topbar,
 } from "components";
-import { join } from "lodash";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { currencyFormat } from "utils";
-import { useCallback, useEffect, useState } from "react";
-import { ILineUpItem } from "types";
-import { navigate } from "@reach/router";
-
-import { get } from "utils";
 import { WeeklyMealLineUp } from "./WeeklyLineup";
 import { OrderStatusBadge } from "pages/Orders/OrderStatusBadge";
+import { currencyFormat, get } from "utils";
 import configs from "config";
 import { OrderRo, UserRo } from "interfaces";
+import { ILineUpItem } from "types";
 import MobileTableData from "./MobileTableData";
 
+interface LineUpState {
+  data: ILineUpItem[];
+  loading: boolean;
+}
+
+const ITEMS_PER_PAGE = 10;
+
 export default function ListLineup() {
-  const [lineUpData, setLineUpData] = useState<{
-    data: ILineUpItem[];
-    loading: boolean;
-  }>({ data: [], loading: true });
-  const [status, setStatus] = useState("");
-  const [week, setWeek] = useState("");
-  const [page, setPage] = useState(1);
+  // State management
+  const [lineUpData, setLineUpData] = useState<LineUpState>({
+    data: [],
+    loading: true,
+  });
+  const [filters, setFilters] = useState({
+    status: "",
+    sortBy: "",
+    week: "",
+    page: 1,
+  });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedUser, setSelectedUser] = useState<UserRo | null>(null);
 
-  const handleOpenModal = (user: UserRo) => {
-    setSelectedUser(user);
-    onOpen();
-  };
+  // Modal handlers
+  const handleOpenModal = useCallback(
+    (user: UserRo) => {
+      setSelectedUser(user);
+      onOpen();
+    },
+    [onOpen]
+  );
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedUser(null);
     onClose();
-  };
+  }, [onClose]);
 
-  const getLineUps = useCallback(async () => {
-    setLineUpData({ ...lineUpData, loading: true });
-    const data = await get(`/orders/lineup/one-section?page=${page}&limit=10`);
-    console.log("\n\n\n\n\n\n\n\n");
-    //@ts-ignore
-    console.log(data?.data);
-    console.log("Lineup data");
-    console.log("\n\n\n\n\n\n\n\n");
+  // Data fetching
+  const fetchLineUps = useCallback(async () => {
+    setLineUpData((prev) => ({ ...prev, loading: true }));
+    try {
+      const data = await get(
+        `/orders/lineup/one-section?page=${filters.page}&limit=${ITEMS_PER_PAGE}`
+      );
+      //@ts-ignore
+      setLineUpData({ loading: false, data: data?.data ?? [] });
+    } catch (error) {
+      console.error("Error fetching lineups:", error);
+      setLineUpData((prev) => ({ ...prev, loading: false }));
+    }
+  }, [filters.page]);
 
-    //@ts-ignore
-    setLineUpData({ loading: false, data: data?.data });
-  }, [page, lineUpData, setLineUpData]);
+  const fetchFilteredLineups = useCallback(async () => {
+    if (!filters.status && !filters.sortBy && !filters.week) return;
 
-  useEffect(() => {
-    getLineUps();
-  }, [page]);  
+    setLineUpData((prev) => ({ ...prev, loading: true }));
+    try {
+      let queryString = `/orders/lineup/one-section?page=${filters.page}&limit=${ITEMS_PER_PAGE}`;
 
-  useEffect(() => {
-    const getStatusLineup = async () => {
-      if (status) {
-        setLineUpData({ ...lineUpData, loading: true });
-        const queryString =
-          status === "all" ? "/lineups/all" : `/lineups/all?status=${status}`;
-        const data = await get(queryString);
-        //@ts-ignore
-        setLineUpData({ loading: false, data: data?.data });
+      if (filters.status && filters.status !== "all") {
+        queryString += `&status=${filters.status}`;
       }
 
-      if (week) {
-        setLineUpData({ ...lineUpData, loading: true });
-        const queryString =
-          week === "all" ? "/lineups/all" : `/lineups/all?week=${week}`;
-        const data = await get(queryString);
-        //@ts-ignore
-        setLineUpData({ loading: false, data: data?.data });
+      if (filters.sortBy) {
+        queryString +=
+          filters.sortBy === "createdAt"
+            ? ""
+            : `&order=-1&sortby=${filters.sortBy}`;
       }
-    };
-    getStatusLineup();
-  }, [status, week]);
 
-  console.log("LINEUPS", lineUpData);
+      if (filters.week && filters.week !== "all") {
+        queryString += `&week=${filters.week}`;
+      }
+
+      const data = await get(queryString);
+      //@ts-ignore
+      setLineUpData({ loading: false, data: data?.data ?? [] });
+    } catch (error) {
+      console.error("Error fetching filtered lineups:", error);
+      setLineUpData((prev) => ({ ...prev, loading: false }));
+    }
+  }, [filters.status, filters.sortBy, filters.week, filters.page]);
+
+  // Filter handlers
+  const handleFilterChange = useCallback(
+    (key: keyof typeof filters, value: string) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+    },
+    []
+  );
+
+  useEffect(() => {
+    fetchLineUps();
+  }, [filters.page, fetchLineUps]);
+
+  useEffect(() => {
+    fetchFilteredLineups();
+  }, [filters.status, filters.week, filters.sortBy, fetchFilteredLineups]);
+
+  // Render helpers
+  const renderOrderTableRow = useCallback((order: OrderRo) => {
+    const customer = order?.customer;
+    const fullName = join([customer?.first_name, customer?.last_name], " ");
+
+    return (
+      <GenericTableItem
+        isClickable={false}
+        key={`order-table-item:${order?._id}`}
+        cols={[
+          <Gravatar
+            src={customer?.profilePhotoUrl}
+            title={fullName}
+            createdAt={customer?.createdAt}
+            IsReturningCustomer={order?.isReturningCustomer}
+            subtitle={
+              customer?.createdAt &&
+              `${formatDistanceToNow(parseISO(customer.createdAt))} ago`
+            }
+          />,
+          <Text fontSize="14px" textTransform="capitalize">
+            {order?.ref ?? "--------"}
+          </Text>,
+          <Text fontSize="14px">{order?.phone_number}</Text>,
+          <Text fontSize="14px" textTransform="uppercase">
+            {currencyFormat("gbp").format(order?.subtotal ?? 0)}
+          </Text>,
+          <Text fontSize="14px">
+            {currencyFormat("gbp").format(order?.delivery_fee ?? 0)}
+          </Text>,
+          <Text fontSize="14px" textTransform="capitalize">
+            {currencyFormat("gbp").format(order?.total ?? 0)}
+          </Text>,
+          <Text fontSize="14px" textTransform="capitalize">
+            {order?.coupon ?? "---"}
+          </Text>,
+          <Text fontSize="14px" textTransform="capitalize">
+            <OrderStatusBadge type={order?.status} />
+          </Text>,
+          <HStack>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => navigate(`${configs.paths.order}/${order?._id}`)}
+            >
+              View More
+            </Button>
+          </HStack>,
+        ]}
+      />
+    );
+  }, []);
+
+  //@ts-ignore
+  const filteredOrders = lineUpData.data?._orders?.data?.filter(
+    (order: OrderRo) => !order.status?.toLowerCase()?.includes("paid")
+  );
 
   return (
     <PageMotion key="dashboard-home">
       <Topbar pageTitle="Line Up" />
       <MainLayoutContainer pb="60px">
         <Stack my="26px">
-          <div>
-            {/* LINEUPS */}
+          {/* Weekly Meal Lineups Section */}
+          <Stack mb={10}>
             <Stack
-            mb={10}
               direction={{ base: "column", md: "row" }}
               justifyContent="space-between"
             >
@@ -113,45 +203,52 @@ export default function ListLineup() {
               <Stack direction={{ base: "column", md: "row" }}>
                 <Select
                   width={{ base: "100%", md: "150px" }}
-                  onChange={(e) => setWeek(e.target.value)}
+                  onChange={(e) => handleFilterChange("week", e.target.value)}
+                  value={filters.week}
                 >
                   <option value="all">All</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
+                  {[1, 2, 3, 4].map((num) => (
+                    <option key={num} value={String(num)}>
+                      {num}
+                    </option>
+                  ))}
                 </Select>
                 <Select
                   width={{ base: "100%", md: "150px" }}
-                  onChange={(e) => setStatus(e.target.value)}
+                  onChange={(e) => handleFilterChange("sortBy", e.target.value)}
+                  value={filters.sortBy}
                 >
-                  <option value="all">All</option>
-                  <option value="active">Active</option>
-                  <option value="deactivated">Deactivated</option>
+                  <option value="createdAt">Created date</option>
+                  <option value="deliverydate">Delivery date</option>
                 </Select>
               </Stack>
             </Stack>
+
+            {/* Desktop View */}
             <GenericTable
               isLoading={lineUpData.loading}
               headers={["Fullname", "Status", "City", "Delivery day", "Action"]}
             >
               {/* @ts-ignore */}
-              {!!lineUpData.data?._lineups?.lineups?.length ? (
+              {lineUpData.data?._lineups?.lineups?.length > 0 && (
                 <WeeklyMealLineUp
-                  //@ts-ignore
-                  data={lineUpData?.data?._lineups?.lineups}
+                //@ts-ignore
+                  data={lineUpData.data._lineups.lineups}
                   isLoading={false}
                 />
-              ) : null}
+              )}
             </GenericTable>
+
+            {/* Mobile View */}
             <MobileTableData
               type="lineup"
               //@ts-ignore
-              data={lineUpData?.data?._lineups?.lineups}
-              isLoading={lineUpData?.loading}
+              data={lineUpData.data?._lineups?.lineups}
+              isLoading={lineUpData.loading}
               onViewLineup={handleOpenModal}
             />
 
+            {/* Lineup Detail Modal */}
             {selectedUser && (
               <LineupDetailModal
                 user={selectedUser}
@@ -161,18 +258,16 @@ export default function ListLineup() {
             )}
 
             <APaginator
-              flexDir={"row"}
+              flexDir="row"
               isLoading={!lineUpData.loading}
-              /* @ts-ignore */
+              //@ts-ignore
               totalCount={lineUpData.data?._lineups?.totalCount}
-              limit={10}
-              page={page}
-              /* @ts-ignore */
-              onPageChange={(p) => setPage(p)}
+              limit={ITEMS_PER_PAGE}
+              page={filters.page}
+              onPageChange={(p: number) => handleFilterChange("page", String(p))}
             />
 
-            {/* ORDERS?\ */}
-
+            {/* Orders Section */}
             <HStack my="10" justifyContent="space-between">
               <Heading fontSize="lg" fontWeight="700">
                 Orders
@@ -180,7 +275,7 @@ export default function ListLineup() {
             </HStack>
 
             <GenericTable
-              isLoading={lineUpData?.loading}
+              isLoading={lineUpData.loading}
               headers={[
                 "Name",
                 "Reference ID",
@@ -193,87 +288,25 @@ export default function ListLineup() {
                 "Action",
               ]}
             >
-              {/* @ts-ignore */}
-              {!!(lineUpData.data?._orders?.data as OrderRo[])?.filter(
-                (o) => !o.status?.toLowerCase()?.includes("un")
-              ).length &&
-                //@ts-ignore
-                (lineUpData.data?._orders?.data as OrderRo[])
-                  ?.filter((o) => !o.status?.toLowerCase()?.includes("paid"))
-                  .map((order) => {
-                    const cus = order?.customer;
-
-                    return (
-                      <GenericTableItem
-                        isClickable={false}
-                        key={`order-table-item:${order?._id}`}
-                        cols={[
-                          <Gravatar
-                            src={cus?.profilePhotoUrl}
-                            title={join([cus?.first_name, cus?.last_name], " ")}
-                            createdAt={cus?.createdAt}
-                            IsReturningCustomer={order?.isReturningCustomer}
-                            subtitle={
-                              !cus?.createdAt
-                                ? undefined
-                                : `${formatDistanceToNow(
-                                    parseISO(cus?.createdAt!)
-                                  )} ago`
-                            }
-                          />,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            {order?.ref ?? "--------"}
-                          </Text>,
-                          <Text fontSize="14px">{order?.phone_number}</Text>,
-                          <Text fontSize="14px" textTransform="uppercase">
-                            {currencyFormat("gbp").format(order?.subtotal ?? 0)}
-                          </Text>,
-                          <Text fontSize="14px">
-                            {currencyFormat("gbp").format(
-                              order?.delivery_fee ?? 0
-                            )}
-                          </Text>,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            {currencyFormat("gbp").format(order?.total ?? 0)}
-                          </Text>,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            {order?.coupon ?? "---"}
-                          </Text>,
-                          <Text fontSize="14px" textTransform="capitalize">
-                            <OrderStatusBadge type={order?.status} />
-                          </Text>,
-                          <HStack>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() =>
-                                navigate(`${configs.paths.order}/${order?._id}`)
-                              }
-                            >
-                              View More
-                            </Button>
-                          </HStack>,
-                        ]}
-                      />
-                    );
-                  })}
+              {filteredOrders?.map(renderOrderTableRow)}
             </GenericTable>
+
             <MobileTableData
               type="order"
               //@ts-ignore
               data={lineUpData.data?._orders?.data}
-              isLoading={lineUpData?.loading}
+              isLoading={lineUpData.loading}
             />
-          </div>
-          <APaginator
-            isLoading={!lineUpData.loading}
-            /* @ts-ignore */
-            totalCount={lineUpData.data?._orders?.totalCount}
-            limit={10}
-            page={page}
-            /* @ts-ignore */
-            onPageChange={(p) => setPage(p)}
-          />
+
+            <APaginator
+              isLoading={!lineUpData.loading}
+              //@ts-ignore
+              totalCount={lineUpData.data?._orders?.totalCount}
+              limit={ITEMS_PER_PAGE}
+              page={filters.page}
+              onPageChange={(p: number) => handleFilterChange("page", String(p))}
+            />
+          </Stack>
         </Stack>
       </MainLayoutContainer>
     </PageMotion>

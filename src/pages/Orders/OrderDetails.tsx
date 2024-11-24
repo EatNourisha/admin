@@ -57,14 +57,12 @@ export default function OrderDetails() {
   const order_items = useMemo(() => items?.data ?? [], [items]);
   const { info: status, getStatusInfo } = useOrderStatus(
     order?.status ?? OrderStatus.PROCESSING
-  );
+  );  
 
   const [partial, set] = usePartialState<{ status: OrderStatus }>(
     { status: order?.status ?? OrderStatus.DEFAULT },
     [order?.status]
   );
-
-  console.log("Order status", id, partial);
 
   const updateStatus = async () => {
     if (
@@ -86,9 +84,6 @@ export default function OrderDetails() {
       });
     }
   };
-  console.log("\n\n\\n\n\n\n\n");
-  console.log("ORDER");
-  console.log("\n\n\\n\n\n\n\n");
   return (
     <PageMotion key="order-details">
       <Topbar pageTitle="Orders" />
