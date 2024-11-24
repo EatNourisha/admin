@@ -96,7 +96,7 @@ export default function ListLineup() {
         queryString +=
           filters.sortBy === "createdAt"
             ? ""
-            : `&order=1&sortby=${filters.sortBy}`;
+            : `&status=active&sortby=${filters.sortBy}`;
       }
 
       if (filters.week && filters.week !== "all") {
