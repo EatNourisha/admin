@@ -214,14 +214,14 @@ function MealItem(props: MealItemProps) {
       {!is_available && (
         <Badge
           pos="absolute"
-          left="26px"
+          left="36px"
           top="calc(50% - 10px)"
           fontSize="sm"
           color="brand.red"
           transform="rotate(-45deg)"
           shadow="0 0 20px rgba(0 0 0 / 60%)"
         >
-          Unavailable
+          Sold Out
         </Badge>
       )}
       <Box
