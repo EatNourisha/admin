@@ -22,6 +22,7 @@ import { LineupItem } from "components/Lineup/LineupItem";
 import useLineup from "hooks/useLineUp";
 import { UserRo } from "interfaces";
 import { join, omit } from "lodash";
+import moment from "moment";
 import { useMemo } from "react";
 import { when } from "utils";
 
@@ -136,7 +137,7 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
               <Detail
                 isLoading={isLoading}
                 title="Delivery Date"
-                description={lineup?.delivery_date ?? "---------"}
+                description={moment(lineup?.delivery_date).format("DD/MM/YYYY")}
                 _desc={{ fontSize: "16px" }}
               />
             </Grid>

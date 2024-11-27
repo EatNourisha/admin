@@ -38,8 +38,6 @@ interface LineupDetailModalProps extends Omit<ModalProps, "children" | "id"> {
 const LineupDetailModal = (props: LineupDetailModalProps) => {
   const { user, isOpen, onClose, _content, _body, lineupData, ...xprops } =
     props;
-console.log(props);
-
   // const { isLoading } = useLineup(user?._id);
   const isLoading = false;
   const lineup = useMemo(
