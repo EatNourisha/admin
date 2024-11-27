@@ -4,10 +4,8 @@ import {
   Button,
   FormControl,
   Grid,
-  Heading,
   HStack,
   IconButton,
-  Select,
   Skeleton,
   Stack,
   Switch,
@@ -16,7 +14,7 @@ import {
   Tooltip,
   useDisclosure,
   useToast,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import {
   APaginator,
@@ -24,17 +22,15 @@ import {
   Gravatar,
   Icon,
   InputLabel,
-  LineupItem,
   Loader,
   MainLayoutContainer,
   PageMotion,
   Textarea,
   Topbar,
-  TransactionDetailModal,
+  TransactionDetailModal
 } from "components";
 
 import { navigate, useParams } from "@reach/router";
-import { EmptyCrate } from "components/Crate/Empty";
 import Modal from "components/Modal";
 import ReportModal from "components/Modals/ReportModal";
 import { format, parseISO } from "date-fns";
@@ -49,6 +45,7 @@ import { capitalize, omit } from "lodash";
 import join from "lodash/join";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { currencyFormat, get, post, when } from "utils";
+import LineupData from "./LineupData";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -87,7 +84,7 @@ export default function UserDetails() {
   const delivery_day = useMemo(() => {
     const info = user?.delivery_info;
     if (!!info && !!info?.next_delivery_date) {
-      const day = parseISO(info?.next_delivery_date).getDay();      /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
+      const day = parseISO(info?.next_delivery_date).getDay(); /// Since nourisha doesn't delivery on sat, sun and mon, consider them not selected by the user.
       if ([6, 0, 1].includes(day)) return "------";
       return format(parseISO(info?.next_delivery_date), "EEE dd, MMM yyyy");
     }
@@ -133,8 +130,8 @@ export default function UserDetails() {
           <Box
             p={{ base: "0", md: "38px" }}
             borderRadius="8px"
-            border={{ base: "none", md: "2px solid brand.neutral100" }}
-            mb="20px"
+            border={{ base: "none", md: "2px solid #E7EAEE" }}
+            mb={{ base: "0", lg: "20px" }}
           >
             <HStack w="100%" justifyContent="space-between">
               <Button
@@ -366,62 +363,18 @@ export default function UserDetails() {
                 />
               )}
             </Box>
+
+            <Box display="flex" flexDirection="column" gap="1.5rem">
+              <CSReport userId={user?._id} />
+              <CSReport userId={user?._id} isFollowUp={true} />
+            </Box>
           </Box>
 
-          <Box className="hidden md:block" position="sticky" top="100px">
-            <HStack justifyContent="space-between">
-              <Heading as="h5" fontSize="lg">
-                Weekly Meal Lineups
-              </Heading>
-
-              <Select
-                mt="10px"
-                placeholder="Select Option"
-                minH="48px"
-                maxW="180px"
-                visibility="hidden"
-              >
-                <option>All time</option>
-              </Select>
-            </HStack>
-
-            <Stack
-              mt="16px"
-              borderRadius="8px"
-              overflow="hidden"
-              p="14px"
-              shadow={when(
-                !lineupData,
-                "0px 2px 12px rgba(0, 0, 0, 0.05)",
-                "none"
-              )}
-              gap="16px"
-            >
-              {!!lineupData &&
-                !isLoading &&
-                Object.keys(lineup ?? {}).map((key, i) => (
-                  <LineupItem
-                    key={key}
-                    day={key}
-                    pack={(lineup! as any)[key]}
-                  />
-                ))}
-
-              {isLoading && !lineupData && <Loader my="80px" />}
-
-              {!isLoading && !hasLineup && (
-                <EmptyCrate
-                  description={
-                    "This user is yet to update / select their lineup"
-                  }
-                />
-              )}
-            </Stack>
-          </Box>
-          <Box display="flex" flexDirection="column" gap="1.5rem">
-            <CSReport userId={user?._id} />
-            <CSReport userId={user?._id} isFollowUp={true} />
-          </Box>
+          <LineupData
+            isLoading={isLoading}
+            lineup={lineup}
+            hasLineup={hasLineup}
+          />
         </Grid>
       </MainLayoutContainer>
     </PageMotion>
@@ -720,7 +673,7 @@ const CSReport = ({ userId, isFollowUp = false }: CSReportProps) => {
       loading: false,
       //@ts-ignore
       data: admins?.data,
-    });    //@ts-ignore
+    }); //@ts-ignore
     // setSelectedCSId(admins?.data[0]?._id);
   }, []);
 

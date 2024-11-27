@@ -150,7 +150,7 @@ export default function AddMealModal(props: AddMealModalProps) {
                 }}
               />
               <InputLabel ml="8px" htmlFor="isChecked">
-                {when(is_available, "Available", "Unavailable")}
+                {when(is_available, "Available", "Sold out")}
               </InputLabel>
             </FormControl>
           </Stack>

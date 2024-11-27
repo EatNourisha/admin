@@ -488,7 +488,7 @@ export default function AddMeal() {
                     }}
                   />
                   <InputLabel ml="8px" htmlFor="isChecked">
-                    {when(!!state?.is_available, "Available", "Unavailable")}
+                    {when(!!state?.is_available, "Available", "Sold Out")}
                   </InputLabel>
                 </FormControl>
 
