@@ -12,9 +12,17 @@ export interface ILineUpFoodItem {
     is_available: true;
     createdAt: string;
     updatedAt: string;
-    __v: number;
+    // __v: number;
   };
   extraId: {
+    _id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    type?:string;
+  };
+  proteinId: {
     _id: string;
     name: string;
     createdAt: string;

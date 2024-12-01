@@ -70,7 +70,7 @@ export default function ConfirmationModal(props: ConfirmationModalProps) {
             size="sm"
             onClick={onConfirm}
           >
-            {buttonText && buttonText[0] ? buttonText[0] : "Confirm"}
+            {isLoading ? "Confirming..." : buttonText && buttonText[0] ? buttonText[0] : "Confirm"}
           </Button>
           <Button
             w="100%"

@@ -85,6 +85,7 @@ export interface UserRo {
     next_lineup_change_date: string;
     updatedAt: string;
   };
+  delivery_date: string;
   stripe_id: string;
   primary_role: string;
 
@@ -155,17 +156,7 @@ export interface UserRo {
 
     // Nourisha
     stripe_id: string;
-    plan: {
-      product_id: string;
-      price_id: string;
-      name: string;
-      description: string;
-      slug: string;
-      amount: number;
-      currency: string;
-      subscription_interval: string;
-      perks: string[];
-    };
+    plan: PlanRo;
     customer: string;
     start_date: string;
     end_date: string;

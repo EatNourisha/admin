@@ -19,10 +19,12 @@ import { EmptyCrate } from "components/Crate/Empty";
 import { Detail } from "components/DetailItem/Detail";
 import Icon from "components/Icon/Icon";
 import { LineupItem } from "components/Lineup/LineupItem";
+import Loader from "components/Loader/Loader";
 import useLineup from "hooks/useLineUp";
 import { UserRo } from "interfaces";
 import { join, omit } from "lodash";
 import moment from "moment";
+import { days } from "pages/Users/LineupData";
 import { useMemo } from "react";
 import { when } from "utils";
 
@@ -36,9 +38,6 @@ interface LineupDetailModalProps extends Omit<ModalProps, "children" | "id"> {
 export default function LineupDetailModal(props: LineupDetailModalProps) {
   const { user, isOpen, onClose, _content, _body, ...xprops } = props;
 
-  console.log(user);
-  
-  
   const { data: lineupData, isLoading } = useLineup(user?._id);
   const lineup = useMemo(
     () =>
@@ -48,10 +47,11 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
         "updatedAt",
         "customer",
         "__v",
+        "delivery_date",
       ]),
     [lineupData]
   );
-
+  const activeDays = Object.keys(lineup).filter((key) => days.includes(key));
   return (
     <Modal
       isOpen={isOpen}
@@ -166,16 +166,20 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
               )}
               gridGap="16px"
             >
-              {!!lineupData &&
-                !isLoading &&
-                Object.keys(lineup ?? {}).map((key) => (
-                  <LineupItem
-                    key={key}
-                    day={key}
-                    pack={(lineup! as any)[key]}
-                  />
-                ))}
-
+              {days.map((day) => (
+                <LineupItem
+                  key={day}
+                  day={day}
+                  pack={
+                    (lineup as any)[day.toLowerCase()] || {
+                      lunch: "",
+                      dinner: "",
+                    }
+                  }
+                  activeDays={activeDays}
+                />
+              ))}
+              {isLoading && <Loader />}
               {!isLoading && !lineupData && <EmptyCrate />}
             </Stack>
 

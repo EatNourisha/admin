@@ -2,6 +2,7 @@ import { PaginatedDocument } from "./apiResponse.interface";
 import { ReferralRo, UserRo } from "./auth.interface";
 
 export interface PlanRo {
+  _id: string;
   product_id: string;
   price_id: string;
   name: string;
@@ -120,20 +121,20 @@ export enum PlanInterval {
   MONTHLY = "month",
 }
 
-export interface PlanRo {
-  _id: string;
-  subscription_interval: string;
-  product_id: string;
-  price_id: string;
-  name: string;
-  description: string;
-  slug: string;
-  amount: number;
-  currency: string;
-  perks: string[];
-  createdAt: string;
-  updatedAt: string;
-}
+// export interface PlanRo {
+//   _id: string;
+//   subscription_interval: string;
+//   product_id: string;
+//   price_id: string;
+//   name: string;
+//   description: string;
+//   slug: string;
+//   amount: number;
+//   currency: string;
+//   perks: string[];
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
 export interface MealPackRo {
   name: string;

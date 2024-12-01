@@ -127,7 +127,6 @@ export default function ListLineup() {
   useEffect(() => {
     fetchFilteredLineups();
   }, [filters.status, filters.week, filters.sortBy, fetchFilteredLineups]);
-
   // Render helpers
   const renderOrderTableRow = useCallback((order: OrderRo) => {
     const customer = order?.customer;

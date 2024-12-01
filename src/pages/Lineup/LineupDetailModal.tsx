@@ -16,13 +16,14 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Logo } from "components";
+import { Loader, Logo } from "components";
 import { EmptyCrate } from "components/Crate/Empty";
 import { Detail } from "components/DetailItem/Detail";
 import { LineupItem } from "components/Lineup/LineupItem";
 import { UserRo } from "interfaces";
 import { join, omit } from "lodash";
 import moment from "moment";
+import { days } from "pages/Users/LineupData";
 import { useMemo } from "react";
 import { ILineUpItem } from "types";
 import { when } from "utils";
@@ -42,16 +43,13 @@ const LineupDetailModal = (props: LineupDetailModalProps) => {
   const isLoading = false;
   const lineup = useMemo(
     () =>
-      omit(lineupData, [
-        "_id",
-        "createdAt",
-        "updatedAt",
-        "customer",
-        "__v",
-      ]),
+      omit(lineupData, ["_id", "createdAt", "updatedAt", "customer", "__v"]),
     [lineupData]
   );
 
+  const activeDays = Object.keys(lineup).filter((key) =>
+    days.includes(key)
+  );
   return (
     <Modal
       isOpen={isOpen}
@@ -159,12 +157,28 @@ const LineupDetailModal = (props: LineupDetailModalProps) => {
             )}
             gridGap="16px"
           >
-            {!!lineupData &&
+            {/* {!!lineupData &&
               !isLoading &&
               Object.keys(lineup ?? {}).map((key, i) => (
                 <LineupItem key={i} day={key} pack={(lineup! as any)[key]} />
-              ))}
+              ))} */}
 
+            {days.map((day) => {
+              return (
+                <LineupItem
+                  key={day}
+                  day={day}
+                  pack={
+                    (lineup as any)[day.toLowerCase()] || {
+                      lunch: "",
+                      dinner: "",
+                    }
+                  }
+                  activeDays={activeDays}
+                />
+              );
+            })}
+            {isLoading && <Loader />}
             {!isLoading && !lineupData && <EmptyCrate />}
           </Stack>
 

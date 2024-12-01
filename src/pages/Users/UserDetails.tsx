@@ -14,7 +14,7 @@ import {
   Tooltip,
   useDisclosure,
   useToast,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import {
   APaginator,
@@ -27,7 +27,7 @@ import {
   PageMotion,
   Textarea,
   Topbar,
-  TransactionDetailModal
+  TransactionDetailModal,
 } from "components";
 
 import { navigate, useParams } from "@reach/router";
@@ -124,7 +124,7 @@ export default function UserDetails() {
       <Topbar pageTitle="Users" />
       <MainLayoutContainer>
         <Grid
-          templateColumns={{ xl: "1.3fr 1fr", "2xl": "1.5fr 1fr" }}
+          templateColumns={{ base: "1fr", lg: "1.3fr 1fr", "2xl": "1.5fr 1fr" }}
           gap="24px"
         >
           <Box
@@ -371,6 +371,7 @@ export default function UserDetails() {
           </Box>
 
           <LineupData
+            user={user}
             isLoading={isLoading}
             lineup={lineup}
             hasLineup={hasLineup}
