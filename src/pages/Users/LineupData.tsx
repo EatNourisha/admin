@@ -86,7 +86,20 @@ function LineupData({ isLoading, lineup, hasLineup, user }: LineupDataProps) {
   }, [hasLineup, lineup]);
 
   // Determine days based on plan name
-  const activeDays = Object.keys(lineup).filter((key) => days.includes(key));
+  const activeDays = useMemo(() => {
+    if (!selectedPlan) return [];
+    return selectedPlan.name.includes("5")
+      ? ["monday", "tuesday", "wednesday", "thursday", "friday"]
+      : [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+        ];
+  }, [selectedPlan]);
 
   const handleMealClick = (day: string, mealType: "lunch" | "dinner") => {
     setCurrentMealContext({ day, mealType });
