@@ -294,7 +294,7 @@ function LineupData({ isLoading, lineup, hasLineup, user }: LineupDataProps) {
 
         <div className="h-[1px] border-b border-black border-dashed my-4" />
 
-        {(selectedPlan || lineupData) && (
+        {selectedPlan && (
           <>
             {days.map((day) => (
               <LineupItem
