@@ -8,8 +8,6 @@ export default function useTransaction(id: string) {
     get
   );
 
-  console.log("Transction", id, data);
-
   return {
     data: data?.data,
     isLoading: !error && !data,

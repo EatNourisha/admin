@@ -38,6 +38,7 @@ interface GravatarProps extends BoxProps {
   variant?: VariantNameType;
   isLoading?: boolean;
   initials?: string;
+  platform?: string;
   createdAt?: string;
   IsReturningCustomer?: boolean;
   onClick?: () => void;
@@ -57,6 +58,7 @@ export default function Gravatar(props: GravatarProps) {
     _textContainer,
     isLoading,
     initials,
+    platform,
     // createdAt,
     onClick,
     IsReturningCustomer,
@@ -181,7 +183,7 @@ export default function Gravatar(props: GravatarProps) {
                   {...variants?.title}
                   {..._title}
                 >
-                  {title}
+                  {title} { platform && `(${platform})`}
                 </Text>
                 {isNew && (
                   <Badge bg="brand.primary" color="white">

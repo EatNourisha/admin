@@ -7,7 +7,7 @@ const trackLiveQueries: Middleware = (useSWRHook: SWRHook) => {
   return (key, fetcher, config) => {
     const swr = useSWRHook(key, fetcher, config);
 
-    console.log({ liveQueries });
+    // console.log({ liveQueries });
 
     useEffect(() => {
       liveQueries.add(String(key));

@@ -72,6 +72,7 @@ export interface UserRo {
   lastName: string;
   first_name: string;
   last_name: string;
+  platform?: string;
   phone: string;
   is_email_verified: boolean;
   delivery_day: string;

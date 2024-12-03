@@ -5,6 +5,7 @@ import {
   HStack,
   Select,
   Stack,
+  Text,
   useDisclosure,
   useToast,
   VStack,
@@ -147,9 +148,6 @@ function LineupData({ isLoading, lineup, hasLineup, user }: LineupDataProps) {
     };
   };
 
-  console.log("lineupData", lineupData);
-  
-
   const handleSaveLineup = async () => {
     const { isValid, missingDays } = validateLineup();
 
@@ -288,72 +286,78 @@ function LineupData({ isLoading, lineup, hasLineup, user }: LineupDataProps) {
         shadow={when(!lineup, "0px 2px 12px rgba(0, 0, 0, 0.05)", "none")}
         gap="16px"
       >
-        <Box>
-          <label htmlFor="plan">Meal Plan</label>
-          <Select
-            id="plan"
-            mt="10px"
-            placeholder="Select Option"
-            value={selectedPlan ? selectedPlan._id : ""}
-            onChange={(e) => handlePlanSelection(e.target.value)}
-          >
-            {plans?.data?.map((plan: any) => (
-              <option key={plan._id} value={plan._id}>
-                {plan.name}
-              </option>
-            ))}
-          </Select>
-        </Box>
-
-        <div className="h-[1px] border-b border-black border-dashed my-4" />
-
-        {selectedPlan && (
+        {!isLoading && (
           <>
-            {days.map((day) => (
-              <LineupItem
-                key={day}
-                day={day}
-                pack={
-                  lineupData[day.toLowerCase()] || { lunch: "", dinner: "" }
-                }
-                activeDays={activeDays}
-                onMealClick={handleMealClick}
-              />
-            ))}
+            <Box>
+              <label htmlFor="plan">Meal Plan</label>
+              <Select
+                id="plan"
+                mt="10px"
+                placeholder="Select Option"
+                value={selectedPlan ? selectedPlan._id : ""}
+                onChange={(e) => handlePlanSelection(e.target.value)}
+              >
+                {plans?.data?.map((plan: any) => (
+                  <option key={plan._id} value={plan._id}>
+                    {plan.name}
+                  </option>
+                ))}
+              </Select>
+            </Box>
 
             <div className="h-[1px] border-b border-black border-dashed my-4" />
 
-            <VStack alignItems="flex-start">
-              <label htmlFor="delivery-date">Delivery Date</label>
-              <input
-                className="w-full border p-2 rounded"
-                type="date"
-                name="delivery_date"
-                id="delivery-date"
-                value={deliveryDate}
-                onChange={(e) => setDeliveryDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]} // Prevent past dates
-              />
-            </VStack>
+            {selectedPlan ? (
+              <>
+                {days.map((day) => (
+                  <LineupItem
+                    key={day}
+                    day={day}
+                    pack={
+                      lineupData[day.toLowerCase()] || { lunch: "", dinner: "" }
+                    }
+                    activeDays={activeDays}
+                    onMealClick={handleMealClick}
+                  />
+                ))}
 
-            <Button
-              mt={4}
-              colorScheme="blue"
-              onClick={() => onModalOpen()}
-              isDisabled={
-                !hasLineupChanged ||
-                Object.keys(lineupData).length === 0 ||
-                isSaving
-              }
-            >
-              Save Lineup
-            </Button>
+                <div className="h-[1px] border-b border-black border-dashed my-4" />
+
+                <VStack alignItems="flex-start">
+                  <label htmlFor="delivery-date">Delivery Date</label>
+                  <input
+                    className="w-full border p-2 rounded"
+                    type="date"
+                    name="delivery_date"
+                    id="delivery-date"
+                    value={deliveryDate}
+                    onChange={(e) => setDeliveryDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]} // Prevent past dates
+                  />
+                </VStack>
+
+                <Button
+                  mt={4}
+                  colorScheme="blue"
+                  onClick={() => onModalOpen()}
+                  isDisabled={
+                    !hasLineupChanged ||
+                    Object.keys(lineupData).length === 0 ||
+                    isSaving
+                  }
+                >
+                  Save Lineup
+                </Button>
+              </>
+            ) : (
+              <Text>Please select a plan to create a lineup</Text>
+            )}
           </>
         )}
 
-        {isLoading && !lineup && <Loader my="80px" />}
+        {isLoading && <Loader my="80px" />}
 
-        {!isLoading && !hasLineup && (
+        {!isLoading && !hasLineup && !lineup && (
           <EmptyCrate
             description={"This user is yet to update / select their lineup"}
           />

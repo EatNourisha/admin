@@ -10,6 +10,7 @@ import {
   Select,
   Stack,
   useDisclosure,
+  Input,
 } from "@chakra-ui/react";
 import {
   APaginator,
@@ -44,8 +45,9 @@ export default function ListLineup() {
   });
   const [filters, setFilters] = useState({
     status: "",
-    sortBy: "",
-    week: "",
+    sortBy: "createdAt",
+    week: "all",
+    delivery_date: "",
     page: 1,
   });
 
@@ -66,23 +68,29 @@ export default function ListLineup() {
     onClose();
   }, [onClose]);
 
-  // Data fetching
-  const fetchLineUps = useCallback(async () => {
-    setLineUpData((prev) => ({ ...prev, loading: true }));
-    try {
-      const data = await get(
-        `/orders/lineup/one-section?page=${filters.page}&limit=${ITEMS_PER_PAGE}`
-      );
-      //@ts-ignore
-      setLineUpData({ loading: false, data: data?.data ?? [] });
-    } catch (error) {
-      console.error("Error fetching lineups:", error);
-      setLineUpData((prev) => ({ ...prev, loading: false }));
-    }
-  }, [filters.page]);
+  // // Data fetching
+  // const fetchLineUps = useCallback(async () => {
+  //   setLineUpData((prev) => ({ ...prev, loading: true }));
+  //   try {
+  //     const data = await get(
+  //       `/orders/lineup/one-section?page=${filters.page}&limit=${ITEMS_PER_PAGE}`
+  //     );
+  //     //@ts-ignore
+  //     setLineUpData({ loading: false, data: data?.data ?? [] });
+  //   } catch (error) {
+  //     console.error("Error fetching lineups:", error);
+  //     setLineUpData((prev) => ({ ...prev, loading: false }));
+  //   }
+  // }, [filters.page]);
 
   const fetchFilteredLineups = useCallback(async () => {
-    if (!filters.status && !filters.sortBy && !filters.week) return;
+    if (
+      !filters.status &&
+      !filters.sortBy &&
+      !filters.week &&
+      !filters.delivery_date
+    )
+      return;
 
     setLineUpData((prev) => ({ ...prev, loading: true }));
     try {
@@ -99,6 +107,12 @@ export default function ListLineup() {
             : `&status=active&sortby=${filters.sortBy}`;
       }
 
+      if (filters.delivery_date) {
+        queryString += `&delivery_date=${new Date(
+          filters.delivery_date
+        ).toISOString()}`;
+      }
+
       if (filters.week && filters.week !== "all") {
         queryString += `&week=${filters.week}`;
       }
@@ -110,23 +124,43 @@ export default function ListLineup() {
       console.error("Error fetching filtered lineups:", error);
       setLineUpData((prev) => ({ ...prev, loading: false }));
     }
-  }, [filters.status, filters.sortBy, filters.week, filters.page]);
+  }, [
+    filters.status,
+    filters.sortBy,
+    filters.week,
+    filters.page,
+    filters.delivery_date,
+  ]);
 
   // Filter handlers
   const handleFilterChange = useCallback(
     (key: keyof typeof filters, value: string) => {
-      setFilters((prev) => ({ ...prev, [key]: value }));
+      console.log("Filter changed:", key, value);
+      setFilters((prev) => ({
+        ...prev,
+        [key]: value,
+        // Reset to first page when filters change
+        ...(key !== "page" && { page: 1 }),
+      }));
     },
     []
   );
 
-  useEffect(() => {
-    fetchLineUps();
-  }, [filters.page, fetchLineUps]);
+
+  // useEffect(() => {
+  //   fetchLineUps();
+  // }, [filters.page, fetchLineUps]);
 
   useEffect(() => {
     fetchFilteredLineups();
-  }, [filters.status, filters.week, filters.sortBy, fetchFilteredLineups]);
+  }, [
+    filters.page,
+    filters.status,
+    filters.week,
+    filters.sortBy,
+    filters.delivery_date,
+    fetchFilteredLineups,
+  ]);
   // Render helpers
   const renderOrderTableRow = useCallback((order: OrderRo) => {
     const customer = order?.customer;
@@ -201,9 +235,10 @@ export default function ListLineup() {
               </Heading>
               <Stack direction={{ base: "column", md: "row" }}>
                 <Select
-                  width={{ base: "100%", md: "150px" }}
+                  width={{ base: "100%", md: "160px" }}
                   onChange={(e) => handleFilterChange("week", e.target.value)}
                   value={filters.week}
+                  isDisabled={lineUpData.loading}
                 >
                   <option value="all">All</option>
                   {[1, 2, 3, 4].map((num) => (
@@ -212,10 +247,20 @@ export default function ListLineup() {
                     </option>
                   ))}
                 </Select>
+                <Input
+                  width={{ base: "100%", md: "200px" }}
+                  type="date"
+                  onChange={(e) =>
+                    handleFilterChange("delivery_date", e.target.value)
+                  }
+                  value={filters.delivery_date}
+                  isDisabled={lineUpData.loading}
+                />
                 <Select
-                  width={{ base: "100%", md: "150px" }}
+                  width={{ base: "100%", md: "160px" }}
                   onChange={(e) => handleFilterChange("sortBy", e.target.value)}
                   value={filters.sortBy}
+                  isDisabled={lineUpData.loading}
                 >
                   <option value="createdAt">Created date</option>
                   <option value="deliverydate">Delivery date</option>
@@ -231,7 +276,7 @@ export default function ListLineup() {
               {/* @ts-ignore */}
               {lineUpData.data?._lineups?.lineups?.length > 0 && (
                 <WeeklyMealLineUp
-                //@ts-ignore
+                  //@ts-ignore
                   data={lineUpData.data._lineups.lineups}
                   isLoading={false}
                 />
@@ -256,15 +301,20 @@ export default function ListLineup() {
               />
             )}
 
-            <APaginator
-              flexDir="row"
-              isLoading={!lineUpData.loading}
-              //@ts-ignore
-              totalCount={lineUpData.data?._lineups?.totalCount}
-              limit={ITEMS_PER_PAGE}
-              page={filters.page}
-              onPageChange={(p: number) => handleFilterChange("page", String(p))}
-            />
+            {/*@ts-ignore*/}
+            {lineUpData.data?._lineups?.lineups?.length > 0 && (
+              <APaginator
+                flexDir="row"
+                isLoading={!lineUpData.loading}
+                //@ts-ignore
+                totalCount={lineUpData.data?._lineups?.totalCount}
+                limit={ITEMS_PER_PAGE}
+                page={filters.page}
+                onPageChange={(p: number) =>
+                  handleFilterChange("page", String(p))
+                }
+              />
+            )}
 
             {/* Orders Section */}
             <HStack my="10" justifyContent="space-between">
@@ -303,7 +353,9 @@ export default function ListLineup() {
               totalCount={lineUpData.data?._orders?.totalCount}
               limit={ITEMS_PER_PAGE}
               page={filters.page}
-              onPageChange={(p: number) => handleFilterChange("page", String(p))}
+              onPageChange={(p: number) =>
+                handleFilterChange("page", String(p))
+              }
             />
           </Stack>
         </Stack>

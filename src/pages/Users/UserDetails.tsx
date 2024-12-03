@@ -55,7 +55,7 @@ export default function UserDetails() {
 
   const { data: user, isLoading, key } = useUserDetails(id);
   const { suspendUser, isLoading: isSuspending } = useUserMutations([key]);
-  const { data: lineupData } = useLineup(id);
+  const { data: lineupData, isLoading: isLoadingLineup } = useLineup(id);
   const lineup = useMemo(
     () =>
       omit(lineupData, [
@@ -232,6 +232,7 @@ export default function UserDetails() {
                 isLoading={isLoading}
                 src={user?.profilePhotoUrl}
                 title={join([user?.first_name, user?.last_name], " ")}
+                platform={user?.platform}
               />
             </VStack>
 
@@ -372,7 +373,7 @@ export default function UserDetails() {
 
           <LineupData
             user={user}
-            isLoading={isLoading}
+            isLoading={isLoading || isLoadingLineup}
             lineup={lineup}
             hasLineup={hasLineup}
           />
