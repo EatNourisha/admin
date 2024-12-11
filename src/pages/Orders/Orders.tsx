@@ -98,6 +98,7 @@ export default function Orders() {
                         key={`order-table-item:${order?._id}`}
                         cols={[
                           <Gravatar
+                            platform={cus?.platform}
                             src={cus?.profilePhotoUrl}
                             title={join([cus?.first_name, cus?.last_name], " ")}
                             createdAt={cus?.createdAt}
@@ -211,6 +212,7 @@ function MobileOrderData({ data = [], isLoading }: MobileOrderDataProps) {
           >
             <VStack alignItems="stretch" spacing="12px">
               <Gravatar
+                platform={cus?.platform}
                 src={cus?.profilePhotoUrl}
                 title={join([cus?.first_name, cus?.last_name], " ")}
                 createdAt={cus?.createdAt}
@@ -224,7 +226,11 @@ function MobileOrderData({ data = [], isLoading }: MobileOrderDataProps) {
               <HStack justifyContent="space-between">
                 <Box>
                   <Text mb="8px">Reference ID:</Text>
-                  <Text fontSize="14px" fontWeight="bold" textTransform="capitalize">
+                  <Text
+                    fontSize="14px"
+                    fontWeight="bold"
+                    textTransform="capitalize"
+                  >
                     {order?.ref ?? "--------"}
                   </Text>
                 </Box>
@@ -232,13 +238,19 @@ function MobileOrderData({ data = [], isLoading }: MobileOrderDataProps) {
                   <Text textAlign="right" mb="8px">
                     Phone Number:
                   </Text>
-                  <Text fontSize="14px" fontWeight="bold">{order?.phone_number}</Text>
+                  <Text fontSize="14px" fontWeight="bold">
+                    {order?.phone_number}
+                  </Text>
                 </Box>
               </HStack>
               <HStack justifyContent="space-between">
                 <Box>
                   <Text mb="8px">SubTotal:</Text>
-                  <Text fontSize="14px" fontWeight="bold" textTransform="uppercase">
+                  <Text
+                    fontSize="14px"
+                    fontWeight="bold"
+                    textTransform="uppercase"
+                  >
                     {currencyFormat("gbp").format(order?.subtotal ?? 0)}
                   </Text>
                 </Box>
@@ -252,13 +264,21 @@ function MobileOrderData({ data = [], isLoading }: MobileOrderDataProps) {
               <HStack justifyContent="space-between">
                 <Box>
                   <Text mb="8px">Total:</Text>
-                  <Text fontSize="14px" fontWeight="bold" textTransform="capitalize">
+                  <Text
+                    fontSize="14px"
+                    fontWeight="bold"
+                    textTransform="capitalize"
+                  >
                     {currencyFormat("gbp").format(order?.total ?? 0)}
                   </Text>
                 </Box>
                 <Box>
                   <Text mb="8px">Status:</Text>
-                  <Text fontSize="14px" fontWeight="bold" textTransform="capitalize">
+                  <Text
+                    fontSize="14px"
+                    fontWeight="bold"
+                    textTransform="capitalize"
+                  >
                     <OrderStatusBadge type={order?.status} />
                   </Text>
                 </Box>

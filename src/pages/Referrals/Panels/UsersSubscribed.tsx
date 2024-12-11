@@ -105,6 +105,7 @@ export function UsersSubscribed(props: Props) {
                   //   onClick={() => navigate(`${configs.paths.users}/${value?._id}`)}
                   cols={[
                     <Gravatar
+                      platform={value?.invitee?.platform}
                       src={value?.invitee?.profilePhotoUrl}
                       title={join(
                         [value?.invitee?.first_name, value?.invitee?.last_name],
@@ -125,6 +126,7 @@ export function UsersSubscribed(props: Props) {
                       }
                     />,
                     <Gravatar
+                      platform={inviter?.platform}
                       src={inviter?.profilePhotoUrl}
                       title={join(
                         [inviter?.first_name, inviter?.last_name],

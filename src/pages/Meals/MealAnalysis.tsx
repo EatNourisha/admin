@@ -214,6 +214,7 @@ export default function MealAnalysis() {
                         // }
                         cols={[
                           <Gravatar
+                            platform={user?.platform}
                             src={user?.profilePhotoUrl}
                             title={join(
                               [user?.first_name, user?.last_name],
@@ -308,6 +309,7 @@ const MobileTableData = (props: MobileTableDataProps) => {
           >
             <VStack alignItems="stretch" spacing="12px">
               <Gravatar
+                platform={user?.platform}
                 src={user?.profilePhotoUrl}
                 title={join([user?.first_name, user?.last_name], " ")}
                 onClick={() => navigate(`${configs.paths.users}/${user?._id}`)}

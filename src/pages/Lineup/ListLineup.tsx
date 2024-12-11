@@ -177,6 +177,7 @@ export default function ListLineup() {
             title={fullName}
             createdAt={customer?.createdAt}
             IsReturningCustomer={order?.isReturningCustomer}
+            platform={customer?.platform}
             subtitle={
               customer?.createdAt &&
               `${formatDistanceToNow(parseISO(customer.createdAt))} ago`

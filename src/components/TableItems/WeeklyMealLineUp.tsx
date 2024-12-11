@@ -54,6 +54,7 @@ function Item(props: ItemProps) {
       <GenericTableItem
         cols={[
           <Gravatar
+            platform={user?.platform}
             title={join([user?.first_name, user?.last_name], " ")}
             onClick={() =>
               navigate(`${configs.paths.users}/${user?._id ?? ""}`)
@@ -75,7 +76,6 @@ function Item(props: ItemProps) {
           </Button>,
         ]}
       />
-
     </>
   );
 }

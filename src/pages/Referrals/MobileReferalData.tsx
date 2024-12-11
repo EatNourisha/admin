@@ -63,6 +63,7 @@ function MobileReferalData({
           >
             <VStack alignItems="stretch" spacing="12px">
               <Gravatar
+                platform={value?.invitee?.platform}
                 src={value?.invitee?.profilePhotoUrl}
                 title={join(
                   [value?.invitee?.first_name, value?.invitee?.last_name],
@@ -126,7 +127,11 @@ function MobileReferalData({
                 <HStack justifyContent="space-between">
                   <Box>
                     <Text mb="8px">Reward:</Text>
-                    <Text fontWeight="bold" fontSize="14px" textTransform="capitalize">
+                    <Text
+                      fontWeight="bold"
+                      fontSize="14px"
+                      textTransform="capitalize"
+                    >
                       {currencyFormat((value?.currency as any) ?? "gbp").format(
                         value?.reward ?? 0
                       )}

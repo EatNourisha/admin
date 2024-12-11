@@ -225,6 +225,7 @@ export default function Subscriptions() {
                         key={`subscription-table-item:${sub?._id}`}
                         cols={[
                           <Gravatar
+                            platform={user?.platform}
                             src={user?.profilePhotoUrl}
                             IsReturningCustomer={sub?.returning_client}
                             title={join(

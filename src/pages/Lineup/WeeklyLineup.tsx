@@ -38,6 +38,7 @@ function Item(props: ItemProps) {
       <GenericTableItem
         cols={[
           <Gravatar
+            platform={customer?.platform}
             title={join([customer?.first_name, customer?.last_name], " ")}
             IsReturningCustomer={isReturningCustomer}
             onClick={() =>

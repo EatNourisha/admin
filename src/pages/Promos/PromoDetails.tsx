@@ -618,6 +618,7 @@ function ReferralItem(props: ReferralItemProps) {
           variant="horizSingle"
           // src={user?.profilePhotoUrl}
           title={join([invitee?.first_name, invitee?.last_name], " ")}
+          platform={invitee?.platform}
           subtitle={format(parseISO(createdAt), "EEE dd, MMM yyyy")}
           onClick={() => navigate(`/users/${invitee?._id}`)}
           _container={{
@@ -677,6 +678,7 @@ function RedeemedByItem(props: UserRo) {
       <HStack justifyContent="space-between">
         <Gravatar
           variant="horizSingle"
+          platform={props?.platform}
           title={join([first_name, last_name], " ")}
           onClick={() => navigate(`/users/${_id}`)}
           _container={{

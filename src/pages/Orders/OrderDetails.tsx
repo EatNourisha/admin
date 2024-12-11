@@ -117,6 +117,7 @@ export default function OrderDetails() {
                 variant="vert"
                 isLoading={isLoading}
                 src={cus?.profilePhotoUrl}
+                platform={cus?.platform}
                 title={join([cus?.first_name, cus?.last_name], " ")}
                 // subtitle={capitalize(user?.gender ?? "male")}
               />

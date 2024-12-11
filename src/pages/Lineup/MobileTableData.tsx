@@ -56,6 +56,7 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           " "
         )}
         IsReturningCustomer={item?.isReturningCustomer}
+        platform={item?.customer?.platform}
         onClick={() =>
           navigate(`${configs.paths.users}/${item?.customer?._id}`)
         }
@@ -104,6 +105,7 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
     <VStack alignItems="stretch" gap="12px">
       <Gravatar
         src={order?.customer?.profilePhotoUrl}
+        platform={order?.customer?.platform}
         title={join(
           [order?.customer?.first_name, order?.customer?.last_name],
           " "

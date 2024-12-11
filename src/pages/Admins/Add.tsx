@@ -74,6 +74,7 @@ function TableItem(props: TableItemProps) {
       <Tr _hover={{ cursor: "default", bg: "#F7F8F98f" }}>
         <Td>
           <Gravatar
+            platform={value?.platform}
             src={value?.profilePhotoUrl}
             title={join([value?.first_name, value?.last_name], " ")}
             onClick={() => navigate(`${configs.paths.users}/${value?._id}`)}

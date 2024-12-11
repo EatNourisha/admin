@@ -159,6 +159,7 @@ export default function AssignPlan() {
                   key={`customer-table-item:${value?._id}`}
                   cols={[
                     <Gravatar
+                      platform={value?.platform}
                       src={value?.profilePhotoUrl}
                       title={join([value?.first_name, value?.last_name], " ")}
                       createdAt={value?.createdAt}
@@ -269,6 +270,7 @@ function MobileData({
           >
             <VStack alignItems="stretch" spacing="12px">
               <Gravatar
+                platform={value?.platform}
                 src={value?.profilePhotoUrl}
                 title={join([value?.first_name, value?.last_name], " ")}
                 createdAt={value?.createdAt}
