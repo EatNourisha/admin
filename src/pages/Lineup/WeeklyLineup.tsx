@@ -1,8 +1,4 @@
-import {
-  Button,
-  Text,
-  useDisclosure
-} from "@chakra-ui/react";
+import { Button, Text, useDisclosure } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import { GenericTableItem } from "components/GenericTable/GenericTable";
 import Gravatar from "components/Gravatar/Gravatar";
@@ -32,10 +28,10 @@ export function WeeklyMealLineUp(props: WeeklyMealLineUpProps) {
 interface ItemProps extends ILineUpItem {}
 
 function Item(props: ItemProps) {
-  const { customer, delivery_date, status, isReturningCustomer } = props;
+  const { customer, delivery_date, status, isReturningCustomer, platform } =
+    props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
 
   return (
     <>
@@ -48,6 +44,7 @@ function Item(props: ItemProps) {
               navigate(`${configs.paths.users}/${customer?._id ?? ""}`)
             }
           />,
+          <Text textTransform="capitalize">{platform ?? "---"}</Text>,
           <Text textTransform="capitalize">{status}</Text>,
           <Text textTransform="capitalize">
             {customer?.address?.city ?? "------------"}

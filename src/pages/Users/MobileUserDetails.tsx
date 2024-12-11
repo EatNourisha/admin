@@ -5,7 +5,7 @@ import {
   HStack,
   Image,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import Empty from "assets/images/folder.png";
@@ -41,9 +41,7 @@ function MobileUserDetails(props: MobileUserDetailsProps) {
 
   // Loading state - show 3 skeleton items
   if (isLoading) {
-    return (
-      <MobileDataSkeleton count={10} />
-    );
+    return <MobileDataSkeleton count={10} />;
   }
 
   // Empty state
@@ -71,6 +69,7 @@ function MobileUserDetails(props: MobileUserDetailsProps) {
         >
           <VStack alignItems="stretch" gap="12px">
             <Gravatar
+              platform={user?.platform}
               title={join([user?.first_name, user?.last_name], " ")}
               onClick={() =>
                 navigate(`${configs.paths.users}/${user?._id ?? ""}`)

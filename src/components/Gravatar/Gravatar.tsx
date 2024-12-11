@@ -183,7 +183,7 @@ export default function Gravatar(props: GravatarProps) {
                   {...variants?.title}
                   {..._title}
                 >
-                  {title} { platform && `(${platform})`}
+                  {title}
                 </Text>
                 {isNew && (
                   <Badge bg="brand.primary" color="white">
@@ -191,6 +191,19 @@ export default function Gravatar(props: GravatarProps) {
                   </Badge>
                 )}
               </HStack>
+
+              {platform && (
+                <Text
+                  fontSize="12px"
+                  fontWeight="400"
+                  color="brand.neutral600"
+                  textTransform="capitalize"
+                  {...variants?.subtitle}
+                  {..._subtitle}
+                >
+                  {platform}
+                </Text>
+              )}
 
               {IsReturningCustomer && (
                 <Badge

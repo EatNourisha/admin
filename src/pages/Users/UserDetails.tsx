@@ -232,6 +232,7 @@ export default function UserDetails() {
                 isLoading={isLoading}
                 src={user?.profilePhotoUrl}
                 title={join([user?.first_name, user?.last_name], " ")}
+                _subtitle={{ textAlign: "center" }}
                 platform={user?.platform}
               />
             </VStack>

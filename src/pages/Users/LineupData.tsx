@@ -46,7 +46,7 @@ export interface ILineupFoodItem {
 
 function LineupData({ isLoading, lineup, hasLineup, user }: LineupDataProps) {
   const { mutate } = useSWRConfig();
-  const { data: plans } = usePlans({});
+  const { data: plans } = usePlans({ searchPhrase: "continent=African" });
   const {
     isOpen: isModalOpen,
     onClose: onModalClose,

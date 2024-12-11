@@ -527,7 +527,7 @@ export default function PromoDetails() {
                     <EmptyCrate description={"This promo has no redeemed by"} />
                   )}
 
-                  {hasRedeemedBy && (
+                  {/* {hasRedeemedBy && (
                     <APaginator
                       flexDir={"row"}
                       isLoading={isLoading}
@@ -536,7 +536,7 @@ export default function PromoDetails() {
                       page={state?.page}
                       onPageChange={onPageChange}
                     />
-                  )}
+                  )} */}
                 </Stack>
               </Box>
             )}

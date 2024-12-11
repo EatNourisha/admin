@@ -14,6 +14,7 @@ import {
   Button,
   Divider,
   HStack,
+  Text,
 } from "@chakra-ui/react";
 import { EmptyCrate } from "components/Crate/Empty";
 import { Detail } from "components/DetailItem/Detail";
@@ -166,6 +167,13 @@ export default function LineupDetailModal(props: LineupDetailModalProps) {
               )}
               gridGap="16px"
             >
+              <Text
+                fontSize="14px"
+                fontWeight="500"
+                color="#7E8494"
+              >
+                Platform: {lineup?.platform}
+              </Text>
               {days.map((day) => (
                 <LineupItem
                   key={day}

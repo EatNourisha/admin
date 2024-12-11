@@ -29,6 +29,7 @@ import configs from "config";
 import { OrderRo, UserRo } from "interfaces";
 import { ILineUpItem } from "types";
 import MobileTableData from "./MobileTableData";
+import moment from "moment";
 
 interface LineUpState {
   data: ILineUpItem[];
@@ -181,6 +182,7 @@ export default function ListLineup() {
               `${formatDistanceToNow(parseISO(customer.createdAt))} ago`
             }
           />,
+          <Text fontSize="14px">{order?.platform ?? "---"}</Text>,
           <Text fontSize="14px" textTransform="capitalize">
             {order?.ref ?? "--------"}
           </Text>,
@@ -190,6 +192,9 @@ export default function ListLineup() {
           </Text>,
           <Text fontSize="14px">
             {currencyFormat("gbp").format(order?.delivery_fee ?? 0)}
+          </Text>,
+          <Text fontSize="14px">
+            {moment(order?.delivery_date).format("DD/MM/YYYY")}
           </Text>,
           <Text fontSize="14px" textTransform="capitalize">
             {currencyFormat("gbp").format(order?.total ?? 0)}
@@ -271,7 +276,7 @@ export default function ListLineup() {
             {/* Desktop View */}
             <GenericTable
               isLoading={lineUpData.loading}
-              headers={["Fullname", "Status", "City", "Delivery day", "Action"]}
+              headers={["Fullname", "Platform", "Status", "City", "Delivery day", "Action"]}
             >
               {/* @ts-ignore */}
               {lineUpData.data?._lineups?.lineups?.length > 0 && (
@@ -327,10 +332,12 @@ export default function ListLineup() {
               isLoading={lineUpData.loading}
               headers={[
                 "Name",
+                "Platform",
                 "Reference ID",
                 "Phone Number",
                 "Subtotal",
                 "Delivery Fee",
+                "delivery date",
                 "Total",
                 "Coupon Code",
                 "Status",

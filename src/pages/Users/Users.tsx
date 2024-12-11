@@ -173,6 +173,7 @@ export default function Users() {
                       title={join([value?.first_name, value?.last_name], " ")}
                       IsReturningCustomer={value?.IsReturningCustomer}
                       createdAt={value?.createdAt}
+                      platform={value?.platform}
                       subtitle={
                         !value?.createdAt
                           ? undefined

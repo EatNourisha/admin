@@ -35,6 +35,7 @@ export interface ILineUpFoodItem {
 export interface ILineUpItem {
   _id: string;
   customer: UserRo;
+  platform?: string;
   monday: {
     lunch: ILineUpFoodItem;
     dinner: ILineUpFoodItem;

@@ -114,6 +114,7 @@ export interface LineupRo {
   saturday: MealPackRo;
   sunday: MealPackRo;
   delivery_date: string;
+  platform: string;
 }
 
 export enum PlanInterval {
@@ -192,6 +193,7 @@ export interface OrderRo {
   delivery_address: UserRo["address"];
   phone_number: string;
   items: OrderItemRo[];
+  platform?: string;
 }
 
 export interface NotificationRo {

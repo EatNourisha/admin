@@ -76,13 +76,25 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           </Text>
         </Box>
       </HStack>
-      <Box>
-        <Text color="gray.600">Delivery Date</Text>
-        <Text fontSize="14px" fontWeight="medium">
-          {moment(item?.delivery_date).format("DD/MM/YYYY")}
-        </Text>
-      </Box>
-      <Button size="sm" width="full" onClick={() => onViewLineup?.(item?.customer)}>
+      <HStack justifyContent="space-between">
+        <Box>
+          <Text color="gray.600">Delivery Date</Text>
+          <Text fontSize="14px" fontWeight="medium">
+            {moment(item?.delivery_date).format("DD/MM/YYYY")}
+          </Text>
+        </Box>
+        <Box>
+          <Text color="gray.600">Platform</Text>
+          <Text fontSize="14px" fontWeight="medium">
+            {item?.platform ?? "---"}
+          </Text>
+        </Box>
+      </HStack>
+      <Button
+        size="sm"
+        width="full"
+        onClick={() => onViewLineup?.(item?.customer)}
+      >
         View Lineup
       </Button>
     </VStack>
@@ -135,12 +147,22 @@ const MobileTableData: React.FC<MobileTableDataProps> = ({
           </Text>
         </Box>
       </HStack>
-      <Box>
-        <Text color="gray.600" textAlign="right">
-          Status
-        </Text>
-        <OrderStatusBadge type={order?.status} />
-      </Box>
+      <HStack justifyContent="space-between">
+        <Box>
+          <Text color="gray.600" textAlign="right">
+            Platform
+          </Text>
+          <Text fontSize="14px" fontWeight="medium">
+            {order?.platform ?? "---"}
+          </Text>
+        </Box>
+        <Box>
+          <Text color="gray.600" textAlign="right">
+            Status
+          </Text>
+          <OrderStatusBadge type={order?.status} />
+        </Box>
+      </HStack>
       <Button
         size="sm"
         width="full"
