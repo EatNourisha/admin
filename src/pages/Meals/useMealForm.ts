@@ -60,6 +60,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
     mealInfo: meal?.mealInfo,
     available_quantity: meal?.available_quantity,
     files: [],
+    isHidden: meal?.isHidden ?? false,
   };
 };
 

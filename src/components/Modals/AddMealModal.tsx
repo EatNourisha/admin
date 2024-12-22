@@ -52,6 +52,7 @@ interface IMealFormState {
   spice_level: string;
   expected_proteins?:string[];
   expected_swallows:string[];
+  isHidden?: boolean;
 }
 
 export default function AddMealModal(props: AddMealModalProps) {
@@ -225,6 +226,7 @@ function useMealForm(meal?: Partial<MealRo>, keys?: string[]) {
       available_quantity: state?.available_quantity ?? 0,
       meals: [],
       spice_level: state?.spice_level!,
+      isHidden: state?.isHidden ?? false,
     });
 
     return res;

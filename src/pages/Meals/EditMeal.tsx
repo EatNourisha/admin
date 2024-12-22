@@ -475,7 +475,7 @@ export default function EditMeal() {
               <Grid
                 templateColumns={{
                   base: "repeat(2, 1fr)",
-                  sm: "repeat(3, 1fr)",
+                  sm: "repeat(4, 1fr)",
                 }}
                 gap="8px"
               >
@@ -572,6 +572,38 @@ export default function EditMeal() {
                   />
                   <InputLabel ml="8px" htmlFor="isChecked">
                     {when(!!state?.isSwallow, "Swallow", "Not Swallow")}
+                  </InputLabel>
+                </FormControl>
+
+                <FormControl
+                  display="flex"
+                  w="fit-content"
+                  alignSelf="flex-start"
+                >
+                  <Switch
+                    ml={{ base: "0px", md: "8px" }}
+                    aria-label="switch meal visibility"
+                    disabled={isLoading}
+                    isChecked={!state?.isHidden}
+                    onChange={() => set({ isHidden: !state?.isHidden })}
+                    sx={{
+                      "--switch-track-width": "26px",
+                      ".chakra-switch__track": {
+                        bg: "brand.neutral400",
+                        padding: "3px",
+                        borderRadius: "26px",
+                      },
+                      ".chakra-switch__track[data-checked]": {
+                        bg: "#03CCAA",
+                        padding: "3px",
+                      },
+                      ".chakra-switch__thumb": {
+                        shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                      },
+                    }}
+                  />
+                  <InputLabel ml="8px" htmlFor="isChecked">
+                    {when(!state?.isHidden, "Visible", "Hidden")}
                   </InputLabel>
                 </FormControl>
               </Grid>

@@ -15,10 +15,10 @@ export interface PlanRo {
   delivery_fee: string;
   perks: string[];
   five_day: boolean;
-  weekend:boolean;
-  continent?:string;
-  meal_number:string;
-  amount_permeal:string;
+  weekend: boolean;
+  continent?: string;
+  meal_number: string;
+  amount_permeal: string;
 }
 
 export interface SubscriptionRo {
@@ -31,7 +31,7 @@ export interface SubscriptionRo {
   end_date: string;
   next_billing_date: string;
   status: string;
-  returning_client?:boolean;
+  returning_client?: boolean;
 }
 
 export interface TransactionRo {
@@ -60,43 +60,44 @@ export interface MealRo {
   createdAt: string;
   image_url: string;
   is_available: boolean;
-  continent?:string;
+  continent?: string;
   isSwallow: boolean;
   meals: string[];
-  lastEdited?:string;
-  lastEditedBy?:UserRo,
+  lastEdited?: string;
+  lastEditedBy?: UserRo;
   name: string;
   category: string;
   slug: string;
-  isProtein:boolean;
-  weight?:string;
+  isProtein: boolean;
+  weight?: string;
   orderType: string;
   country: string;
   updatedAt: string;
-  expected_proteins?:string[];
-  expected_swallows:string[];
+  isHidden: boolean;
+  expected_proteins?: string[];
+  expected_swallows: string[];
   price?: {
     amount: string;
     deliveryFee: string;
     previousAmount: number;
     currency: string;
   };
-  mealInfo?:{
-    ingredient?:string;
-    heating?:string;
-    allergy?:string,
-    nutrition?:{
-      protein?:string;
-      fat?:string;
-      carbs?:string;
-    }
-  },
-  calories?:string;
+  mealInfo?: {
+    ingredient?: string;
+    heating?: string;
+    allergy?: string;
+    nutrition?: {
+      protein?: string;
+      fat?: string;
+      carbs?: string;
+    };
+  };
+  calories?: string;
   images?: string[];
   description?: string;
   available_quantity: string | number;
   _id: string;
-  spice_level:string;
+  spice_level: string;
 }
 
 export interface MealPackRo {
@@ -164,29 +165,29 @@ export interface OrderItemRo {
   cart_session_id: string;
 }
 export interface ExtraRo {
-  name?:string;
-  _id?:string;
-  type?:string;
+  name?: string;
+  _id?: string;
+  type?: string;
 }
 
 export interface OrderRo {
   _id: string;
   createdAt: string;
-  orderExtras:[
+  orderExtras: [
     {
-      item:MealRo;
-      protein:ExtraRo;
-      swallow:ExtraRo;
+      item: MealRo;
+      protein: ExtraRo;
+      swallow: ExtraRo;
     }
   ];
   updatedAt: string;
-  isReturningCustomer?:boolean;
+  isReturningCustomer?: boolean;
   customer: UserRo;
   cart_id: string;
   subtotal: number;
   delivery_fee: number;
   total: number;
-  coupon?:string;
+  coupon?: string;
   status: OrderStatus;
   delivery_date: string;
   ref: string;
@@ -260,8 +261,8 @@ export interface SettingsRo {
   _id: string;
   name: string;
   delivery_fee: string;
-  wed_sat?:string;
-  sun_tue?:string;
+  wed_sat?: string;
+  sun_tue?: string;
   createdAt: string;
   updatedAt: string;
   currency: string;
@@ -319,7 +320,7 @@ export interface PromoRo {
   };
   createdAt: string;
   updatedAt: string;
-  redeemed_by:UserRo[];
+  redeemed_by: UserRo[];
 }
 
 export interface CreatePromoDto

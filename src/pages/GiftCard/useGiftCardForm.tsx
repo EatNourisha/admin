@@ -57,6 +57,7 @@ const transformMealToFormState = (meal: MealRo): IMealFormState => {
     })),
     available_quantity: meal?.available_quantity,
     files: [],
+    isHidden: meal?.isHidden ?? false,
   };
 };
 
